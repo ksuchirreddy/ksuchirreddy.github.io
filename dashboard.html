@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Application Dashboard — K. Suchir Reddy</title>
+  <title>Career Command Center — K. Suchir Reddy</title>
   <meta name="robots" content="noindex, nofollow" />
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -71,7 +71,7 @@
       background-attachment: fixed;
     }
 
-    .container { max-width: 1500px; margin: 0 auto; }
+    .container { max-width: 1550px; margin: 0 auto; }
 
     /* Header */
     header {
@@ -214,14 +214,14 @@
       color: var(--text-muted);
     }
 
-    /* 3-Column Tracker Grid */
+    /* Multi-Column Tracker Grid */
     .multi-columns-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
       gap: 1.5rem;
       margin-bottom: 2.5rem;
     }
-    @media (max-width: 900px) {
+    @media (max-width: 950px) {
       .multi-columns-grid { grid-template-columns: 1fr; }
     }
 
@@ -317,13 +317,18 @@
     }
 
     .status-select {
-      padding: 0.2rem 0.4rem;
+      padding: 0.25rem 0.45rem;
       font-size: 0.78rem;
       border-radius: 6px;
       font-weight: 600;
       border: 1px solid var(--border-color);
       background: var(--bg-card);
       cursor: pointer;
+    }
+    .status-select.pending-status {
+      border-color: var(--accent-amber);
+      color: var(--accent-amber);
+      background: rgba(245, 158, 11, 0.1);
     }
 
     .delete-btn {
@@ -366,7 +371,7 @@
     <header>
       <div class="header-left">
         <h1>🎯 Career Application Command Center</h1>
-        <p>Private workspace for K. Suchir Reddy · Real-time tracking across Internshala, LinkedIn & Naukri.</p>
+        <p>Private workspace for K. Suchir Reddy · Real-time tracking across Internshala, LinkedIn & Naukri with Approval Workflow.</p>
       </div>
       <div class="header-actions">
         <button onclick="exportAllCSV()" class="btn btn-outline" style="font-size: 0.82rem;">📥 Export All CSV</button>
@@ -428,20 +433,20 @@
     <!-- Quick Stats Metric Summary -->
     <div class="metrics-summary">
       <div class="metric-card">
-        <span class="num" id="is-total-stat" style="color: var(--internshala-blue);">0</span>
-        <span class="label">Internshala Applied</span>
+        <span class="num" id="pending-stat" style="color: var(--accent-amber);">0</span>
+        <span class="label">🟡 Ready / Pending Review</span>
       </div>
       <div class="metric-card">
-        <span class="num" id="li-total-stat" style="color: var(--linkedin-blue);">0</span>
-        <span class="label">LinkedIn Applied</span>
+        <span class="num" id="applied-stat" style="color: var(--accent-cyan);">0</span>
+        <span class="label">🔵 Total Applied & Active</span>
       </div>
       <div class="metric-card">
-        <span class="num" id="nk-total-stat" style="color: var(--naukri-blue);">0</span>
-        <span class="label">Naukri Applied</span>
+        <span class="num" id="interview-stat" style="color: var(--accent-emerald);">0</span>
+        <span class="label">🟢 Interviews Scheduled</span>
       </div>
       <div class="metric-card">
-        <span class="num" id="all-interviews-stat" style="color: var(--accent-emerald);">0</span>
-        <span class="label">Total Interviews / Offers</span>
+        <span class="num" id="offers-stat" style="color: #a855f7;">0</span>
+        <span class="label">🎉 Offers Received</span>
       </div>
     </div>
 
@@ -469,17 +474,18 @@
             <input type="text" id="is-role" placeholder="ML Intern" required />
           </div>
           <div class="form-group">
-            <label>Date Applied</label>
+            <label>Date</label>
             <input type="date" id="is-date" required />
           </div>
           <div class="form-group">
             <label>Status</label>
             <select id="is-status">
-              <option value="Applied" selected>Applied</option>
+              <option value="Pending" selected>🟡 Ready to Apply (Pending)</option>
+              <option value="Applied">Applied</option>
               <option value="In-Review">In-Review</option>
               <option value="Shortlisted">Shortlisted</option>
               <option value="Assignment">Assignment Given</option>
-              <option value="Interview">Interview</option>
+              <option value="Interview">Interview Scheduled</option>
               <option value="Selected">Selected / Offer 🎉</option>
               <option value="Not-Selected">Not Selected</option>
             </select>
@@ -529,13 +535,14 @@
             <input type="text" id="li-role" placeholder="AI/ML Engineer" required />
           </div>
           <div class="form-group">
-            <label>Date Applied</label>
+            <label>Date</label>
             <input type="date" id="li-date" required />
           </div>
           <div class="form-group">
             <label>Status</label>
             <select id="li-status">
-              <option value="Applied" selected>Applied</option>
+              <option value="Pending" selected>🟡 Ready to Apply (Pending)</option>
+              <option value="Applied">Applied</option>
               <option value="Easy-Apply">Easy Apply</option>
               <option value="Recruiter-Contact">Recruiter Contacted</option>
               <option value="Interview-R1">Interview Round 1</option>
@@ -589,14 +596,15 @@
             <input type="text" id="nk-role" placeholder="Python AI Developer" required />
           </div>
           <div class="form-group">
-            <label>Date Applied</label>
+            <label>Date</label>
             <input type="date" id="nk-date" required />
           </div>
           <div class="form-group">
             <label>Status</label>
             <select id="nk-status">
-              <option value="Applied" selected>Applied</option>
-              <option value="Viewed">Profile Viewed by Recruiter</option>
+              <option value="Pending" selected>🟡 Ready to Apply (Pending)</option>
+              <option value="Applied">Applied</option>
+              <option value="Viewed">Profile Viewed</option>
               <option value="Shortlisted">Shortlisted</option>
               <option value="Interview-R1">Interview Round 1</option>
               <option value="Interview-Final">Final Round</option>
@@ -635,19 +643,18 @@
       <div class="column-box">
         <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem;">📋 Follow-ups & Action Items</h3>
         <form id="task-form" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-          <input type="text" id="task-input" placeholder="e.g. Check Naukri recruiter views / Internshala test" required />
+          <input type="text" id="task-input" placeholder="e.g. Review pending applications / Check recruiter reply" required />
           <button type="submit" class="btn btn-primary" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">Add</button>
         </form>
         <ul class="task-list" id="task-list"></ul>
       </div>
 
       <div class="column-box">
-        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem;">💡 Application & Platform Tips</h3>
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem;">💡 Workflow & Approval Guide</h3>
         <ul style="color: var(--text-muted); font-size: 0.88rem; padding-left: 1.25rem; line-height: 1.7;">
-          <li><strong>Naukri:</strong> Update your profile headline every 3–4 days to stay at the top of recruiter search results.</li>
-          <li><strong>Internshala:</strong> Always complete assessment questions tailored to the company's tech stack (Python, OpenCV, PyTorch).</li>
-          <li><strong>LinkedIn:</strong> Send personalized connection notes to hiring managers within 2–3 days of submitting your application.</li>
-          <li><strong>Portfolio:</strong> Keep your clean GitHub Pages link (<a href="https://ksuchirreddy.github.io" target="_blank" style="color: var(--primary);">ksuchirreddy.github.io</a>) in your resume header.</li>
+          <li><strong style="color: var(--accent-amber);">🟡 Ready to Apply (Pending):</strong> Means OmniRoute found the role and prepared your tailored materials. Open the job link, paste answers, and click apply!</li>
+          <li><strong style="color: var(--accent-cyan);">🔵 Applied:</strong> Switch to Applied once submitted to move it into active tracking.</li>
+          <li><strong>Daily Habit:</strong> Review and submit 2–3 pending roles every morning to maintain high application velocity.</li>
         </ul>
       </div>
     </div>
@@ -658,22 +665,22 @@
     // Storage keys
     let isApps = JSON.parse(localStorage.getItem('suchir_is_apps')) || [
       { id: 1, company: 'AI Research Lab', role: 'Machine Learning Intern', date: '2026-08-28', status: 'Applied', notes: '₹15,000/mo · Remote' },
-      { id: 2, company: 'VisionTech Analytics', role: 'Computer Vision Intern', date: '2026-08-27', status: 'In-Review', notes: 'Bengaluru' }
+      { id: 2, company: 'VisionTech Analytics', role: 'Computer Vision Intern', date: '2026-08-27', status: 'Pending', notes: 'Bengaluru · Ready for submission' }
     ];
 
     let liApps = JSON.parse(localStorage.getItem('suchir_li_apps')) || [
       { id: 1, company: 'FRND', role: 'ML Engineer Intern', date: '2026-08-27', status: 'Applied', notes: 'Hybrid Bengaluru' },
-      { id: 2, company: 'HARMAN India', role: 'Associate Engineer - AI/ML', date: '2026-08-26', status: 'Recruiter-Contact', notes: 'Referred' }
+      { id: 2, company: 'HARMAN India', role: 'Associate Engineer - AI/ML', date: '2026-08-26', status: 'Interview-R1', notes: 'Referred · Round 1' }
     ];
 
     let nkApps = JSON.parse(localStorage.getItem('suchir_nk_apps')) || [
-      { id: 1, company: 'NextGen AI Solutions', role: 'Junior Python ML Developer', date: '2026-08-28', status: 'Applied', notes: 'Bengaluru · Full-Time/Intern' }
+      { id: 1, company: 'NextGen AI Solutions', role: 'Junior Python ML Developer', date: '2026-08-28', status: 'Pending', notes: 'Bengaluru · Tailored pack ready' }
     ];
 
     let tasks = JSON.parse(localStorage.getItem('suchir_tasks')) || [
-      { id: 1, text: 'Check Internshala student dashboard messages', done: false },
-      { id: 2, text: 'Follow up with LinkedIn recruiters for ML roles', done: false },
-      { id: 3, text: 'Review Naukri recruiter search impressions & update headline', done: false }
+      { id: 1, text: 'Review 2 pending applications and hit submit', done: false },
+      { id: 2, text: 'Check Internshala student dashboard messages', done: false },
+      { id: 3, text: 'Follow up with LinkedIn recruiters for ML roles', done: false }
     ];
 
     // Set today's date
@@ -683,15 +690,24 @@
     document.getElementById('nk-date').value = today;
 
     function updateMetrics() {
-      document.getElementById('is-total-stat').textContent = isApps.length;
-      document.getElementById('li-total-stat').textContent = liApps.length;
-      document.getElementById('nk-total-stat').textContent = nkApps.length;
-
+      let pending = 0;
+      let applied = 0;
       let interviews = 0;
-      isApps.forEach(a => { if (['Interview', 'Selected'].includes(a.status)) interviews++; });
-      liApps.forEach(a => { if (['Interview-R1', 'Interview-Final', 'Offer'].includes(a.status)) interviews++; });
-      nkApps.forEach(a => { if (['Interview-R1', 'Interview-Final', 'Offer'].includes(a.status)) interviews++; });
-      document.getElementById('all-interviews-stat').textContent = interviews;
+      let offers = 0;
+
+      const allApps = [...isApps, ...liApps, ...nkApps];
+
+      allApps.forEach(a => {
+        if (a.status === 'Pending') pending++;
+        else if (['Applied', 'Easy-Apply', 'In-Review', 'Viewed', 'Shortlisted', 'Assignment'].includes(a.status)) applied++;
+        else if (['Interview', 'Interview-R1', 'Interview-Final', 'Recruiter-Contact'].includes(a.status)) interviews++;
+        else if (['Selected', 'Offer'].includes(a.status)) offers++;
+      });
+
+      document.getElementById('pending-stat').textContent = pending;
+      document.getElementById('applied-stat').textContent = applied;
+      document.getElementById('interview-stat').textContent = interviews;
+      document.getElementById('offers-stat').textContent = offers;
     }
 
     function renderIS() {
@@ -699,6 +715,7 @@
       tbody.innerHTML = '';
 
       isApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
+        const isPending = a.status === 'Pending';
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
@@ -708,7 +725,8 @@
           </td>
           <td>${a.role}</td>
           <td>
-            <select class="status-select" onchange="updateISStatus(${a.id}, this.value)">
+            <select class="status-select ${isPending ? 'pending-status' : ''}" onchange="updateISStatus(${a.id}, this.value)">
+              <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
               <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied</option>
               <option value="In-Review" ${a.status === 'In-Review' ? 'selected' : ''}>In-Review</option>
               <option value="Shortlisted" ${a.status === 'Shortlisted' ? 'selected' : ''}>Shortlisted</option>
@@ -732,6 +750,7 @@
       tbody.innerHTML = '';
 
       liApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
+        const isPending = a.status === 'Pending';
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
@@ -741,7 +760,8 @@
           </td>
           <td>${a.role}</td>
           <td>
-            <select class="status-select" onchange="updateLIStatus(${a.id}, this.value)">
+            <select class="status-select ${isPending ? 'pending-status' : ''}" onchange="updateLIStatus(${a.id}, this.value)">
+              <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
               <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied</option>
               <option value="Easy-Apply" ${a.status === 'Easy-Apply' ? 'selected' : ''}>Easy Apply</option>
               <option value="Recruiter-Contact" ${a.status === 'Recruiter-Contact' ? 'selected' : ''}>Recruiter Contact</option>
@@ -765,6 +785,7 @@
       tbody.innerHTML = '';
 
       nkApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
+        const isPending = a.status === 'Pending';
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
@@ -774,7 +795,8 @@
           </td>
           <td>${a.role}</td>
           <td>
-            <select class="status-select" onchange="updateNKStatus(${a.id}, this.value)">
+            <select class="status-select ${isPending ? 'pending-status' : ''}" onchange="updateNKStatus(${a.id}, this.value)">
+              <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
               <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied</option>
               <option value="Viewed" ${a.status === 'Viewed' ? 'selected' : ''}>Profile Viewed</option>
               <option value="Shortlisted" ${a.status === 'Shortlisted' ? 'selected' : ''}>Shortlisted</option>
@@ -858,13 +880,13 @@
     };
 
     window.updateISStatus = (id, val) => { const a = isApps.find(x => x.id === id); if(a) a.status = val; renderIS(); };
-    window.deleteISApp = (id) => { if(confirm('Delete this Internshala record?')) { isApps = isApps.filter(x => x.id !== id); renderIS(); } };
+    window.deleteISApp = (id) => { if(confirm('Delete this record?')) { isApps = isApps.filter(x => x.id !== id); renderIS(); } };
 
     window.updateLIStatus = (id, val) => { const a = liApps.find(x => x.id === id); if(a) a.status = val; renderLI(); };
-    window.deleteLIApp = (id) => { if(confirm('Delete this LinkedIn record?')) { liApps = liApps.filter(x => x.id !== id); renderLI(); } };
+    window.deleteLIApp = (id) => { if(confirm('Delete this record?')) { liApps = liApps.filter(x => x.id !== id); renderLI(); } };
 
     window.updateNKStatus = (id, val) => { const a = nkApps.find(x => x.id === id); if(a) a.status = val; renderNK(); };
-    window.deleteNKApp = (id) => { if(confirm('Delete this Naukri record?')) { nkApps = nkApps.filter(x => x.id !== id); renderNK(); } };
+    window.deleteNKApp = (id) => { if(confirm('Delete this record?')) { nkApps = nkApps.filter(x => x.id !== id); renderNK(); } };
 
     // Task Actions
     document.getElementById('task-form').onsubmit = (e) => {
