@@ -376,6 +376,7 @@
         <p>Primary Hub for K. Suchir Reddy · LinkedIn-First Job Discovery, Outreach & Cross-Platform Tracking.</p>
       </div>
       <div class="header-actions">
+        <button onclick="clearAllData()" class="btn btn-outline" style="font-size: 0.82rem; color: var(--accent-red);">🗑️ Clear All Data</button>
         <button onclick="exportAllCSV()" class="btn btn-outline" style="font-size: 0.82rem;">📥 Export All CSV</button>
         <a href="index.html" class="btn btn-outline">← Back to Portfolio</a>
       </div>
@@ -470,7 +471,7 @@
         <form id="form-li" class="add-form">
           <div class="form-group">
             <label>Company</label>
-            <input type="text" id="li-company" placeholder="e.g. Infilect / FRND / HARMAN" required />
+            <input type="text" id="li-company" placeholder="e.g. Infilect / FRND / Google" required />
           </div>
           <div class="form-group">
             <label>Role</label>
@@ -643,7 +644,7 @@
       <div class="column-box">
         <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem;">📋 Follow-ups & Recruiter DMs</h3>
         <form id="task-form" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-          <input type="text" id="task-input" placeholder="e.g. Send LinkedIn DM to Infilect recruiter / Follow up" required />
+          <input type="text" id="task-input" placeholder="e.g. Follow up on LinkedIn Easy Apply / Send note" required />
           <button type="submit" class="btn btn-primary" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">Add</button>
         </form>
         <ul class="task-list" id="task-list"></ul>
@@ -662,26 +663,11 @@
   </div>
 
   <script>
-    // Storage keys
-    let liApps = JSON.parse(localStorage.getItem('suchir_li_apps')) || [
-      { id: 102, company: 'Infilect Technologies', role: 'Computer Vision & AI Intern', date: '2026-08-28', status: 'Pending', notes: 'Bengaluru · OpenCV/YOLO · Tailored Pack Ready' },
-      { id: 1, company: 'FRND', role: 'ML Engineer Intern', date: '2026-08-27', status: 'Applied', notes: 'Hybrid Bengaluru' },
-      { id: 2, company: 'HARMAN India', role: 'Associate Engineer - AI/ML', date: '2026-08-26', status: 'Interview-R1', notes: 'Referred · Round 1' }
-    ];
-
-    let nkApps = JSON.parse(localStorage.getItem('suchir_nk_apps')) || [
-      { id: 103, company: 'Discover Dollar', role: 'AI/ML Engineer Intern', date: '2026-08-28', status: 'Pending', notes: 'Bengaluru · Python/Data Pipeline · Ready for Submission' }
-    ];
-
-    let dpApps = JSON.parse(localStorage.getItem('suchir_dp_apps')) || [
-      { id: 101, company: 'Meraki Labs', role: 'AI Engineer Intern', date: '2026-08-28', status: 'Pending', notes: 'Bengaluru · In-Office · PyTorch/LLM' }
-    ];
-
-    let tasks = JSON.parse(localStorage.getItem('suchir_tasks')) || [
-      { id: 1, text: 'Send LinkedIn connection note to Infilect hiring manager', done: false },
-      { id: 2, text: 'Review 3 pending applications and submit', done: false },
-      { id: 3, text: 'Follow up with LinkedIn recruiters for ML roles', done: false }
-    ];
+    // Pure clean slate arrays (No test cases)
+    let liApps = JSON.parse(localStorage.getItem('suchir_li_apps')) || [];
+    let nkApps = JSON.parse(localStorage.getItem('suchir_nk_apps')) || [];
+    let dpApps = JSON.parse(localStorage.getItem('suchir_dp_apps')) || [];
+    let tasks = JSON.parse(localStorage.getItem('suchir_tasks')) || [];
 
     // Set today's date
     const today = new Date().toISOString().split('T')[0];
@@ -712,32 +698,36 @@
       const tbody = document.querySelector('#table-li tbody');
       tbody.innerHTML = '';
 
-      liApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
-        const isPending = a.status === 'Pending';
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
-          <td>
-            <div style="font-weight: 700; color: var(--text-main);">${a.company}</div>
-            ${a.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${a.notes}</div>` : ''}
-          </td>
-          <td>${a.role}</td>
-          <td>
-            <select class="status-select ${isPending ? 'pending-status' : ''}" onchange="updateLIStatus(${a.id}, this.value)">
-              <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
-              <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied (Easy Apply)</option>
-              <option value="Recruiter-DM" ${a.status === 'Recruiter-DM' ? 'selected' : ''}>Recruiter DM Sent</option>
-              <option value="Connection-Sent" ${a.status === 'Connection-Sent' ? 'selected' : ''}>Connection Sent</option>
-              <option value="Interview-R1" ${a.status === 'Interview-R1' ? 'selected' : ''}>Interview R1</option>
-              <option value="Interview-Final" ${a.status === 'Interview-Final' ? 'selected' : ''}>Final Round</option>
-              <option value="Offer" ${a.status === 'Offer' ? 'selected' : ''}>Offer 🎉</option>
-              <option value="Rejected" ${a.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
-            </select>
-          </td>
-          <td><button class="delete-btn" onclick="deleteLIApp(${a.id})">✕</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
+      if (liApps.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.82rem;">No LinkedIn applications logged yet. Use the form above or Claude to add!</td></tr>`;
+      } else {
+        liApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
+          const isPending = a.status === 'Pending';
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
+            <td>
+              <div style="font-weight: 700; color: var(--text-main);">${a.company}</div>
+              ${a.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${a.notes}</div>` : ''}
+            </td>
+            <td>${a.role}</td>
+            <td>
+              <select class="status-select ${isPending ? 'pending-status' : ''}" onchange="updateLIStatus(${a.id}, this.value)">
+                <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
+                <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied (Easy Apply)</option>
+                <option value="Recruiter-DM" ${a.status === 'Recruiter-DM' ? 'selected' : ''}>Recruiter DM Sent</option>
+                <option value="Connection-Sent" ${a.status === 'Connection-Sent' ? 'selected' : ''}>Connection Sent</option>
+                <option value="Interview-R1" ${a.status === 'Interview-R1' ? 'selected' : ''}>Interview R1</option>
+                <option value="Interview-Final" ${a.status === 'Interview-Final' ? 'selected' : ''}>Final Round</option>
+                <option value="Offer" ${a.status === 'Offer' ? 'selected' : ''}>Offer 🎉</option>
+                <option value="Rejected" ${a.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+              </select>
+            </td>
+            <td><button class="delete-btn" onclick="deleteLIApp(${a.id})">✕</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
 
       localStorage.setItem('suchir_li_apps', JSON.stringify(liApps));
       updateMetrics();
@@ -747,31 +737,35 @@
       const tbody = document.querySelector('#table-nk tbody');
       tbody.innerHTML = '';
 
-      nkApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
-        const isPending = a.status === 'Pending';
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
-          <td>
-            <div style="font-weight: 700; color: var(--text-main);">${a.company}</div>
-            ${a.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${a.notes}</div>` : ''}
-          </td>
-          <td>${a.role}</td>
-          <td>
-            <select class="status-select ${isPending ? 'pending-status' : ''}" onchange="updateNKStatus(${a.id}, this.value)">
-              <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
-              <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied</option>
-              <option value="Viewed" ${a.status === 'Viewed' ? 'selected' : ''}>Profile Viewed</option>
-              <option value="Shortlisted" ${a.status === 'Shortlisted' ? 'selected' : ''}>Shortlisted</option>
-              <option value="Interview-R1" ${a.status === 'Interview-R1' ? 'selected' : ''}>Interview R1</option>
-              <option value="Offer" ${a.status === 'Offer' ? 'selected' : ''}>Offer 🎉</option>
-              <option value="Rejected" ${a.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
-            </select>
-          </td>
-          <td><button class="delete-btn" onclick="deleteNKApp(${a.id})">✕</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
+      if (nkApps.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.82rem;">No Naukri applications logged yet.</td></tr>`;
+      } else {
+        nkApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
+          const isPending = a.status === 'Pending';
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
+            <td>
+              <div style="font-weight: 700; color: var(--text-main);">${a.company}</div>
+              ${a.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${a.notes}</div>` : ''}
+            </td>
+            <td>${a.role}</td>
+            <td>
+              <select class="status-select ${isPending ? 'pending-status' : ''}" onchange="updateNKStatus(${a.id}, this.value)">
+                <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
+                <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied</option>
+                <option value="Viewed" ${a.status === 'Viewed' ? 'selected' : ''}>Profile Viewed</option>
+                <option value="Shortlisted" ${a.status === 'Shortlisted' ? 'selected' : ''}>Shortlisted</option>
+                <option value="Interview-R1" ${a.status === 'Interview-R1' ? 'selected' : ''}>Interview R1</option>
+                <option value="Offer" ${a.status === 'Offer' ? 'selected' : ''}>Offer 🎉</option>
+                <option value="Rejected" ${a.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+              </select>
+            </td>
+            <td><button class="delete-btn" onclick="deleteNKApp(${a.id})">✕</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
 
       localStorage.setItem('suchir_nk_apps', JSON.stringify(nkApps));
       updateMetrics();
@@ -781,30 +775,34 @@
       const tbody = document.querySelector('#table-dp tbody');
       tbody.innerHTML = '';
 
-      dpApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
-        const isPending = a.status === 'Pending';
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
-          <td>
-            <div style="font-weight: 700; color: var(--text-main);">${a.company}</div>
-            ${a.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${a.notes}</div>` : ''}
-          </td>
-          <td>${a.role}</td>
-          <td>
-            <select class="status-select ${isPending ? 'pending-status' : ''}" onchange="updateDPStatus(${a.id}, this.value)">
-              <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
-              <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied on Site</option>
-              <option value="Assessment" ${a.status === 'Assessment' ? 'selected' : ''}>Assessment</option>
-              <option value="Interview-R1" ${a.status === 'Interview-R1' ? 'selected' : ''}>Interview R1</option>
-              <option value="Offer" ${a.status === 'Offer' ? 'selected' : ''}>Offer 🎉</option>
-              <option value="Rejected" ${a.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
-            </select>
-          </td>
-          <td><button class="delete-btn" onclick="deleteDPApp(${a.id})">✕</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
+      if (dpApps.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.82rem;">No Direct applications logged yet.</td></tr>`;
+      } else {
+        dpApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
+          const isPending = a.status === 'Pending';
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
+            <td>
+              <div style="font-weight: 700; color: var(--text-main);">${a.company}</div>
+              ${a.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${a.notes}</div>` : ''}
+            </td>
+            <td>${a.role}</td>
+            <td>
+              <select class="status-select ${isPending ? 'pending-status' : ''}" onchange="updateDPStatus(${a.id}, this.value)">
+                <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
+                <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied on Site</option>
+                <option value="Assessment" ${a.status === 'Assessment' ? 'selected' : ''}>Assessment</option>
+                <option value="Interview-R1" ${a.status === 'Interview-R1' ? 'selected' : ''}>Interview R1</option>
+                <option value="Offer" ${a.status === 'Offer' ? 'selected' : ''}>Offer 🎉</option>
+                <option value="Rejected" ${a.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+              </select>
+            </td>
+            <td><button class="delete-btn" onclick="deleteDPApp(${a.id})">✕</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
 
       localStorage.setItem('suchir_dp_apps', JSON.stringify(dpApps));
       updateMetrics();
@@ -813,15 +811,19 @@
     function renderTasks() {
       const list = document.getElementById('task-list');
       list.innerHTML = '';
-      tasks.forEach(t => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-          <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${t.id})">
-          <span class="${t.done ? 'done' : ''}">${t.text}</span>
-          <button class="delete-btn" onclick="deleteTask(${t.id})">✕</button>
-        `;
-        list.appendChild(li);
-      });
+      if (tasks.length === 0) {
+        list.innerHTML = `<li style="color: var(--text-muted); font-size: 0.82rem;">No pending follow-ups. Add one above!</li>`;
+      } else {
+        tasks.forEach(t => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${t.id})">
+            <span class="${t.done ? 'done' : ''}">${t.text}</span>
+            <button class="delete-btn" onclick="deleteTask(${t.id})">✕</button>
+          `;
+          list.appendChild(li);
+        });
+      }
       localStorage.setItem('suchir_tasks', JSON.stringify(tasks));
     }
 
@@ -893,6 +895,24 @@
     };
     window.toggleTask = (id) => { const t = tasks.find(x => x.id === id); if(t) t.done = !t.done; renderTasks(); };
     window.deleteTask = (id) => { tasks = tasks.filter(x => x.id !== id); renderTasks(); };
+
+    // Clear all data
+    window.clearAllData = () => {
+      if (confirm('Are you sure you want to clear all data from this dashboard?')) {
+        liApps = [];
+        nkApps = [];
+        dpApps = [];
+        tasks = [];
+        localStorage.removeItem('suchir_li_apps');
+        localStorage.removeItem('suchir_nk_apps');
+        localStorage.removeItem('suchir_dp_apps');
+        localStorage.removeItem('suchir_tasks');
+        renderLI();
+        renderNK();
+        renderDP();
+        renderTasks();
+      }
+    };
 
     // Exports
     window.exportPlatformCSV = (platform) => {
