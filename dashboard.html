@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Applicant & Internship Hub — K. Suchir Reddy</title>
+  <title>Application Dashboard — K. Suchir Reddy</title>
   <meta name="robots" content="noindex, nofollow" />
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,9 +13,9 @@
   <style>
     :root {
       --bg-main: #090d16;
-      --bg-card: rgba(18, 24, 38, 0.75);
-      --bg-card-hover: rgba(28, 36, 56, 0.85);
-      --bg-glass: rgba(15, 21, 34, 0.65);
+      --bg-card: rgba(18, 24, 38, 0.85);
+      --bg-card-hover: rgba(28, 36, 56, 0.95);
+      --bg-glass: rgba(15, 21, 34, 0.75);
       --border-color: rgba(255, 255, 255, 0.08);
       --border-hover: rgba(99, 102, 241, 0.4);
       --text-main: #f1f5f9;
@@ -27,7 +27,8 @@
       --accent-emerald: #10b981;
       --accent-amber: #f59e0b;
       --accent-red: #ef4444;
-      --accent-internshala: #008bdc;
+      --internshala-blue: #008bdc;
+      --linkedin-blue: #0a66c2;
       --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
     }
 
@@ -47,7 +48,8 @@
       --accent-emerald: #059669;
       --accent-amber: #d97706;
       --accent-red: #dc2626;
-      --accent-internshala: #008bdc;
+      --internshala-blue: #008bdc;
+      --linkedin-blue: #0a66c2;
       --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.07);
     }
 
@@ -61,13 +63,14 @@
       padding: 1.5rem;
       transition: background-color 0.3s ease, color 0.3s ease;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(0, 139, 220, 0.08) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(0, 139, 220, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(10, 102, 194, 0.1) 0px, transparent 50%);
       background-attachment: fixed;
     }
 
-    .container { max-width: 1100px; margin: 0 auto; }
+    .container { max-width: 1300px; margin: 0 auto; }
 
+    /* Header */
     header {
       display: flex;
       justify-content: space-between;
@@ -75,7 +78,7 @@
       flex-wrap: wrap;
       gap: 1rem;
       padding-bottom: 1.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       border-bottom: 1px solid var(--border-color);
     }
 
@@ -117,354 +120,567 @@
     .btn-outline { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); }
     .btn-outline:hover { border-color: var(--border-hover); background: var(--bg-card-hover); transform: translateY(-1px); }
     
-    .btn-internshala {
-      background: #008bdc;
-      color: #ffffff;
-      font-weight: 600;
-      box-shadow: 0 4px 12px rgba(0, 139, 220, 0.25);
+    .btn-is {
+      background: var(--internshala-blue);
+      color: white;
     }
-    .btn-internshala:hover {
+    .btn-is:hover {
       background: #0077bd;
+      color: white;
       transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(0, 139, 220, 0.35);
-      color: #fff;
     }
 
-    /* Portals Quick Launcher */
-    .portal-banner {
-      background: linear-gradient(135deg, rgba(0, 139, 220, 0.12), rgba(99, 102, 241, 0.08));
-      border: 1px solid rgba(0, 139, 220, 0.25);
+    .btn-li {
+      background: var(--linkedin-blue);
+      color: white;
+    }
+    .btn-li:hover {
+      background: #004182;
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    /* Platform Launchpad */
+    .launchpad-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 768px) {
+      .launchpad-grid { grid-template-columns: 1fr; }
+    }
+
+    .launch-card {
       border-radius: 14px;
       padding: 1.25rem 1.5rem;
-      margin-bottom: 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 1rem;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border-color);
+    }
+    .launch-is {
+      background: linear-gradient(135deg, rgba(0, 139, 220, 0.15), var(--bg-card));
+      border-color: rgba(0, 139, 220, 0.3);
+    }
+    .launch-li {
+      background: linear-gradient(135deg, rgba(10, 102, 194, 0.15), var(--bg-card));
+      border-color: rgba(10, 102, 194, 0.3);
     }
 
-    .portal-info {
+    .launch-info {
       display: flex;
       align-items: center;
       gap: 1rem;
     }
-
-    .portal-icon {
-      width: 44px;
-      height: 44px;
+    .launch-badge-icon {
+      width: 42px;
+      height: 42px;
       border-radius: 10px;
-      background: #008bdc;
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       flex-shrink: 0;
     }
+    .launch-is .launch-badge-icon { background: var(--internshala-blue); }
+    .launch-li .launch-badge-icon { background: var(--linkedin-blue); }
 
-    .portal-links {
-      display: flex;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-    }
-
-    /* Grid Layout */
-    .grid {
+    /* Summary Bar */
+    .metrics-summary {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
       margin-bottom: 2rem;
     }
-
-    .card {
+    .metric-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 1.5rem;
-      box-shadow: var(--card-shadow);
-      backdrop-filter: blur(12px);
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
     }
-
-    .card h2 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin-bottom: 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 0.6rem;
-    }
-
-    /* Stats */
-    .stat-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 0.92rem;
-    }
-    .stat-row:last-child { border-bottom: none; }
-    .stat-badge {
+    .metric-card .num {
+      font-size: 1.8rem;
+      font-weight: 800;
       font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
-      font-size: 1.05rem;
-      padding: 0.15rem 0.6rem;
-      border-radius: 6px;
-      background: var(--bg-glass);
-      border: 1px solid var(--border-color);
-    }
-
-    /* Tasks */
-    .task-list { list-style: none; }
-    .task-list li {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.65rem 0;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 0.9rem;
-    }
-    .task-list li:last-child { border-bottom: none; }
-    .task-list input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      accent-color: var(--primary);
-      cursor: pointer;
-    }
-    .task-list span.done { text-decoration: line-through; color: var(--text-subtle); }
-    .delete-btn {
-      color: var(--accent-red);
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 0.8rem;
-      margin-left: auto;
-      opacity: 0.7;
-      transition: opacity 0.2s;
-    }
-    .delete-btn:hover { opacity: 1; text-decoration: underline; }
-
-    /* Form & Table */
-    .form-group label {
       display: block;
-      font-size: 0.78rem;
+      margin-bottom: 0.2rem;
+    }
+    .metric-card .label {
+      font-size: 0.8rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 0.35rem;
+      color: var(--text-muted);
+    }
+
+    /* Dual Column Tracker Grid */
+    .dual-columns-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    @media (max-width: 1024px) {
+      .dual-columns-grid { grid-template-columns: 1fr; }
+    }
+
+    .column-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .column-is {
+      border-top: 4px solid var(--internshala-blue);
+    }
+    .column-li {
+      border-top: 4px solid var(--linkedin-blue);
+    }
+
+    .column-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .column-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    /* Forms */
+    .add-form {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .form-full { grid-column: 1 / -1; }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
       color: var(--text-muted);
     }
 
     input, select {
       width: 100%;
-      padding: 0.55rem 0.75rem;
+      padding: 0.5rem 0.65rem;
       background: var(--bg-main);
       border: 1px solid var(--border-color);
-      border-radius: 8px;
+      border-radius: 6px;
       color: var(--text-main);
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     input:focus, select:focus {
       outline: none;
       border-color: var(--primary);
     }
 
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      flex-grow: 1;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 1rem;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
     }
     th, td {
-      padding: 0.85rem 0.75rem;
+      padding: 0.65rem 0.5rem;
       text-align: left;
       border-bottom: 1px solid var(--border-color);
     }
     th {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--text-muted);
       font-weight: 600;
     }
 
-    .platform-pill {
-      display: inline-block;
-      padding: 0.2rem 0.55rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-    .platform-internshala { background: rgba(0, 139, 220, 0.15); color: #008bdc; }
-    .platform-linkedin { background: rgba(10, 102, 194, 0.15); color: #38bdf8; }
-    .platform-other { background: rgba(255, 255, 255, 0.08); color: var(--text-muted); }
-
-    .status-badge {
-      padding: 0.25rem 0.6rem;
-      border-radius: 6px;
+    .status-select {
+      padding: 0.2rem 0.4rem;
       font-size: 0.78rem;
+      border-radius: 6px;
       font-weight: 600;
-      font-family: 'JetBrains Mono', monospace;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      cursor: pointer;
     }
-    .status-badge.applied { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
-    .status-badge.interview { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-    .status-badge.offer { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-    .status-badge.rejected { background: rgba(239, 68, 68, 0.15); color: #f87171; }
-    .status-badge.saved { background: rgba(255, 255, 255, 0.08); color: var(--text-muted); }
+
+    .delete-btn {
+      color: var(--accent-red);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.8rem;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .delete-btn:hover { opacity: 1; text-decoration: underline; }
+
+    /* Follow-ups bar */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .bottom-grid { grid-template-columns: 1fr; }
+    }
+    .task-list { list-style: none; }
+    .task-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.88rem;
+    }
+    .task-list li:last-child { border-bottom: none; }
+    .task-list input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); }
+    .task-list span.done { text-decoration: line-through; color: var(--text-subtle); }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- Header -->
     <header>
       <div class="header-left">
-        <h1>🎯 Internship & Career Command Center</h1>
-        <p>Private workspace for K. Suchir Reddy · Tracks applications across Internshala, LinkedIn, and more.</p>
+        <h1>🎯 Career Application Command Center</h1>
+        <p>Private workspace for K. Suchir Reddy · Real-time tracking across Internshala & LinkedIn.</p>
       </div>
       <div class="header-actions">
-        <a href="resume.pdf" target="_blank" class="btn btn-outline">📄 My Resume</a>
+        <button onclick="exportAllCSV()" class="btn btn-outline" style="font-size: 0.82rem;">📥 Export All CSV</button>
         <a href="index.html" class="btn btn-outline">← Back to Portfolio</a>
       </div>
     </header>
 
-    <!-- Quick Portals Launcher -->
-    <div class="portal-banner">
-      <div class="portal-info">
-        <div class="portal-icon">IS</div>
+    <!-- Platform Launchpads -->
+    <div class="launchpad-grid">
+      <!-- Internshala Card -->
+      <div class="launch-card launch-is">
+        <div class="launch-info">
+          <div class="launch-badge-icon">IS</div>
+          <div>
+            <h3 style="font-size: 1.05rem; font-weight: 700;">Internshala Student Dashboard</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">Access live applications, messages, and internships.</p>
+          </div>
+        </div>
         <div>
-          <h3 style="font-size: 1rem; font-weight: 700;">Internshala Student Dashboard</h3>
-          <p style="font-size: 0.82rem; color: var(--text-muted);">Access your live applications, chat with employers, and track assignments.</p>
+          <a href="https://internshala.com/student/dashboard" target="_blank" rel="noopener noreferrer" class="btn btn-is">
+            <span>Open Internshala ↗</span>
+          </a>
         </div>
       </div>
-      <div class="portal-links">
-        <a href="https://internshala.com/student/dashboard" target="_blank" rel="noopener noreferrer" class="btn btn-internshala">
-          <span>Open Internshala Dashboard ↗</span>
-        </a>
-        <a href="https://www.linkedin.com/jobs/" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size: 0.82rem;">
-          <span>LinkedIn Jobs ↗</span>
-        </a>
+
+      <!-- LinkedIn Card -->
+      <div class="launch-card launch-li">
+        <div class="launch-info">
+          <div class="launch-badge-icon">in</div>
+          <div>
+            <h3 style="font-size: 1.05rem; font-weight: 700;">LinkedIn Job Center</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">Track jobs, messages with recruiters, and alerts.</p>
+          </div>
+        </div>
+        <div>
+          <a href="https://www.linkedin.com/jobs/" target="_blank" rel="noopener noreferrer" class="btn btn-li">
+            <span>Open LinkedIn Jobs ↗</span>
+          </a>
+        </div>
       </div>
     </div>
 
-    <div class="grid">
-      <!-- KPIs -->
-      <div class="card">
-        <h2>
-          <span>Application Metrics</span>
-          <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 400;">Real-time</span>
-        </h2>
-        <div class="stat-row">
-          <span>Total Tracked</span>
-          <span class="stat-badge" id="stat-total" style="color: var(--accent-cyan);">0</span>
+    <!-- Quick Stats Metric Summary -->
+    <div class="metrics-summary">
+      <div class="metric-card">
+        <span class="num" id="is-total-stat" style="color: var(--internshala-blue);">0</span>
+        <span class="label">Internshala Applied</span>
+      </div>
+      <div class="metric-card">
+        <span class="num" id="is-shortlisted-stat" style="color: var(--accent-amber);">0</span>
+        <span class="label">Internshala Active / Review</span>
+      </div>
+      <div class="metric-card">
+        <span class="num" id="li-total-stat" style="color: var(--linkedin-blue);">0</span>
+        <span class="label">LinkedIn Applied</span>
+      </div>
+      <div class="metric-card">
+        <span class="num" id="li-interview-stat" style="color: var(--accent-emerald);">0</span>
+        <span class="label">Interviews / Offers</span>
+      </div>
+    </div>
+
+    <!-- Dual-Column Application Trackers -->
+    <div class="dual-columns-grid">
+      
+      <!-- COLUMN 1: INTERNSHALA TRACKER -->
+      <div class="column-box column-is">
+        <div class="column-header">
+          <div class="column-title">
+            <span style="color: var(--internshala-blue);">🟦</span>
+            <span>Internshala Column</span>
+          </div>
+          <button onclick="exportPlatformCSV('Internshala')" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">Export IS</button>
         </div>
-        <div class="stat-row">
-          <span>Interviews Scheduled</span>
-          <span class="stat-badge" id="stat-interviews" style="color: var(--accent-amber);">0</span>
-        </div>
-        <div class="stat-row">
-          <span>Offers Received</span>
-          <span class="stat-badge" id="stat-offers" style="color: var(--accent-emerald);">0</span>
-        </div>
-        <div class="stat-row">
-          <span>Rejections / Closed</span>
-          <span class="stat-badge" id="stat-rejected" style="color: var(--accent-red);">0</span>
+
+        <!-- Add Internshala Entry -->
+        <form id="form-is" class="add-form">
+          <div class="form-group">
+            <label>Company</label>
+            <input type="text" id="is-company" placeholder="e.g. AI Research Lab" required />
+          </div>
+          <div class="form-group">
+            <label>Role / Profile</label>
+            <input type="text" id="is-role" placeholder="ML Intern" required />
+          </div>
+          <div class="form-group">
+            <label>Date Applied</label>
+            <input type="date" id="is-date" required />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="is-status">
+              <option value="Applied" selected>Applied</option>
+              <option value="In-Review">In-Review</option>
+              <option value="Shortlisted">Shortlisted</option>
+              <option value="Assignment">Assignment Given</option>
+              <option value="Interview">Interview</option>
+              <option value="Selected">Selected / Offer 🎉</option>
+              <option value="Not-Selected">Not Selected</option>
+            </select>
+          </div>
+          <div class="form-full" style="display: flex; gap: 0.5rem;">
+            <input type="text" id="is-stipend" placeholder="Stipend / Notes (e.g. ₹15,000/mo · Bengaluru)" />
+            <button type="submit" class="btn btn-is" style="white-space: nowrap; padding: 0.4rem 1rem;">+ Add</button>
+          </div>
+        </form>
+
+        <div class="table-container">
+          <table id="table-is">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Company</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <!-- Action Items -->
-      <div class="card">
-        <h2>
-          <span>Follow-ups & Tasks</span>
-        </h2>
+      <!-- COLUMN 2: LINKEDIN TRACKER -->
+      <div class="column-box column-li">
+        <div class="column-header">
+          <div class="column-title">
+            <span style="color: var(--linkedin-blue);">🔷</span>
+            <span>LinkedIn Column</span>
+          </div>
+          <button onclick="exportPlatformCSV('LinkedIn')" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">Export LinkedIn</button>
+        </div>
+
+        <!-- Add LinkedIn Entry -->
+        <form id="form-li" class="add-form">
+          <div class="form-group">
+            <label>Company</label>
+            <input type="text" id="li-company" placeholder="e.g. FRND / HARMAN" required />
+          </div>
+          <div class="form-group">
+            <label>Role</label>
+            <input type="text" id="li-role" placeholder="AI/ML Engineer" required />
+          </div>
+          <div class="form-group">
+            <label>Date Applied</label>
+            <input type="date" id="li-date" required />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="li-status">
+              <option value="Applied" selected>Applied</option>
+              <option value="Easy-Apply">Easy Apply</option>
+              <option value="Recruiter-Contact">Recruiter Contacted</option>
+              <option value="Interview-R1">Interview Round 1</option>
+              <option value="Interview-Final">Final Round</option>
+              <option value="Offer">Offer Received 🎉</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+          <div class="form-full" style="display: flex; gap: 0.5rem;">
+            <input type="text" id="li-notes" placeholder="Location / Notes (e.g. Remote / Hybrid Bengaluru)" />
+            <button type="submit" class="btn btn-li" style="white-space: nowrap; padding: 0.4rem 1rem;">+ Add</button>
+          </div>
+        </form>
+
+        <div class="table-container">
+          <table id="table-li">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Company</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Follow-ups & Notes -->
+    <div class="bottom-grid">
+      <div class="column-box">
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem;">📋 Follow-ups & Action Items</h3>
         <form id="task-form" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-          <input type="text" id="task-input" placeholder="e.g. Follow up on ML internship assignments" required />
+          <input type="text" id="task-input" placeholder="e.g. Check Internshala reply / Send LinkedIn message" required />
           <button type="submit" class="btn btn-primary" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">Add</button>
         </form>
         <ul class="task-list" id="task-list"></ul>
       </div>
-    </div>
 
-    <!-- Application Tracker Table -->
-    <div class="card">
-      <h2>
-        <span>Live Applications Tracker</span>
-        <button onclick="exportCSV()" class="btn btn-outline" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;">📥 Export CSV</button>
-      </h2>
-
-      <!-- Add Form -->
-      <form id="app-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; background: var(--bg-glass); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border-color);">
-        <div class="form-group">
-          <label>Company Name</label>
-          <input type="text" id="app-company" required placeholder="e.g. FRND / AI Startup" />
-        </div>
-        <div class="form-group">
-          <label>Role</label>
-          <input type="text" id="app-role" required placeholder="AI/ML Intern" />
-        </div>
-        <div class="form-group">
-          <label>Platform</label>
-          <select id="app-platform">
-            <option value="Internshala" selected>Internshala</option>
-            <option value="LinkedIn">LinkedIn</option>
-            <option value="Unstop">Unstop</option>
-            <option value="Direct / Career Page">Direct / Career Page</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Date Applied</label>
-          <input type="date" id="app-date" required />
-        </div>
-        <div class="form-group">
-          <label>Status</label>
-          <select id="app-status">
-            <option value="applied" selected>Applied</option>
-            <option value="saved">Saved / Later</option>
-            <option value="interview">Interview Scheduled</option>
-            <option value="offer">Offer</option>
-            <option value="rejected">Rejected / Closed</option>
-          </select>
-        </div>
-        <div style="display: flex; align-items: flex-end;">
-          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; height: 38px;">+ Add Entry</button>
-        </div>
-      </form>
-
-      <div style="overflow-x: auto;">
-        <table id="app-table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Company</th>
-              <th>Role</th>
-              <th>Platform</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Populated via JS -->
-          </tbody>
-        </table>
+      <div class="column-box">
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem;">💡 Application Tips</h3>
+        <ul style="color: var(--text-muted); font-size: 0.88rem; padding-left: 1.25rem; line-height: 1.7;">
+          <li><strong>Internshala:</strong> Always complete assessment questions tailored to the company's tech stack (Python, OpenCV, PyTorch).</li>
+          <li><strong>LinkedIn:</strong> Follow up with recruiters or engineers at the target company within 3–4 days of applying.</li>
+          <li><strong>Resume:</strong> Keep your public portfolio link (<a href="https://ksuchirreddy.github.io" target="_blank" style="color: var(--primary);">ksuchirreddy.github.io</a>) in your application header.</li>
+        </ul>
       </div>
     </div>
+
   </div>
 
   <script>
-    let apps = JSON.parse(localStorage.getItem('suchir_apps')) || [
-      { id: 1, company: 'AI Research Lab', role: 'Machine Learning Intern', platform: 'Internshala', date: '2026-08-28', status: 'applied' },
-      { id: 2, company: 'FRND', role: 'ML Engineer Intern', platform: 'LinkedIn', date: '2026-08-27', status: 'applied' },
-      { id: 3, company: '8byte', role: 'AI Intern', platform: 'LinkedIn', date: '2026-08-27', status: 'saved' }
-    ];
-    let tasks = JSON.parse(localStorage.getItem('suchir_tasks')) || [
-      { id: 1, text: 'Check Internshala student dashboard messages', done: false },
-      { id: 2, text: 'Follow up on ML internship assignments', done: false }
+    // Storage keys
+    let isApps = JSON.parse(localStorage.getItem('suchir_is_apps')) || [
+      { id: 1, company: 'AI Research Lab', role: 'Machine Learning Intern', date: '2026-08-28', status: 'Applied', notes: '₹15,000/mo · Remote' },
+      { id: 2, company: 'VisionTech Analytics', role: 'Computer Vision Intern', date: '2026-08-27', status: 'In-Review', notes: 'Bengaluru' }
     ];
 
-    document.getElementById('app-date').valueAsDate = new Date();
+    let liApps = JSON.parse(localStorage.getItem('suchir_li_apps')) || [
+      { id: 1, company: 'FRND', role: 'ML Engineer Intern', date: '2026-08-27', status: 'Applied', notes: 'Hybrid Bengaluru' },
+      { id: 2, company: 'HARMAN India', role: 'Associate Engineer - AI/ML', date: '2026-08-26', status: 'Recruiter-Contact', notes: 'Referred' }
+    ];
+
+    let tasks = JSON.parse(localStorage.getItem('suchir_tasks')) || [
+      { id: 1, text: 'Check Internshala student dashboard messages', done: false },
+      { id: 2, text: 'Follow up with LinkedIn recruiters for ML roles', done: false }
+    ];
+
+    // Set today's date
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('is-date').value = today;
+    document.getElementById('li-date').value = today;
+
+    function renderIS() {
+      const tbody = document.querySelector('#table-is tbody');
+      tbody.innerHTML = '';
+      let reviewCount = 0;
+
+      isApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
+        if (['In-Review', 'Shortlisted', 'Assignment', 'Interview'].includes(a.status)) reviewCount++;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
+          <td>
+            <div style="font-weight: 700; color: var(--text-main);">${a.company}</div>
+            ${a.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${a.notes}</div>` : ''}
+          </td>
+          <td>${a.role}</td>
+          <td>
+            <select class="status-select" onchange="updateISStatus(${a.id}, this.value)">
+              <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied</option>
+              <option value="In-Review" ${a.status === 'In-Review' ? 'selected' : ''}>In-Review</option>
+              <option value="Shortlisted" ${a.status === 'Shortlisted' ? 'selected' : ''}>Shortlisted</option>
+              <option value="Assignment" ${a.status === 'Assignment' ? 'selected' : ''}>Assignment</option>
+              <option value="Interview" ${a.status === 'Interview' ? 'selected' : ''}>Interview</option>
+              <option value="Selected" ${a.status === 'Selected' ? 'selected' : ''}>Selected 🎉</option>
+              <option value="Not-Selected" ${a.status === 'Not-Selected' ? 'selected' : ''}>Not Selected</option>
+            </select>
+          </td>
+          <td><button class="delete-btn" onclick="deleteISApp(${a.id})">✕</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('is-total-stat').textContent = isApps.length;
+      document.getElementById('is-shortlisted-stat').textContent = reviewCount;
+      localStorage.setItem('suchir_is_apps', JSON.stringify(isApps));
+    }
+
+    function renderLI() {
+      const tbody = document.querySelector('#table-li tbody');
+      tbody.innerHTML = '';
+      let offerCount = 0;
+
+      liApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
+        if (['Interview-R1', 'Interview-Final', 'Offer'].includes(a.status)) offerCount++;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
+          <td>
+            <div style="font-weight: 700; color: var(--text-main);">${a.company}</div>
+            ${a.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${a.notes}</div>` : ''}
+          </td>
+          <td>${a.role}</td>
+          <td>
+            <select class="status-select" onchange="updateLIStatus(${a.id}, this.value)">
+              <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied</option>
+              <option value="Easy-Apply" ${a.status === 'Easy-Apply' ? 'selected' : ''}>Easy Apply</option>
+              <option value="Recruiter-Contact" ${a.status === 'Recruiter-Contact' ? 'selected' : ''}>Recruiter Contact</option>
+              <option value="Interview-R1" ${a.status === 'Interview-R1' ? 'selected' : ''}>Interview R1</option>
+              <option value="Interview-Final" ${a.status === 'Interview-Final' ? 'selected' : ''}>Final Round</option>
+              <option value="Offer" ${a.status === 'Offer' ? 'selected' : ''}>Offer 🎉</option>
+              <option value="Rejected" ${a.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+            </select>
+          </td>
+          <td><button class="delete-btn" onclick="deleteLIApp(${a.id})">✕</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('li-total-stat').textContent = liApps.length;
+      document.getElementById('li-interview-stat').textContent = offerCount;
+      localStorage.setItem('suchir_li_apps', JSON.stringify(liApps));
+    }
 
     function renderTasks() {
       const list = document.getElementById('task-list');
@@ -481,45 +697,44 @@
       localStorage.setItem('suchir_tasks', JSON.stringify(tasks));
     }
 
-    function renderApps() {
-      const tbody = document.querySelector('#app-table tbody');
-      tbody.innerHTML = '';
-
-      let counts = { applied: 0, interview: 0, offer: 0, rejected: 0, total: 0 };
-
-      apps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
-        if (a.status !== 'saved') counts.total++;
-        if (counts[a.status] !== undefined) counts[a.status]++;
-
-        const platformClass = a.platform === 'Internshala' ? 'platform-internshala' : (a.platform === 'LinkedIn' ? 'platform-linkedin' : 'platform-other');
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;">${a.date}</td>
-          <td style="font-weight: 700; color: var(--text-main);">${a.company}</td>
-          <td>${a.role}</td>
-          <td><span class="platform-pill ${platformClass}">${a.platform || 'Direct'}</span></td>
-          <td>
-            <select onchange="updateAppStatus(${a.id}, this.value)" style="padding: 0.25rem 0.5rem; font-size: 0.82rem; width: auto; background: var(--bg-card);">
-              <option value="applied" ${a.status === 'applied' ? 'selected' : ''}>Applied</option>
-              <option value="interview" ${a.status === 'interview' ? 'selected' : ''}>Interview</option>
-              <option value="offer" ${a.status === 'offer' ? 'selected' : ''}>Offer</option>
-              <option value="rejected" ${a.status === 'rejected' ? 'selected' : ''}>Rejected</option>
-              <option value="saved" ${a.status === 'saved' ? 'selected' : ''}>Saved</option>
-            </select>
-          </td>
-          <td><button class="delete-btn" onclick="deleteApp(${a.id})">Delete</button></td>
-        `;
-        tbody.appendChild(tr);
+    // Forms
+    document.getElementById('form-is').onsubmit = (e) => {
+      e.preventDefault();
+      isApps.push({
+        id: Date.now(),
+        company: document.getElementById('is-company').value,
+        role: document.getElementById('is-role').value,
+        date: document.getElementById('is-date').value,
+        status: document.getElementById('is-status').value,
+        notes: document.getElementById('is-stipend').value
       });
+      document.getElementById('is-company').value = '';
+      document.getElementById('is-role').value = '';
+      document.getElementById('is-stipend').value = '';
+      renderIS();
+    };
 
-      document.getElementById('stat-total').textContent = counts.total;
-      document.getElementById('stat-interviews').textContent = counts.interview;
-      document.getElementById('stat-offers').textContent = counts.offer;
-      document.getElementById('stat-rejected').textContent = counts.rejected;
+    document.getElementById('form-li').onsubmit = (e) => {
+      e.preventDefault();
+      liApps.push({
+        id: Date.now(),
+        company: document.getElementById('li-company').value,
+        role: document.getElementById('li-role').value,
+        date: document.getElementById('li-date').value,
+        status: document.getElementById('li-status').value,
+        notes: document.getElementById('li-notes').value
+      });
+      document.getElementById('li-company').value = '';
+      document.getElementById('li-role').value = '';
+      document.getElementById('li-notes').value = '';
+      renderLI();
+    };
 
-      localStorage.setItem('suchir_apps', JSON.stringify(apps));
-    }
+    window.updateISStatus = (id, val) => { const a = isApps.find(x => x.id === id); if(a) a.status = val; renderIS(); };
+    window.deleteISApp = (id) => { if(confirm('Delete this Internshala record?')) { isApps = isApps.filter(x => x.id !== id); renderIS(); } };
+
+    window.updateLIStatus = (id, val) => { const a = liApps.find(x => x.id === id); if(a) a.status = val; renderLI(); };
+    window.deleteLIApp = (id) => { if(confirm('Delete this LinkedIn record?')) { liApps = liApps.filter(x => x.id !== id); renderLI(); } };
 
     // Task Actions
     document.getElementById('task-form').onsubmit = (e) => {
@@ -529,59 +744,36 @@
       input.value = '';
       renderTasks();
     };
-    window.toggleTask = (id) => {
-      const task = tasks.find(t => t.id === id);
-      if (task) task.done = !task.done;
-      renderTasks();
-    };
-    window.deleteTask = (id) => {
-      tasks = tasks.filter(t => t.id !== id);
-      renderTasks();
+    window.toggleTask = (id) => { const t = tasks.find(x => x.id === id); if(t) t.done = !t.done; renderTasks(); };
+    window.deleteTask = (id) => { tasks = tasks.filter(x => x.id !== id); renderTasks(); };
+
+    // Exports
+    window.exportPlatformCSV = (platform) => {
+      const data = platform === 'Internshala' ? isApps : liApps;
+      let csv = `Date,Company,Role,Status,Notes\n`;
+      data.forEach(a => { csv += `"${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
+      downloadBlob(csv, `suchir_${platform.toLowerCase()}_applications.csv`);
     };
 
-    // App Actions
-    document.getElementById('app-form').onsubmit = (e) => {
-      e.preventDefault();
-      apps.push({
-        id: Date.now(),
-        company: document.getElementById('app-company').value,
-        role: document.getElementById('app-role').value,
-        platform: document.getElementById('app-platform').value,
-        date: document.getElementById('app-date').value,
-        status: document.getElementById('app-status').value
-      });
-      document.getElementById('app-company').value = '';
-      document.getElementById('app-role').value = '';
-      renderApps();
-    };
-    window.updateAppStatus = (id, newStatus) => {
-      const app = apps.find(a => a.id === id);
-      if (app) app.status = newStatus;
-      renderApps();
-    };
-    window.deleteApp = (id) => {
-      if (confirm('Delete this application record?')) {
-        apps = apps.filter(a => a.id !== id);
-        renderApps();
-      }
+    window.exportAllCSV = () => {
+      let csv = `Platform,Date,Company,Role,Status,Notes\n`;
+      isApps.forEach(a => { csv += `"Internshala","${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
+      liApps.forEach(a => { csv += `"LinkedIn","${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
+      downloadBlob(csv, `suchir_all_applications.csv`);
     };
 
-    // CSV Export
-    window.exportCSV = () => {
-      let csv = 'Date,Company,Role,Platform,Status\n';
-      apps.forEach(a => {
-        csv += `"${a.date}","${a.company}","${a.role}","${a.platform}","${a.status}"\n`;
-      });
-      const blob = new Blob([csv], { type: 'text/csv' });
+    function downloadBlob(content, filename) {
+      const blob = new Blob([content], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.setAttribute('href', url);
-      a.setAttribute('download', 'suchir_applications.csv');
+      a.href = url;
+      a.download = filename;
       a.click();
-    };
+    }
 
+    renderIS();
+    renderLI();
     renderTasks();
-    renderApps();
   </script>
 </body>
 </html>
