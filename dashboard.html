@@ -332,6 +332,12 @@
       color: var(--accent-amber);
       background: rgba(245, 158, 11, 0.1);
     }
+    .status-select.applied-status {
+      border-color: var(--accent-emerald);
+      color: var(--accent-emerald);
+      background: rgba(16, 185, 129, 0.12);
+      font-weight: 700;
+    }
 
     .delete-btn {
       color: var(--accent-red);
@@ -438,15 +444,15 @@
     <!-- Quick Stats Metric Summary -->
     <div class="metrics-summary">
       <div class="metric-card">
+        <span class="num" id="applied-stat" style="color: var(--accent-emerald);">9</span>
+        <span class="label">🚀 Applications Submitted (Applied)</span>
+      </div>
+      <div class="metric-card">
         <span class="num" id="pending-stat" style="color: var(--accent-amber);">0</span>
-        <span class="label">🟡 Ready / Pending Review</span>
+        <span class="label">🟡 Ready / Pending</span>
       </div>
       <div class="metric-card">
-        <span class="num" id="li-total-stat" style="color: var(--linkedin-blue);">0</span>
-        <span class="label">💼 LinkedIn Applications</span>
-      </div>
-      <div class="metric-card">
-        <span class="num" id="interview-stat" style="color: var(--accent-emerald);">0</span>
+        <span class="num" id="interview-stat" style="color: var(--accent-cyan);">0</span>
         <span class="label">🟢 Interviews Scheduled</span>
       </div>
       <div class="metric-card">
@@ -759,6 +765,15 @@
     let dpApps = JSON.parse(localStorage.getItem('suchir_dp_apps')) || initialDP;
     let tasks = JSON.parse(localStorage.getItem('suchir_tasks')) || initialTasks;
 
+    // Migrate any cached 'Pending' state from this batch to 'Applied'
+    liApps = liApps.map(a => a.status === 'Pending' ? { ...a, status: 'Applied' } : a);
+    nkApps = nkApps.map(a => a.status === 'Pending' ? { ...a, status: 'Applied' } : a);
+    dpApps = dpApps.map(a => a.status === 'Pending' ? { ...a, status: 'Applied' } : a);
+
+    if (liApps.length < 3) liApps = initialLI;
+    if (nkApps.length < 3) nkApps = initialNK;
+    if (dpApps.length < 3) dpApps = initialDP;
+
     // Persist current state
     localStorage.setItem('suchir_li_apps', JSON.stringify(liApps));
     localStorage.setItem('suchir_nk_apps', JSON.stringify(nkApps));
@@ -772,6 +787,7 @@
     document.getElementById('dp-date').value = today;
 
     function updateMetrics() {
+      let applied = 0;
       let pending = 0;
       let interviews = 0;
       let offers = 0;
@@ -779,13 +795,14 @@
       const allApps = [...liApps, ...nkApps, ...dpApps];
 
       allApps.forEach(a => {
-        if (a.status === 'Pending') pending++;
+        if (a.status === 'Applied') applied++;
+        else if (a.status === 'Pending') pending++;
         else if (['Interview', 'Interview-R1', 'Interview-Final', 'Recruiter-DM'].includes(a.status)) interviews++;
         else if (['Selected', 'Offer'].includes(a.status)) offers++;
       });
 
+      if (document.getElementById('applied-stat')) document.getElementById('applied-stat').textContent = applied;
       document.getElementById('pending-stat').textContent = pending;
-      document.getElementById('li-total-stat').textContent = liApps.length;
       document.getElementById('interview-stat').textContent = interviews;
       document.getElementById('offers-stat').textContent = offers;
     }
@@ -799,6 +816,7 @@
       } else {
         liApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
           const isPending = a.status === 'Pending';
+          const isApplied = a.status === 'Applied';
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
@@ -808,9 +826,9 @@
             </td>
             <td>${a.role}</td>
             <td>
-              <select class="status-select ${isPending ? 'pending-status' : ''}" onchange="updateLIStatus(${a.id}, this.value)">
-                <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
+              <select class="status-select ${isApplied ? 'applied-status' : isPending ? 'pending-status' : ''}" onchange="updateLIStatus(${a.id}, this.value)">
                 <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied (Easy Apply)</option>
+                <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
                 <option value="Recruiter-DM" ${a.status === 'Recruiter-DM' ? 'selected' : ''}>Recruiter DM Sent</option>
                 <option value="Connection-Sent" ${a.status === 'Connection-Sent' ? 'selected' : ''}>Connection Sent</option>
                 <option value="Interview-R1" ${a.status === 'Interview-R1' ? 'selected' : ''}>Interview R1</option>
@@ -838,6 +856,7 @@
       } else {
         nkApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
           const isPending = a.status === 'Pending';
+          const isApplied = a.status === 'Applied';
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
@@ -847,9 +866,9 @@
             </td>
             <td>${a.role}</td>
             <td>
-              <select class="status-select ${isPending ? 'pending-status' : ''}" onchange="updateNKStatus(${a.id}, this.value)">
-                <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
+              <select class="status-select ${isApplied ? 'applied-status' : isPending ? 'pending-status' : ''}" onchange="updateNKStatus(${a.id}, this.value)">
                 <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied</option>
+                <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
                 <option value="Viewed" ${a.status === 'Viewed' ? 'selected' : ''}>Profile Viewed</option>
                 <option value="Shortlisted" ${a.status === 'Shortlisted' ? 'selected' : ''}>Shortlisted</option>
                 <option value="Interview-R1" ${a.status === 'Interview-R1' ? 'selected' : ''}>Interview R1</option>
@@ -876,6 +895,7 @@
       } else {
         dpApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
           const isPending = a.status === 'Pending';
+          const isApplied = a.status === 'Applied';
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
@@ -885,9 +905,9 @@
             </td>
             <td>${a.role}</td>
             <td>
-              <select class="status-select ${isPending ? 'pending-status' : ''}" onchange="updateDPStatus(${a.id}, this.value)">
-                <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
+              <select class="status-select ${isApplied ? 'applied-status' : isPending ? 'pending-status' : ''}" onchange="updateDPStatus(${a.id}, this.value)">
                 <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied on Site</option>
+                <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
                 <option value="Assessment" ${a.status === 'Assessment' ? 'selected' : ''}>Assessment</option>
                 <option value="Interview-R1" ${a.status === 'Interview-R1' ? 'selected' : ''}>Interview R1</option>
                 <option value="Offer" ${a.status === 'Offer' ? 'selected' : ''}>Offer 🎉</option>
