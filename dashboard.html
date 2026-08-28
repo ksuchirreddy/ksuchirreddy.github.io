@@ -248,7 +248,7 @@
     }
     .delete-btn:hover { opacity: 1; text-decoration: underline; }
 
-    /* Application Table */
+    /* Form & Table */
     .form-group label {
       display: block;
       font-size: 0.78rem;
@@ -326,6 +326,7 @@
         <p>Private workspace for K. Suchir Reddy · Tracks applications across Internshala, LinkedIn, and more.</p>
       </div>
       <div class="header-actions">
+        <a href="resume.pdf" target="_blank" class="btn btn-outline">📄 My Resume</a>
         <a href="index.html" class="btn btn-outline">← Back to Portfolio</a>
       </div>
     </header>
@@ -380,7 +381,7 @@
           <span>Follow-ups & Tasks</span>
         </h2>
         <form id="task-form" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-          <input type="text" id="task-input" placeholder="e.g. Check Internshala reply from AI Startup" required />
+          <input type="text" id="task-input" placeholder="e.g. Follow up on ML internship assignments" required />
           <button type="submit" class="btn btn-primary" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">Add</button>
         </form>
         <ul class="task-list" id="task-list"></ul>
@@ -453,7 +454,6 @@
   </div>
 
   <script>
-    // Load local storage data
     let apps = JSON.parse(localStorage.getItem('suchir_apps')) || [
       { id: 1, company: 'AI Research Lab', role: 'Machine Learning Intern', platform: 'Internshala', date: '2026-08-28', status: 'applied' },
       { id: 2, company: 'FRND', role: 'ML Engineer Intern', platform: 'LinkedIn', date: '2026-08-27', status: 'applied' },
