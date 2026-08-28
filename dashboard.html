@@ -29,7 +29,7 @@
       --accent-red: #ef4444;
       --linkedin-blue: #0a66c2;
       --naukri-blue: #1e50ff;
-      --internshala-blue: #008bdc;
+      --direct-purple: #8b5cf6;
       --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
     }
 
@@ -51,7 +51,7 @@
       --accent-red: #dc2626;
       --linkedin-blue: #0a66c2;
       --naukri-blue: #1e50ff;
-      --internshala-blue: #008bdc;
+      --direct-purple: #7c3aed;
       --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.07);
     }
 
@@ -128,8 +128,8 @@
     .btn-nk { background: var(--naukri-blue); color: white; }
     .btn-nk:hover { background: #0b3bd6; color: white; transform: translateY(-1px); }
 
-    .btn-dp { background: var(--internshala-blue); color: white; }
-    .btn-dp:hover { background: #0077bd; color: white; transform: translateY(-1px); }
+    .btn-dp { background: var(--direct-purple); color: white; }
+    .btn-dp:hover { background: #6d28d9; color: white; transform: translateY(-1px); }
 
     /* Platform Launchpads (LinkedIn Spotlight) */
     .launchpad-grid {
@@ -162,8 +162,8 @@
       border-color: rgba(30, 80, 255, 0.25);
     }
     .launch-dp {
-      background: linear-gradient(135deg, rgba(0, 139, 220, 0.12), var(--bg-card));
-      border-color: rgba(0, 139, 220, 0.25);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), var(--bg-card));
+      border-color: rgba(139, 92, 246, 0.25);
     }
 
     .launch-info {
@@ -185,7 +185,7 @@
     }
     .launch-li-primary .launch-badge-icon { background: var(--linkedin-blue); }
     .launch-nk .launch-badge-icon { background: var(--naukri-blue); }
-    .launch-dp .launch-badge-icon { background: var(--internshala-blue); }
+    .launch-dp .launch-badge-icon { background: var(--direct-purple); }
 
     /* Summary Bar */
     .metrics-summary {
@@ -332,12 +332,6 @@
       color: var(--accent-amber);
       background: rgba(245, 158, 11, 0.1);
     }
-    .status-select.applied-status {
-      border-color: var(--accent-emerald);
-      color: var(--accent-emerald);
-      background: rgba(16, 185, 129, 0.12);
-      font-weight: 700;
-    }
 
     .delete-btn {
       color: var(--accent-red);
@@ -382,8 +376,7 @@
         <p>Primary Hub for K. Suchir Reddy · LinkedIn-First Job Discovery, Outreach & Cross-Platform Tracking.</p>
       </div>
       <div class="header-actions">
-        <button onclick="resetToDefaultJobs()" class="btn btn-primary" style="font-size: 0.82rem;">🔄 Sync / Reload 10 Live Jobs</button>
-        <button onclick="clearAllData()" class="btn btn-outline" style="font-size: 0.82rem; color: var(--accent-red);">🗑️ Clear All</button>
+        <button onclick="clearAllData()" class="btn btn-outline" style="font-size: 0.82rem; color: var(--accent-red);">🗑️ Clear All Data</button>
         <button onclick="exportAllCSV()" class="btn btn-outline" style="font-size: 0.82rem;">📥 Export All CSV</button>
         <a href="index.html" class="btn btn-outline">← Back to Portfolio</a>
       </div>
@@ -424,18 +417,18 @@
         </div>
       </div>
 
-      <!-- Internshala Card -->
+      <!-- Direct & Startup Portals Card -->
       <div class="launch-card launch-dp">
         <div class="launch-info">
-          <div class="launch-badge-icon">IS</div>
+          <div class="launch-badge-icon">🚀</div>
           <div>
-            <h3 style="font-size: 1.05rem; font-weight: 700;">Internshala Portal</h3>
-            <p style="font-size: 0.82rem; color: var(--text-muted);">AI/ML, Python & Data Science internships & fresher roles.</p>
+            <h3 style="font-size: 1.05rem; font-weight: 700;">Direct Career Portals</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">Company career pages, Wellfound & Unstop openings.</p>
           </div>
         </div>
         <div>
-          <a href="https://internshala.com/internships/ai-internship/" target="_blank" rel="noopener noreferrer" class="btn btn-dp">
-            <span>Open Internshala ↗</span>
+          <a href="https://wellfound.com/jobs" target="_blank" rel="noopener noreferrer" class="btn btn-dp">
+            <span>Open Wellfound ↗</span>
           </a>
         </div>
       </div>
@@ -444,15 +437,15 @@
     <!-- Quick Stats Metric Summary -->
     <div class="metrics-summary">
       <div class="metric-card">
-        <span class="num" id="applied-stat" style="color: var(--accent-emerald);">10</span>
-        <span class="label">🚀 Applications Submitted (Applied)</span>
-      </div>
-      <div class="metric-card">
         <span class="num" id="pending-stat" style="color: var(--accent-amber);">0</span>
-        <span class="label">🟡 Ready / Pending</span>
+        <span class="label">🟡 Ready / Pending Review</span>
       </div>
       <div class="metric-card">
-        <span class="num" id="interview-stat" style="color: var(--accent-cyan);">0</span>
+        <span class="num" id="li-total-stat" style="color: var(--linkedin-blue);">0</span>
+        <span class="label">💼 LinkedIn Applications</span>
+      </div>
+      <div class="metric-card">
+        <span class="num" id="interview-stat" style="color: var(--accent-emerald);">0</span>
         <span class="label">🟢 Interviews Scheduled</span>
       </div>
       <div class="metric-card">
@@ -585,21 +578,21 @@
         </div>
       </div>
 
-      <!-- COLUMN 3: INTERNSHALA PORTAL -->
+      <!-- COLUMN 3: DIRECT & COMPANY CAREER PORTALS -->
       <div class="column-box column-dp">
         <div class="column-header">
           <div class="column-title">
-            <span style="color: var(--internshala-blue);">🎓</span>
-            <span>Internshala Applications</span>
+            <span style="color: var(--direct-purple);">🟣</span>
+            <span>Direct Career Pages</span>
           </div>
-          <button onclick="exportPlatformCSV('Internshala')" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">Export Internshala</button>
+          <button onclick="exportPlatformCSV('Direct')" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">Export Direct</button>
         </div>
 
-        <!-- Add Internshala Entry -->
+        <!-- Add Direct Entry -->
         <form id="form-dp" class="add-form">
           <div class="form-group">
             <label>Company</label>
-            <input type="text" id="dp-company" placeholder="e.g. Sarvam AI / Internshala" required />
+            <input type="text" id="dp-company" placeholder="e.g. Meraki Labs / Sarvam AI" required />
           </div>
           <div class="form-group">
             <label>Role</label>
@@ -646,83 +639,6 @@
 
     </div>
 
-    <!-- Tailored Resume Asset Vault & Audit Trail -->
-    <div class="column-box" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
-      <div class="column-header">
-        <div class="column-title">
-          <div class="launch-badge-icon" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;">PDF</div>
-          <div>
-            <h3 style="font-size: 1.05rem; font-weight: 800;">📄 Tailored Resume Vault & Company Mapping</h3>
-            <p style="font-size: 0.78rem; color: var(--text-muted);">Verified audit trail: Exact customized PDF resume generated and attached per company without altering project truth.</p>
-          </div>
-        </div>
-      </div>
-      <div class="table-wrap" style="max-height: none;">
-        <table>
-          <thead>
-            <tr>
-              <th>Target Company</th>
-              <th>Target Role</th>
-              <th>Tailored Focus & Skills</th>
-              <th>#1 Priority Project</th>
-              <th>Attached Resume PDF</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong style="color: var(--text-main);">IBM India</strong></td>
-              <td>Software Developer Intern</td>
-              <td><span style="font-size: 0.8rem; background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Backend & Systems (Java, Python, C++, SQL)</span></td>
-              <td>Multi-Model AST Engine</td>
-              <td><a href="resumes/Suchir_Resume_IBM.pdf" target="_blank" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">👁️ View Suchir_Resume_IBM.pdf ↗</a></td>
-            </tr>
-            <tr>
-              <td><strong style="color: var(--text-main);">Sarvam AI</strong></td>
-              <td>AI/ML Engineer Intern</td>
-              <td><span style="font-size: 0.8rem; background: rgba(168, 85, 247, 0.1); color: #a855f7; padding: 2px 6px; border-radius: 4px; font-weight: 600;">LLMs & PyTorch (AST & Model Benchmarking)</span></td>
-              <td>Multi-Model AST Engine</td>
-              <td><a href="resumes/Suchir_Resume_SarvamAI.pdf" target="_blank" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">👁️ View Suchir_Resume_SarvamAI.pdf ↗</a></td>
-            </tr>
-            <tr>
-              <td><strong style="color: var(--text-main);">Meraki Labs</strong></td>
-              <td>Computer Vision Intern</td>
-              <td><span style="font-size: 0.8rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Computer Vision (OpenCV, YOLO, Video Streams)</span></td>
-              <td>Adaptive Traffic Signal CV</td>
-              <td><a href="resumes/Suchir_Resume_MerakiLabs.pdf" target="_blank" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">👁️ View Suchir_Resume_MerakiLabs.pdf ↗</a></td>
-            </tr>
-            <tr>
-              <td><strong style="color: var(--text-main);">Merkle Science</strong></td>
-              <td>Backend Engineering Intern</td>
-              <td><span style="font-size: 0.8rem; background: rgba(245, 158, 11, 0.1); color: #f59e0b; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Python & Relational DBs (MySQL, FastAPI, REST)</span></td>
-              <td>AI Content Moderator Backend</td>
-              <td><a href="resumes/Suchir_Resume_MerkleScience.pdf" target="_blank" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">👁️ View Suchir_Resume_MerkleScience.pdf ↗</a></td>
-            </tr>
-            <tr>
-              <td><strong style="color: var(--text-main);">MPL</strong></td>
-              <td>Data Engineer Intern</td>
-              <td><span style="font-size: 0.8rem; background: rgba(6, 182, 212, 0.1); color: #06b6d4; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Data Pipelines & SQL (Pandas, ETL, AWS S3)</span></td>
-              <td>AI Content Moderator Data Flow</td>
-              <td><a href="resumes/Suchir_Resume_MPL.pdf" target="_blank" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">👁️ View Suchir_Resume_MPL.pdf ↗</a></td>
-            </tr>
-            <tr>
-              <td><strong style="color: var(--text-main);">Fractal Analytics</strong></td>
-              <td>Software & Data Trainee Engineer</td>
-              <td><span style="font-size: 0.8rem; background: rgba(99, 102, 241, 0.1); color: #6366f1; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Systems & Analytics (Python, Java, DSA, SQL)</span></td>
-              <td>Multi-Model AST Engine</td>
-              <td><a href="resumes/Suchir_Resume_Fractal.pdf" target="_blank" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">👁️ View Suchir_Resume_Fractal.pdf ↗</a></td>
-            </tr>
-            <tr>
-              <td><strong style="color: var(--text-main);">Flexio</strong></td>
-              <td>Python Full-Stack Developer Intern</td>
-              <td><span style="font-size: 0.8rem; background: rgba(236, 72, 153, 0.1); color: #ec4899; padding: 2px 6px; border-radius: 4px; font-weight: 600;">APIs & Full-Stack (Flask, FastAPI, MySQL, JS)</span></td>
-              <td>AI Content Moderator Platform</td>
-              <td><a href="resumes/Suchir_Resume_Flexio.pdf" target="_blank" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">👁️ View Suchir_Resume_Flexio.pdf ↗</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
     <!-- Follow-ups & Notes -->
     <div class="bottom-grid">
       <div class="column-box">
@@ -747,114 +663,11 @@
   </div>
 
   <script>
-    // 10 Live Multi-Domain Applications (Backend, Software Eng, Data Eng, AI/ML, CV)
-    const initialLI = [
-      {
-        id: 1724840011,
-        company: "IBM India",
-        role: "Software Developer Intern (Backend & Systems)",
-        date: new Date().toISOString().split('T')[0],
-        status: "Applied",
-        notes: "Bengaluru | Java, Python & REST APIs | Easy Apply submitted"
-      },
-      {
-        id: 1724840012,
-        company: "Merkle Science",
-        role: "Backend Engineering Intern (Python & SQL)",
-        date: new Date().toISOString().split('T')[0],
-        status: "Applied",
-        notes: "Bengaluru | Python, MySQL & FastAPI | InMail note sent"
-      },
-      {
-        id: 1724840013,
-        company: "MPL",
-        role: "Data Engineer Intern (ETL & SQL)",
-        date: new Date().toISOString().split('T')[0],
-        status: "Applied",
-        notes: "Bengaluru | SQL, Pandas & AWS S3 | Easy Apply submitted"
-      },
-      {
-        id: 1724840014,
-        company: "Sarvam AI",
-        role: "AI/ML Engineer Intern (PyTorch & LLMs)",
-        date: new Date().toISOString().split('T')[0],
-        status: "Applied",
-        notes: "Bengaluru | AST Benchmarking & PyTorch | Easy Apply submitted"
-      }
-    ];
-
-    const initialNK = [
-      {
-        id: 1724840018,
-        company: "Fractal Analytics",
-        role: "Software Development & Data Trainee Engineer",
-        date: new Date().toISOString().split('T')[0],
-        status: "Applied",
-        notes: "Bengaluru | Python, Java & Data Structures | Profile tailored & submitted"
-      },
-      {
-        id: 1724840019,
-        company: "Lentra AI",
-        role: "Backend & AI Solutions Intern",
-        date: new Date().toISOString().split('T')[0],
-        status: "Applied",
-        notes: "Bengaluru | Python, REST APIs & MySQL | Profile matched & submitted"
-      },
-      {
-        id: 1724840020,
-        company: "Turing Technologies",
-        role: "Junior Software / AI Engineer (Compiler & AST)",
-        date: new Date().toISOString().split('T')[0],
-        status: "Applied",
-        notes: "Bengaluru/Remote | AST Analysis & Clean Code | Tailored application submitted"
-      }
-    ];
-
-    const initialDP = [
-      {
-        id: 1724840015,
-        company: "Meraki Labs",
-        role: "Computer Vision & Video Analytics Intern",
-        date: new Date().toISOString().split('T')[0],
-        status: "Applied",
-        notes: "Internshala | Bengaluru | OpenCV & YOLO Traffic Signal project tailored"
-      },
-      {
-        id: 1724840016,
-        company: "Flexio",
-        role: "Python Full-Stack / API Developer Intern",
-        date: new Date().toISOString().split('T')[0],
-        status: "Applied",
-        notes: "Internshala | Bengaluru | Flask, MySQL & REST APIs tailored"
-      },
-      {
-        id: 1724840017,
-        company: "Skill Nexis",
-        role: "Data Science & Analytics Intern",
-        date: new Date().toISOString().split('T')[0],
-        status: "Applied",
-        notes: "Internshala | Bengaluru/Remote | Power BI, Pandas & Scikit-learn tailored"
-      }
-    ];
-
-    const initialTasks = [
-      { id: 1, text: "Send LinkedIn connection note to IBM India University Recruiter", done: false },
-      { id: 2, text: "Follow up on Merkle Science Backend Intern application with GitHub portfolio", done: false },
-      { id: 3, text: "Review Meraki Labs Computer Vision code demo submission on Internshala", done: false },
-      { id: 4, text: "Check Fractal Analytics assessment status on Naukri", done: false }
-    ];
-
-    // Load existing stored applications or fallback to seeded live roles
-    let liApps = initialLI;
-    let nkApps = initialNK;
-    let dpApps = initialDP;
-    let tasks = initialTasks;
-
-    // Persist current state
-    localStorage.setItem('suchir_li_apps', JSON.stringify(liApps));
-    localStorage.setItem('suchir_nk_apps', JSON.stringify(nkApps));
-    localStorage.setItem('suchir_dp_apps', JSON.stringify(dpApps));
-    localStorage.setItem('suchir_tasks', JSON.stringify(tasks));
+    // Pure clean slate arrays (No test cases)
+    let liApps = JSON.parse(localStorage.getItem('suchir_li_apps')) || [];
+    let nkApps = JSON.parse(localStorage.getItem('suchir_nk_apps')) || [];
+    let dpApps = JSON.parse(localStorage.getItem('suchir_dp_apps')) || [];
+    let tasks = JSON.parse(localStorage.getItem('suchir_tasks')) || [];
 
     // Set today's date
     const today = new Date().toISOString().split('T')[0];
@@ -863,7 +676,6 @@
     document.getElementById('dp-date').value = today;
 
     function updateMetrics() {
-      let applied = 0;
       let pending = 0;
       let interviews = 0;
       let offers = 0;
@@ -871,38 +683,16 @@
       const allApps = [...liApps, ...nkApps, ...dpApps];
 
       allApps.forEach(a => {
-        if (a.status === 'Applied') applied++;
-        else if (a.status === 'Pending') pending++;
+        if (a.status === 'Pending') pending++;
         else if (['Interview', 'Interview-R1', 'Interview-Final', 'Recruiter-DM'].includes(a.status)) interviews++;
         else if (['Selected', 'Offer'].includes(a.status)) offers++;
       });
 
-      if (document.getElementById('applied-stat')) document.getElementById('applied-stat').textContent = applied;
       document.getElementById('pending-stat').textContent = pending;
+      document.getElementById('li-total-stat').textContent = liApps.length;
       document.getElementById('interview-stat').textContent = interviews;
       document.getElementById('offers-stat').textContent = offers;
     }
-
-    // Sort priority: Pending / Attention Required items ALWAYS appear FIRST
-    function sortAppsWithPriority(apps) {
-      return [...apps].sort((a, b) => {
-        const isAPending = (a.status === 'Pending' || a.status === 'Action-Required' || a.status === 'Trouble') ? 1 : 0;
-        const isBPending = (b.status === 'Pending' || b.status === 'Action-Required' || b.status === 'Trouble') ? 1 : 0;
-        if (isAPending !== isBPending) {
-          return isBPending - isAPending; // 1 (Pending) comes before 0 (Applied/others)
-        }
-        return new Date(b.date) - new Date(a.date);
-      });
-    }
-
-    // Auto-push trouble alerts to Command list
-    window.pushTroubleAlert = (platform, company, reason) => {
-      const alertText = `⚠️ [ACTION REQUIRED] ${company} (${platform}) - ${reason}`;
-      if (!tasks.some(t => t.text.includes(company) && !t.done)) {
-        tasks.unshift({ id: Date.now(), text: alertText, done: false, isAlert: true });
-        renderTasks();
-      }
-    };
 
     function renderLI() {
       const tbody = document.querySelector('#table-li tbody');
@@ -911,20 +701,18 @@
       if (liApps.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.82rem;">No LinkedIn applications logged yet. Use the form above or Claude to add!</td></tr>`;
       } else {
-        sortAppsWithPriority(liApps).forEach(a => {
+        liApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
           const isPending = a.status === 'Pending';
-          const isApplied = a.status === 'Applied';
           const tr = document.createElement('tr');
-          if (isPending) tr.style.backgroundColor = 'rgba(245, 158, 11, 0.04)';
           tr.innerHTML = `
             <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
             <td>
-              <div style="font-weight: 700; color: var(--text-main);">${a.company} ${isPending ? '<span style="color: var(--accent-amber); font-size: 0.75rem;">(⚠️ Action Needed)</span>' : ''}</div>
-              ${a.notes ? `<div style="font-size: 0.75rem; color: ${isPending ? 'var(--accent-amber)' : 'var(--text-muted)'};">${a.notes}</div>` : ''}
+              <div style="font-weight: 700; color: var(--text-main);">${a.company}</div>
+              ${a.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${a.notes}</div>` : ''}
             </td>
             <td>${a.role}</td>
             <td>
-              <select class="status-select ${isApplied ? 'applied-status' : isPending ? 'pending-status' : ''}" onchange="updateLIStatus(${a.id}, this.value)">
+              <select class="status-select ${isPending ? 'pending-status' : ''}" onchange="updateLIStatus(${a.id}, this.value)">
                 <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
                 <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied (Easy Apply)</option>
                 <option value="Recruiter-DM" ${a.status === 'Recruiter-DM' ? 'selected' : ''}>Recruiter DM Sent</option>
@@ -952,20 +740,18 @@
       if (nkApps.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.82rem;">No Naukri applications logged yet.</td></tr>`;
       } else {
-        sortAppsWithPriority(nkApps).forEach(a => {
+        nkApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
           const isPending = a.status === 'Pending';
-          const isApplied = a.status === 'Applied';
           const tr = document.createElement('tr');
-          if (isPending) tr.style.backgroundColor = 'rgba(245, 158, 11, 0.04)';
           tr.innerHTML = `
             <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
             <td>
-              <div style="font-weight: 700; color: var(--text-main);">${a.company} ${isPending ? '<span style="color: var(--accent-amber); font-size: 0.75rem;">(⚠️ Action Needed)</span>' : ''}</div>
-              ${a.notes ? `<div style="font-size: 0.75rem; color: ${isPending ? 'var(--accent-amber)' : 'var(--text-muted)'};">${a.notes}</div>` : ''}
+              <div style="font-weight: 700; color: var(--text-main);">${a.company}</div>
+              ${a.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${a.notes}</div>` : ''}
             </td>
             <td>${a.role}</td>
             <td>
-              <select class="status-select ${isApplied ? 'applied-status' : isPending ? 'pending-status' : ''}" onchange="updateNKStatus(${a.id}, this.value)">
+              <select class="status-select ${isPending ? 'pending-status' : ''}" onchange="updateNKStatus(${a.id}, this.value)">
                 <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
                 <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied</option>
                 <option value="Viewed" ${a.status === 'Viewed' ? 'selected' : ''}>Profile Viewed</option>
@@ -990,22 +776,20 @@
       tbody.innerHTML = '';
 
       if (dpApps.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.82rem;">No Internshala applications logged yet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.82rem;">No Direct applications logged yet.</td></tr>`;
       } else {
-        sortAppsWithPriority(dpApps).forEach(a => {
+        dpApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
           const isPending = a.status === 'Pending';
-          const isApplied = a.status === 'Applied';
           const tr = document.createElement('tr');
-          if (isPending) tr.style.backgroundColor = 'rgba(245, 158, 11, 0.04)';
           tr.innerHTML = `
             <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
             <td>
-              <div style="font-weight: 700; color: var(--text-main);">${a.company} ${isPending ? '<span style="color: var(--accent-amber); font-size: 0.75rem;">(⚠️ Action Needed)</span>' : ''}</div>
-              ${a.notes ? `<div style="font-size: 0.75rem; color: ${isPending ? 'var(--accent-amber)' : 'var(--text-muted)'};">${a.notes}</div>` : ''}
+              <div style="font-weight: 700; color: var(--text-main);">${a.company}</div>
+              ${a.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${a.notes}</div>` : ''}
             </td>
             <td>${a.role}</td>
             <td>
-              <select class="status-select ${isApplied ? 'applied-status' : isPending ? 'pending-status' : ''}" onchange="updateDPStatus(${a.id}, this.value)">
+              <select class="status-select ${isPending ? 'pending-status' : ''}" onchange="updateDPStatus(${a.id}, this.value)">
                 <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
                 <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied on Site</option>
                 <option value="Assessment" ${a.status === 'Assessment' ? 'selected' : ''}>Assessment</option>
@@ -1135,7 +919,7 @@
       let data = [];
       if (platform === 'LinkedIn') data = liApps;
       else if (platform === 'Naukri') data = nkApps;
-      else if (platform === 'Internshala' || platform === 'Direct') data = dpApps;
+      else if (platform === 'Direct') data = dpApps;
 
       let csv = `Date,Company,Role,Status,Notes\n`;
       data.forEach(a => { csv += `"${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
@@ -1146,7 +930,7 @@
       let csv = `Platform,Date,Company,Role,Status,Notes\n`;
       liApps.forEach(a => { csv += `"LinkedIn","${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
       nkApps.forEach(a => { csv += `"Naukri","${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
-      dpApps.forEach(a => { csv += `"Internshala","${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
+      dpApps.forEach(a => { csv += `"Direct","${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
       downloadBlob(csv, `suchir_all_applications.csv`);
     };
 
@@ -1157,35 +941,6 @@
       a.href = url;
       a.download = filename;
       a.click();
-    }
-
-    // Reset & Reload 9 Live AI Applications
-    window.resetToDefaultJobs = () => {
-      liApps = [...initialLI];
-      nkApps = [...initialNK];
-      dpApps = [...initialDP];
-      tasks = [...initialTasks];
-      localStorage.setItem('suchir_li_apps', JSON.stringify(liApps));
-      localStorage.setItem('suchir_nk_apps', JSON.stringify(nkApps));
-      localStorage.setItem('suchir_dp_apps', JSON.stringify(dpApps));
-      localStorage.setItem('suchir_tasks', JSON.stringify(tasks));
-      renderLI();
-      renderNK();
-      renderDP();
-      renderTasks();
-      alert('✅ Successfully reloaded 9 tailored applications across LinkedIn, Internshala, and Naukri!');
-    };
-
-    // Auto-seed if empty or outdated
-    if (!localStorage.getItem('suchir_li_apps') || liApps.length < 3) {
-      liApps = initialLI;
-      nkApps = initialNK;
-      dpApps = initialDP;
-      tasks = initialTasks;
-      localStorage.setItem('suchir_li_apps', JSON.stringify(liApps));
-      localStorage.setItem('suchir_nk_apps', JSON.stringify(nkApps));
-      localStorage.setItem('suchir_dp_apps', JSON.stringify(dpApps));
-      localStorage.setItem('suchir_tasks', JSON.stringify(tasks));
     }
 
     renderLI();
