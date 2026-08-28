@@ -29,7 +29,7 @@
       --accent-red: #ef4444;
       --linkedin-blue: #0a66c2;
       --naukri-blue: #1e50ff;
-      --direct-purple: #8b5cf6;
+      --internshala-blue: #008bdc;
       --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
     }
 
@@ -51,7 +51,7 @@
       --accent-red: #dc2626;
       --linkedin-blue: #0a66c2;
       --naukri-blue: #1e50ff;
-      --direct-purple: #7c3aed;
+      --internshala-blue: #008bdc;
       --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.07);
     }
 
@@ -128,8 +128,8 @@
     .btn-nk { background: var(--naukri-blue); color: white; }
     .btn-nk:hover { background: #0b3bd6; color: white; transform: translateY(-1px); }
 
-    .btn-dp { background: var(--direct-purple); color: white; }
-    .btn-dp:hover { background: #6d28d9; color: white; transform: translateY(-1px); }
+    .btn-dp { background: var(--internshala-blue); color: white; }
+    .btn-dp:hover { background: #0077bd; color: white; transform: translateY(-1px); }
 
     /* Platform Launchpads (LinkedIn Spotlight) */
     .launchpad-grid {
@@ -162,8 +162,8 @@
       border-color: rgba(30, 80, 255, 0.25);
     }
     .launch-dp {
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), var(--bg-card));
-      border-color: rgba(139, 92, 246, 0.25);
+      background: linear-gradient(135deg, rgba(0, 139, 220, 0.12), var(--bg-card));
+      border-color: rgba(0, 139, 220, 0.25);
     }
 
     .launch-info {
@@ -185,7 +185,7 @@
     }
     .launch-li-primary .launch-badge-icon { background: var(--linkedin-blue); }
     .launch-nk .launch-badge-icon { background: var(--naukri-blue); }
-    .launch-dp .launch-badge-icon { background: var(--direct-purple); }
+    .launch-dp .launch-badge-icon { background: var(--internshala-blue); }
 
     /* Summary Bar */
     .metrics-summary {
@@ -376,7 +376,8 @@
         <p>Primary Hub for K. Suchir Reddy · LinkedIn-First Job Discovery, Outreach & Cross-Platform Tracking.</p>
       </div>
       <div class="header-actions">
-        <button onclick="clearAllData()" class="btn btn-outline" style="font-size: 0.82rem; color: var(--accent-red);">🗑️ Clear All Data</button>
+        <button onclick="resetToDefaultJobs()" class="btn btn-primary" style="font-size: 0.82rem;">🔄 Sync / Reload 9 Live Jobs</button>
+        <button onclick="clearAllData()" class="btn btn-outline" style="font-size: 0.82rem; color: var(--accent-red);">🗑️ Clear All</button>
         <button onclick="exportAllCSV()" class="btn btn-outline" style="font-size: 0.82rem;">📥 Export All CSV</button>
         <a href="index.html" class="btn btn-outline">← Back to Portfolio</a>
       </div>
@@ -417,18 +418,18 @@
         </div>
       </div>
 
-      <!-- Direct & Startup Portals Card -->
+      <!-- Internshala Card -->
       <div class="launch-card launch-dp">
         <div class="launch-info">
-          <div class="launch-badge-icon">🚀</div>
+          <div class="launch-badge-icon">IS</div>
           <div>
-            <h3 style="font-size: 1.05rem; font-weight: 700;">Direct Career Portals</h3>
-            <p style="font-size: 0.82rem; color: var(--text-muted);">Company career pages, Wellfound & Unstop openings.</p>
+            <h3 style="font-size: 1.05rem; font-weight: 700;">Internshala Portal</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">AI/ML, Python & Data Science internships & fresher roles.</p>
           </div>
         </div>
         <div>
-          <a href="https://wellfound.com/jobs" target="_blank" rel="noopener noreferrer" class="btn btn-dp">
-            <span>Open Wellfound ↗</span>
+          <a href="https://internshala.com/internships/ai-internship/" target="_blank" rel="noopener noreferrer" class="btn btn-dp">
+            <span>Open Internshala ↗</span>
           </a>
         </div>
       </div>
@@ -578,21 +579,21 @@
         </div>
       </div>
 
-      <!-- COLUMN 3: DIRECT & COMPANY CAREER PORTALS -->
+      <!-- COLUMN 3: INTERNSHALA PORTAL -->
       <div class="column-box column-dp">
         <div class="column-header">
           <div class="column-title">
-            <span style="color: var(--direct-purple);">🟣</span>
-            <span>Direct Career Pages</span>
+            <span style="color: var(--internshala-blue);">🎓</span>
+            <span>Internshala Applications</span>
           </div>
-          <button onclick="exportPlatformCSV('Direct')" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">Export Direct</button>
+          <button onclick="exportPlatformCSV('Internshala')" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">Export Internshala</button>
         </div>
 
-        <!-- Add Direct Entry -->
+        <!-- Add Internshala Entry -->
         <form id="form-dp" class="add-form">
           <div class="form-group">
             <label>Company</label>
-            <input type="text" id="dp-company" placeholder="e.g. Meraki Labs / Sarvam AI" required />
+            <input type="text" id="dp-company" placeholder="e.g. Sarvam AI / Internshala" required />
           </div>
           <div class="form-group">
             <label>Role</label>
@@ -663,11 +664,106 @@
   </div>
 
   <script>
-    // Pure clean slate arrays (No test cases)
-    let liApps = JSON.parse(localStorage.getItem('suchir_li_apps')) || [];
-    let nkApps = JSON.parse(localStorage.getItem('suchir_nk_apps')) || [];
-    let dpApps = JSON.parse(localStorage.getItem('suchir_dp_apps')) || [];
-    let tasks = JSON.parse(localStorage.getItem('suchir_tasks')) || [];
+    // 9 Live Applications across LinkedIn, Naukri, and Internshala
+    const initialLI = [
+      {
+        id: 1724840001,
+        company: "Sarvam AI",
+        role: "AI/ML Engineer Intern (LLMs & PyTorch)",
+        date: new Date().toISOString().split('T')[0],
+        status: "Pending",
+        notes: "Bengaluru | AST Benchmarking & PyTorch | InMail note ready"
+      },
+      {
+        id: 1724840002,
+        company: "Go Digit",
+        role: "Intern - AI Automation & NLP",
+        date: new Date().toISOString().split('T')[0],
+        status: "Pending",
+        notes: "Bengaluru | NLP Toxicity & Flask Pipeline | Easy Apply ready"
+      },
+      {
+        id: 1724840003,
+        company: "Adecco Tech",
+        role: "Machine Learning & Python Intern",
+        date: new Date().toISOString().split('T')[0],
+        status: "Pending",
+        notes: "Bengaluru | Scikit-learn, SQL & Model Evaluation | Easy Apply ready"
+      }
+    ];
+
+    const initialNK = [
+      {
+        id: 1724840004,
+        company: "Fractal Analytics",
+        role: "Python & ML Trainee Engineer",
+        date: new Date().toISOString().split('T')[0],
+        status: "Pending",
+        notes: "Bengaluru | Python, MySQL & Backend APIs | Tailored cover ready"
+      },
+      {
+        id: 1724840005,
+        company: "Lentra AI",
+        role: "Python / AI Solutions Intern",
+        date: new Date().toISOString().split('T')[0],
+        status: "Pending",
+        notes: "Bengaluru | Python, REST APIs & Data Pipelines | Tailored cover ready"
+      },
+      {
+        id: 1724840006,
+        company: "Turing Technologies",
+        role: "Junior Python AI Engineer",
+        date: new Date().toISOString().split('T')[0],
+        status: "Pending",
+        notes: "Bengaluru/Remote | AST Analysis & Clean Code | Tailored cover ready"
+      }
+    ];
+
+    const initialDP = [
+      {
+        id: 1724840007,
+        company: "Meraki Labs",
+        role: "AI Engineer Intern (Computer Vision)",
+        date: new Date().toISOString().split('T')[0],
+        status: "Pending",
+        notes: "Internshala | Bengaluru | OpenCV & YOLO Traffic project tailored"
+      },
+      {
+        id: 1724840008,
+        company: "Flexio",
+        role: "AI Data & Model Validation Intern",
+        date: new Date().toISOString().split('T')[0],
+        status: "Pending",
+        notes: "Internshala | Bengaluru | Model Evaluation & AST Benchmarking tailored"
+      },
+      {
+        id: 1724840009,
+        company: "Nucleus Software",
+        role: "Machine Learning & Python Intern",
+        date: new Date().toISOString().split('T')[0],
+        status: "Pending",
+        notes: "Internshala | Bengaluru | NLP & Database Pipeline tailored"
+      }
+    ];
+
+    const initialTasks = [
+      { id: 1, text: "Send LinkedIn connection note (<300 chars) to Sarvam AI tech recruiter", done: false },
+      { id: 2, text: "Submit Easy Apply on LinkedIn for Go Digit (AI Automation Intern)", done: false },
+      { id: 3, text: "Submit Internshala application for Meraki Labs with YOLO Traffic Signal demo", done: false },
+      { id: 4, text: "Submit Naukri profile application for Fractal Analytics", done: false }
+    ];
+
+    // Load existing stored applications or fallback to seeded live roles
+    let liApps = JSON.parse(localStorage.getItem('suchir_li_apps')) || initialLI;
+    let nkApps = JSON.parse(localStorage.getItem('suchir_nk_apps')) || initialNK;
+    let dpApps = JSON.parse(localStorage.getItem('suchir_dp_apps')) || initialDP;
+    let tasks = JSON.parse(localStorage.getItem('suchir_tasks')) || initialTasks;
+
+    // Persist current state
+    localStorage.setItem('suchir_li_apps', JSON.stringify(liApps));
+    localStorage.setItem('suchir_nk_apps', JSON.stringify(nkApps));
+    localStorage.setItem('suchir_dp_apps', JSON.stringify(dpApps));
+    localStorage.setItem('suchir_tasks', JSON.stringify(tasks));
 
     // Set today's date
     const today = new Date().toISOString().split('T')[0];
@@ -776,7 +872,7 @@
       tbody.innerHTML = '';
 
       if (dpApps.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.82rem;">No Direct applications logged yet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.82rem;">No Internshala applications logged yet.</td></tr>`;
       } else {
         dpApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
           const isPending = a.status === 'Pending';
@@ -919,7 +1015,7 @@
       let data = [];
       if (platform === 'LinkedIn') data = liApps;
       else if (platform === 'Naukri') data = nkApps;
-      else if (platform === 'Direct') data = dpApps;
+      else if (platform === 'Internshala' || platform === 'Direct') data = dpApps;
 
       let csv = `Date,Company,Role,Status,Notes\n`;
       data.forEach(a => { csv += `"${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
@@ -930,7 +1026,7 @@
       let csv = `Platform,Date,Company,Role,Status,Notes\n`;
       liApps.forEach(a => { csv += `"LinkedIn","${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
       nkApps.forEach(a => { csv += `"Naukri","${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
-      dpApps.forEach(a => { csv += `"Direct","${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
+      dpApps.forEach(a => { csv += `"Internshala","${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
       downloadBlob(csv, `suchir_all_applications.csv`);
     };
 
@@ -941,6 +1037,35 @@
       a.href = url;
       a.download = filename;
       a.click();
+    }
+
+    // Reset & Reload 9 Live AI Applications
+    window.resetToDefaultJobs = () => {
+      liApps = [...initialLI];
+      nkApps = [...initialNK];
+      dpApps = [...initialDP];
+      tasks = [...initialTasks];
+      localStorage.setItem('suchir_li_apps', JSON.stringify(liApps));
+      localStorage.setItem('suchir_nk_apps', JSON.stringify(nkApps));
+      localStorage.setItem('suchir_dp_apps', JSON.stringify(dpApps));
+      localStorage.setItem('suchir_tasks', JSON.stringify(tasks));
+      renderLI();
+      renderNK();
+      renderDP();
+      renderTasks();
+      alert('✅ Successfully reloaded 9 tailored applications across LinkedIn, Internshala, and Naukri!');
+    };
+
+    // Auto-seed if empty or outdated
+    if (!localStorage.getItem('suchir_li_apps') || liApps.length < 3) {
+      liApps = initialLI;
+      nkApps = initialNK;
+      dpApps = initialDP;
+      tasks = initialTasks;
+      localStorage.setItem('suchir_li_apps', JSON.stringify(liApps));
+      localStorage.setItem('suchir_nk_apps', JSON.stringify(nkApps));
+      localStorage.setItem('suchir_dp_apps', JSON.stringify(dpApps));
+      localStorage.setItem('suchir_tasks', JSON.stringify(tasks));
     }
 
     renderLI();
