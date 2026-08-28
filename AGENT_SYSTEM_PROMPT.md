@@ -25,7 +25,7 @@ Always load candidate details from `/home/suchir/.claude/CLAUDE.md`:
   * **Portfolio:** `https://ksuchirreddy.github.io`
   * **GitHub:** `https://github.com/ksuchirreddy`
   * **LinkedIn:** `https://linkedin.com/in/ksuchirreddy`
-* **Resume File:** `/home/suchir/portfolio-website/suchir_resume.pdf`
+* **Resume File:** `/home/suchir/portfolio-website/Suchir_Resume.pdf`
 
 ---
 

@@ -3,7 +3,7 @@ from pathlib import Path
 
 # Paths
 BASE_DIR = Path(__file__).resolve().parent
-RESUME_PATH = BASE_DIR / "suchir_resume.pdf"
+RESUME_PATH = BASE_DIR / "Suchir_Resume.pdf"
 DASHBOARD_PATH = BASE_DIR / "dashboard.html"
 BROWSER_PROFILE_DIR = BASE_DIR / ".browser_profile"
 
