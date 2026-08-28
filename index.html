@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K. Suchir Reddy — AI/ML Engineer</title>
+  <meta name="description" content="AI/ML Engineer portfolio — Machine Learning, Computer Vision, NLP, and Full-Stack Development projects">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-elevated: #11141a;
+      --fg: #e8eaed;
+      --fg-muted: #8b919a;
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --accent-dim: rgba(59, 130, 246, 0.15);
+      --border: #242933;
+      --card-bg: #151922;
+      --success: #10b981;
+      --warning: #f59e0b;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f8fafc;
+        --bg-elevated: #ffffff;
+        --fg: #1e293b;
+        --fg-muted: #64748b;
+        --accent: #2563eb;
+        --accent-hover: #1d4ed8;
+        --accent-dim: rgba(37, 99, 235, 0.1);
+        --border: #e2e8f0;
+        --card-bg: #ffffff;
+      }
+    }
+    [data-theme="dark"] {
+      --bg: #0b0d12;
+      --bg-elevated: #11141a;
+      --fg: #e8eaed;
+      --fg-muted: #8b919a;
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --accent-dim: rgba(59, 130, 246, 0.15);
+      --border: #242933;
+      --card-bg: #151922;
+    }
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-elevated: #ffffff;
+      --fg: #1e293b;
+      --fg-muted: #64748b;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-dim: rgba(37, 99, 235, 0.1);
+      --border: #e2e8f0;
+      --card-bg: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+    a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--accent-hover); }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+    .skip-link { position: absolute; top: -100%; left: 1rem; background: var(--accent); color: white; padding: 0.5rem 1rem; border-radius: 4px; z-index: 100; }
+    .skip-link:focus { top: 1rem; }
+    header { padding: 3rem 0 2rem; text-align: center; }
+    .name { font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+    .title { font-size: clamp(1.1rem, 2.5vw, 1.4rem); color: var(--fg-muted); margin-bottom: 1.5rem; }
+    .cta-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .btn-secondary { background: var(--card-bg); color: var(--fg); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-ghost { background: transparent; color: var(--fg-muted); }
+    .btn-ghost:hover { color: var(--fg); }
+    nav { display: flex; justify-content: center; gap: 2rem; padding: 1.5rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 3rem; flex-wrap: wrap; }
+    nav a { color: var(--fg-muted); font-weight: 500; font-size: 0.95rem; padding: 0.25rem 0; position: relative; }
+    nav a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.2s; }
+    nav a:hover, nav a.active { color: var(--accent); }
+    nav a:hover::after, nav a.active::after { width: 100%; }
+    section { padding: 3rem 0; }
+    .section-title { font-size: 1.75rem; font-weight: 700; margin-bottom: 2rem; position: relative; display: inline-block; }
+    .section-title::after { content: ''; position: absolute; bottom: -0.5rem; left: 0; width: 60px; height: 3px; background: var(--accent); border-radius: 2px; }
+    .grid { display: grid; gap: 1.5rem; }
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: all 0.2s; }
+    .card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+    .card h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+    .card .meta { font-size: 0.85rem; color: var(--fg-muted); margin-bottom: 0.75rem; }
+    .card p { color: var(--fg-muted); font-size: 0.95rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+    .tag { background: var(--accent-dim); color: var(--accent); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 500; }
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+    .timeline-item { position: relative; padding-bottom: 2rem; }
+    .timeline-item::before { content: ''; position: absolute; left: -2rem; top: 0.25rem; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); border: 3px solid var(--bg); z-index: 1; }
+    .timeline-item h4 { font-size: 1.05rem; margin-bottom: 0.25rem; }
+    .timeline-item .period { font-size: 0.85rem; color: var(--fg-muted); margin-bottom: 0.5rem; display: block; }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .skill-category { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+    .skill-category h4 { font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .skill-category ul { list-style: none; }
+    .skill-category li { padding: 0.25rem 0; font-size: 0.9rem; border-bottom: 1px solid var(--border); }
+    .skill-category li:last-child { border-bottom: none; }
+    .contact-links { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+    .contact-links a { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--fg); font-weight: 500; transition: all 0.2s; }
+    .contact-links a:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+    footer { text-align: center; padding: 2rem; color: var(--fg-muted); font-size: 0.85rem; border-top: 1px solid var(--border); }
+    @media (max-width: 640px) {
+      .timeline { padding-left: 1.5rem; }
+      .timeline-item::before { left: -1.5rem; width: 10px; height: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header>
+    <h1 class="name">K. Suchir Reddy</h1>
+    <p class="title">AI/ML Engineer · Computer Science & Business Systems</p>
+    <p class="title">Dayananda Sagar College of Engineering, Bengaluru · 2023–Present</p>
+    <div class="cta-row">
+      <a href="dashboard.html" class="btn btn-primary">My Dashboard</a>
+      <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+      <a href="https://github.com/suchirreddy" target="_blank" rel="noopener" class="btn btn-ghost">GitHub</a>
+      <a href="https://linkedin.com/in/ksuchirreddy" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn</a>
+    </div>
+  </header>
+  <nav aria-label="Main navigation">
+    <a href="#about" class="active">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#experience">Experience</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <main id="main" class="container">
+    <section id="about" aria-labelledby="about-title">
+      <h2 id="about-title" class="section-title">About Me</h2>
+      <div class="card" style="max-width: 800px;">
+        <p style="margin-bottom: 1rem;">Detail-oriented computer science student and AI enthusiast driven by a passion for building intelligent systems. Experienced in creating complete machine learning workflows, fine-tuning deep learning models, and delivering clean, accessible software that solves practical data problems.</p>
+        <p>Currently a third-year undergraduate in Computer Science & Business Systems (CPI: 8.15), I focus on the intersection of ML research and production engineering — from data preprocessing and model training to API deployment and monitoring.</p>
+      </div>
+    </section>
+    <section id="projects" aria-labelledby="projects-title">
+      <h2 id="projects-title" class="section-title">Featured Projects</h2>
+      <div class="grid grid-2">
+        <article class="card">
+          <h3>AI-Powered Code Generator & Debugging System</h3>
+          <p class="meta">Jan 2026 – Mar 2026 · Python, Flask, Generative AI, NLP, REST APIs</p>
+          <p>Designed a smart web interface using Flask to help developers quickly locate logic errors and generate code structures using natural language and generative AI techniques. Built an efficient backend pipeline that parses user requests on the fly, delivering debugging suggestions and optimization strategies in near real-time.</p>
+          <div class="tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">LLM APIs</span><span class="tag">NLP</span></div>
+        </article>
+        <article class="card">
+          <h3>Pothole Tagging System</h3>
+          <p class="meta">Oct 2025 – Nov 2025 · Python, OpenCV, Computer Vision, Power BI, Pandas</p>
+          <p>Built an image-processing system with OpenCV that analyzes video clips to detect and catalog road damage, automating local infrastructure inspections. Translated complex detection patterns into interactive Power BI dashboards for municipal stakeholders.</p>
+          <div class="tags"><span class="tag">OpenCV</span><span class="tag">Computer Vision</span><span class="tag">Power BI</span><span class="tag">Pandas</span></div>
+        </article>
+        <article class="card">
+          <h3>AI Comment Toxicity Rewriter</h3>
+          <p class="meta">Jan 2025 – Mar 2025 · Python, NLP, TensorFlow, MySQL, Scikit-learn</p>
+          <p>Created an NLP pipeline to detect toxic/offensive language in text threads for healthier online spaces. Structured a relational MySQL backend to safely log interactions and handle concurrent requests without performance degradation.</p>
+          <div class="tags"><span class="tag">NLP</span><span class="tag">TensorFlow</span><span class="tag">MySQL</span><span class="tag">Scikit-learn</span></div>
+        </article>
+      </div>
+    </section>
+    <section id="experience" aria-labelledby="experience-title">
+      <h2 id="experience-title" class="section-title">Experience & Leadership</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <h4>AI Enthusiast & Peer Mentor</h4>
+          <span class="period">Jan 2025 – Present</span>
+          <p style="color: var(--fg-muted);">Hosted practical study sessions and collaborative reviews to simplify ML architectures and share clean-coding best practices. Guided team discussions on algorithm design and technical problem-solving, helping project groups deliver on schedule.</p>
+        </div>
+      </div>
+    </section>
+    <section id="skills" aria-labelledby="skills-title">
+      <h2 id="skills-title" class="section-title">Technical Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h4>Programming Languages</h4>
+          <ul>
+            <li>Python (Advanced)</li>
+            <li>C / C++</li>
+            <li>Java</li>
+            <li>SQL</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h4>ML / DL & Data</h4>
+          <ul>
+            <li>TensorFlow, PyTorch</li>
+            <li>Scikit-learn, Pandas, NumPy</li>
+            <li>OpenCV, NLP / Transformers</li>
+            <li>Model Evaluation (Precision/Recall)</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h4>Web & Backend</h4>
+          <ul>
+            <li>Flask, REST APIs</li>
+            <li>FastAPI (Learning)</li>
+            <li>Docker (Basics)</li>
+            <li>Git / GitHub</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h4>Cloud & Tools</h4>
+          <ul>
+            <li>AWS S3</li>
+            <li>MySQL, DBMS</li>
+            <li>Power BI</li>
+            <li>CI/CD Concepts</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title" class="section-title">Get In Touch</h2>
+      <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+        <p style="margin-bottom: 1.5rem;">Open to AI/ML Engineering, Software Engineering, Data Analyst, and Business Analyst internship opportunities in Bengaluru.</p>
+        <div class="contact-links">
+          <a href="mailto:ksuchirreddy@gmail.com">📧 Email</a>
+          <a href="tel:+917899597757">📱 Phone</a>
+          <a href="https://linkedin.com/in/ksuchirreddy" target="_blank" rel="noopener">💼 LinkedIn</a>
+          <a href="https://github.com/suchirreddy" target="_blank" rel="noopener">💻 GitHub</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2026 K. Suchir Reddy. Built with HTML, CSS & vanilla JS.</p>
+  </footer>
+  <script>
+    (function() {
+      const stored = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (stored === 'dark' || (!stored && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+</body>
+</html>
