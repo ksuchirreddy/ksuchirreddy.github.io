@@ -664,7 +664,8 @@
 
   <script>
     // Pure clean slate arrays (No test cases)
-    let liApps = JSON.parse(localStorage.getItem('suchir_li_apps')) || [];
+    let liApps = JSON.parse(localStorage.getItem('suchir_li_apps')) || [
+      { id: 1787855400, company: 'Infilect Technologies', role: 'Computer Vision & Deep Learning Intern', date: '2026-08-28', status: 'Pending', notes: 'Bengaluru · Match: 86% · Computer Vision' },];
     let nkApps = JSON.parse(localStorage.getItem('suchir_nk_apps')) || [];
     let dpApps = JSON.parse(localStorage.getItem('suchir_dp_apps')) || [];
     let tasks = JSON.parse(localStorage.getItem('suchir_tasks')) || [];
