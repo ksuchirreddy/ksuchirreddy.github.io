@@ -22,7 +22,8 @@ CANDIDATE = {
     "github": "https://github.com/ksuchirreddy",
     "portfolio": "https://ksuchirreddy.github.io",
     "education": {
-        "degree": "Bachelor of Engineering (B.E.)",
+        "degree": "Bachelor of Engineering (B.E.) — 4th Year Undergraduate",
+        "current_year": "4th Year (Final Year)",
         "institution": "Dayananda Sagar College of Engineering (DSCE), Bengaluru",
         "field_of_study": "Computer Science & Engineering",
         "start_year": "2022",
