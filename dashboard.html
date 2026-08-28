@@ -1,139 +1,434 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard — K. Suchir Reddy</title>
-  <meta name="robots" content="noindex, nofollow">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Applicant & Internship Hub — K. Suchir Reddy</title>
+  <meta name="robots" content="noindex, nofollow" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
   <style>
     :root {
-      --bg: #f8fafc;
-      --bg-elevated: #ffffff;
-      --fg: #1e293b;
-      --fg-muted: #64748b;
-      --accent: #2563eb;
-      --accent-hover: #1d4ed8;
-      --border: #e2e8f0;
-      --card-bg: #ffffff;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
+      --bg-main: #090d16;
+      --bg-card: rgba(18, 24, 38, 0.75);
+      --bg-card-hover: rgba(28, 36, 56, 0.85);
+      --bg-glass: rgba(15, 21, 34, 0.65);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(99, 102, 241, 0.4);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+      --primary: #6366f1;
+      --primary-glow: rgba(99, 102, 241, 0.25);
+      --accent-cyan: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --accent-internshala: #008bdc;
+      --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0b0d12;
-        --bg-elevated: #11141a;
-        --fg: #e8eaed;
-        --fg-muted: #8b919a;
-        --accent: #3b82f6;
-        --accent-hover: #60a5fa;
-        --border: #242933;
-        --card-bg: #151922;
-      }
+
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: rgba(255, 255, 255, 0.95);
+      --bg-card-hover: #ffffff;
+      --bg-glass: rgba(255, 255, 255, 0.85);
+      --border-color: rgba(0, 0, 0, 0.08);
+      --border-hover: rgba(99, 102, 241, 0.4);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-subtle: #94a3b8;
+      --primary: #4f46e5;
+      --primary-glow: rgba(79, 70, 229, 0.15);
+      --accent-cyan: #0284c7;
+      --accent-emerald: #059669;
+      --accent-amber: #d97706;
+      --accent-red: #dc2626;
+      --accent-internshala: #008bdc;
+      --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.07);
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--fg); line-height: 1.6; min-height: 100vh; padding: 2rem 1.5rem; }
-    .container { max-width: 1000px; margin: 0 auto; }
-    header { margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
-    h1 { font-size: 2rem; font-weight: 700; }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .btn { background: var(--accent); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 500; cursor: pointer; transition: background 0.2s; text-decoration: none; display: inline-block; }
-    .btn:hover { background: var(--accent-hover); text-decoration: none; }
-    .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.85rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
-    .card h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: var(--fg); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
-    .form-group { margin-bottom: 1rem; }
-    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--fg-muted); }
-    input, select, textarea { width: 100%; padding: 0.5rem; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--fg); font-family: inherit; }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
-    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
-    th { font-weight: 600; color: var(--fg-muted); }
-    .status-badge { padding: 0.25rem 0.5rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; background: var(--border); color: var(--fg); }
-    .status-badge.applied { background: rgba(59,130,246,0.2); color: #3b82f6; }
-    .status-badge.interview { background: rgba(245,158,11,0.2); color: #f59e0b; }
-    .status-badge.offer { background: rgba(16,185,129,0.2); color: #10b981; }
-    .status-badge.rejected { background: rgba(239,68,68,0.2); color: #ef4444; }
-    .stat-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
-    .stat-value { font-weight: 700; font-size: 1.1rem; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 1.5rem;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(0, 139, 220, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .header-left h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .header-left p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: all 0.2s ease;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #4f46e5; transform: translateY(-1px); }
+    .btn-outline { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); }
+    .btn-outline:hover { border-color: var(--border-hover); background: var(--bg-card-hover); transform: translateY(-1px); }
+    
+    .btn-internshala {
+      background: #008bdc;
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0, 139, 220, 0.25);
+    }
+    .btn-internshala:hover {
+      background: #0077bd;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0, 139, 220, 0.35);
+      color: #fff;
+    }
+
+    /* Portals Quick Launcher */
+    .portal-banner {
+      background: linear-gradient(135deg, rgba(0, 139, 220, 0.12), rgba(99, 102, 241, 0.08));
+      border: 1px solid rgba(0, 139, 220, 0.25);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .portal-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .portal-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: #008bdc;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .portal-links {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    /* Grid Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .card h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.6rem;
+    }
+
+    /* Stats */
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.92rem;
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1.05rem;
+      padding: 0.15rem 0.6rem;
+      border-radius: 6px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-color);
+    }
+
+    /* Tasks */
     .task-list { list-style: none; }
-    .task-list li { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+    .task-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.9rem;
+    }
     .task-list li:last-child { border-bottom: none; }
-    .task-list input[type="checkbox"] { width: auto; cursor: pointer; }
-    .task-list span.done { text-decoration: line-through; color: var(--fg-muted); }
-    .delete-btn { color: var(--danger); background: none; border: none; cursor: pointer; font-size: 0.85rem; margin-left: auto; }
-    .delete-btn:hover { text-decoration: underline; }
+    .task-list input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+    .task-list span.done { text-decoration: line-through; color: var(--text-subtle); }
+    .delete-btn {
+      color: var(--accent-red);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.8rem;
+      margin-left: auto;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .delete-btn:hover { opacity: 1; text-decoration: underline; }
+
+    /* Application Table */
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.35rem;
+      color: var(--text-muted);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.88rem;
+    }
+    th, td {
+      padding: 0.85rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    th {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .platform-pill {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .platform-internshala { background: rgba(0, 139, 220, 0.15); color: #008bdc; }
+    .platform-linkedin { background: rgba(10, 102, 194, 0.15); color: #38bdf8; }
+    .platform-other { background: rgba(255, 255, 255, 0.08); color: var(--text-muted); }
+
+    .status-badge {
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .status-badge.applied { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
+    .status-badge.interview { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .status-badge.offer { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .status-badge.rejected { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .status-badge.saved { background: rgba(255, 255, 255, 0.08); color: var(--text-muted); }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <div>
-        <h1>Applicant Dashboard</h1>
-        <p style="color: var(--fg-muted); font-size: 0.9rem;">Private tracking space for K. Suchir Reddy. Data is saved to your local browser.</p>
+      <div class="header-left">
+        <h1>🎯 Internship & Career Command Center</h1>
+        <p>Private workspace for K. Suchir Reddy · Tracks applications across Internshala, LinkedIn, and more.</p>
       </div>
-      <div>
-        <a href="index.html" class="btn">View Public Portfolio</a>
+      <div class="header-actions">
+        <a href="index.html" class="btn btn-outline">← Back to Portfolio</a>
       </div>
     </header>
+
+    <!-- Quick Portals Launcher -->
+    <div class="portal-banner">
+      <div class="portal-info">
+        <div class="portal-icon">IS</div>
+        <div>
+          <h3 style="font-size: 1rem; font-weight: 700;">Internshala Student Dashboard</h3>
+          <p style="font-size: 0.82rem; color: var(--text-muted);">Access your live applications, chat with employers, and track assignments.</p>
+        </div>
+      </div>
+      <div class="portal-links">
+        <a href="https://internshala.com/student/dashboard" target="_blank" rel="noopener noreferrer" class="btn btn-internshala">
+          <span>Open Internshala Dashboard ↗</span>
+        </a>
+        <a href="https://www.linkedin.com/jobs/" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size: 0.82rem;">
+          <span>LinkedIn Jobs ↗</span>
+        </a>
+      </div>
+    </div>
 
     <div class="grid">
       <!-- KPIs -->
       <div class="card">
-        <h2>Quick Stats</h2>
-        <div class="stat-row"><span>Total Applications</span> <span class="stat-value" id="stat-total">0</span></div>
-        <div class="stat-row"><span>Interviews Scheduled</span> <span class="stat-value" id="stat-interviews">0</span></div>
-        <div class="stat-row"><span>Offers</span> <span class="stat-value" id="stat-offers">0</span></div>
-        <div class="stat-row"><span>Rejections</span> <span class="stat-value" id="stat-rejected">0</span></div>
+        <h2>
+          <span>Application Metrics</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 400;">Real-time</span>
+        </h2>
+        <div class="stat-row">
+          <span>Total Tracked</span>
+          <span class="stat-badge" id="stat-total" style="color: var(--accent-cyan);">0</span>
+        </div>
+        <div class="stat-row">
+          <span>Interviews Scheduled</span>
+          <span class="stat-badge" id="stat-interviews" style="color: var(--accent-amber);">0</span>
+        </div>
+        <div class="stat-row">
+          <span>Offers Received</span>
+          <span class="stat-badge" id="stat-offers" style="color: var(--accent-emerald);">0</span>
+        </div>
+        <div class="stat-row">
+          <span>Rejections / Closed</span>
+          <span class="stat-badge" id="stat-rejected" style="color: var(--accent-red);">0</span>
+        </div>
       </div>
 
-      <!-- Todo List -->
+      <!-- Action Items -->
       <div class="card">
-        <h2>Daily Tasks</h2>
+        <h2>
+          <span>Follow-ups & Tasks</span>
+        </h2>
         <form id="task-form" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-          <input type="text" id="task-input" placeholder="e.g. Follow up with FRND" required>
-          <button type="submit" class="btn btn-sm">Add</button>
+          <input type="text" id="task-input" placeholder="e.g. Check Internshala reply from AI Startup" required />
+          <button type="submit" class="btn btn-primary" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">Add</button>
         </form>
         <ul class="task-list" id="task-list"></ul>
       </div>
     </div>
 
-    <!-- Application Tracker -->
-    <div class="card" style="grid-column: 1 / -1;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
-        <h2 style="border: none; margin: 0; padding: 0;">Application Tracker</h2>
-      </div>
+    <!-- Application Tracker Table -->
+    <div class="card">
+      <h2>
+        <span>Live Applications Tracker</span>
+        <button onclick="exportCSV()" class="btn btn-outline" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;">📥 Export CSV</button>
+      </h2>
 
-      <form id="app-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; background: var(--bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
-        <div class="form-group" style="margin-bottom: 0;">
-          <label>Company</label>
-          <input type="text" id="app-company" required placeholder="e.g. 8byte">
+      <!-- Add Form -->
+      <form id="app-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; background: var(--bg-glass); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border-color);">
+        <div class="form-group">
+          <label>Company Name</label>
+          <input type="text" id="app-company" required placeholder="e.g. FRND / AI Startup" />
         </div>
-        <div class="form-group" style="margin-bottom: 0;">
+        <div class="form-group">
           <label>Role</label>
-          <input type="text" id="app-role" required placeholder="AI Intern">
+          <input type="text" id="app-role" required placeholder="AI/ML Intern" />
         </div>
-        <div class="form-group" style="margin-bottom: 0;">
+        <div class="form-group">
+          <label>Platform</label>
+          <select id="app-platform">
+            <option value="Internshala" selected>Internshala</option>
+            <option value="LinkedIn">LinkedIn</option>
+            <option value="Unstop">Unstop</option>
+            <option value="Direct / Career Page">Direct / Career Page</option>
+          </select>
+        </div>
+        <div class="form-group">
           <label>Date Applied</label>
-          <input type="date" id="app-date" required>
+          <input type="date" id="app-date" required />
         </div>
-        <div class="form-group" style="margin-bottom: 0;">
+        <div class="form-group">
           <label>Status</label>
           <select id="app-status">
+            <option value="applied" selected>Applied</option>
             <option value="saved">Saved / Later</option>
-            <option value="applied">Applied</option>
-            <option value="interview">Interview</option>
+            <option value="interview">Interview Scheduled</option>
             <option value="offer">Offer</option>
-            <option value="rejected">Rejected</option>
+            <option value="rejected">Rejected / Closed</option>
           </select>
         </div>
         <div style="display: flex; align-items: flex-end;">
-          <button type="submit" class="btn" style="width: 100%;">Add Record</button>
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; height: 38px;">+ Add Entry</button>
         </div>
       </form>
 
@@ -144,6 +439,7 @@
               <th>Date</th>
               <th>Company</th>
               <th>Role</th>
+              <th>Platform</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -157,19 +453,17 @@
   </div>
 
   <script>
-    // Data structures
+    // Load local storage data
     let apps = JSON.parse(localStorage.getItem('suchir_apps')) || [
-      { id: Date.now(), company: 'FRND', role: 'Machine Learning Intern', date: '2026-08-27', status: 'saved' },
-      { id: Date.now()+1, company: '8byte', role: 'AI Intern', date: '2026-08-27', status: 'saved' },
-      { id: Date.now()+2, company: 'HARMAN India', role: 'Associate Engineer - AI/ML', date: '2026-08-27', status: 'saved' }
+      { id: 1, company: 'AI Research Lab', role: 'Machine Learning Intern', platform: 'Internshala', date: '2026-08-28', status: 'applied' },
+      { id: 2, company: 'FRND', role: 'ML Engineer Intern', platform: 'LinkedIn', date: '2026-08-27', status: 'applied' },
+      { id: 3, company: '8byte', role: 'AI Intern', platform: 'LinkedIn', date: '2026-08-27', status: 'saved' }
     ];
     let tasks = JSON.parse(localStorage.getItem('suchir_tasks')) || [
-      { id: 1, text: 'Submit FRND application on LinkedIn', done: false },
-      { id: 2, text: 'Submit 8byte application on LinkedIn', done: false },
-      { id: 3, text: 'Submit HARMAN application on LinkedIn', done: false }
+      { id: 1, text: 'Check Internshala student dashboard messages', done: false },
+      { id: 2, text: 'Follow up on ML internship assignments', done: false }
     ];
 
-    // Initialize date field to today
     document.getElementById('app-date').valueAsDate = new Date();
 
     function renderTasks() {
@@ -180,7 +474,7 @@
         li.innerHTML = `
           <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${t.id})">
           <span class="${t.done ? 'done' : ''}">${t.text}</span>
-          <button class="delete-btn" onclick="deleteTask(${t.id})">Remove</button>
+          <button class="delete-btn" onclick="deleteTask(${t.id})">✕</button>
         `;
         list.appendChild(li);
       });
@@ -197,18 +491,21 @@
         if (a.status !== 'saved') counts.total++;
         if (counts[a.status] !== undefined) counts[a.status]++;
 
+        const platformClass = a.platform === 'Internshala' ? 'platform-internshala' : (a.platform === 'LinkedIn' ? 'platform-linkedin' : 'platform-other');
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>${a.date}</td>
-          <td style="font-weight: 500;">${a.company}</td>
+          <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;">${a.date}</td>
+          <td style="font-weight: 700; color: var(--text-main);">${a.company}</td>
           <td>${a.role}</td>
+          <td><span class="platform-pill ${platformClass}">${a.platform || 'Direct'}</span></td>
           <td>
-            <select onchange="updateAppStatus(${a.id}, this.value)" style="padding: 0.15rem; font-size: 0.85rem; width: auto;">
-              <option value="saved" ${a.status === 'saved' ? 'selected' : ''}>Saved</option>
+            <select onchange="updateAppStatus(${a.id}, this.value)" style="padding: 0.25rem 0.5rem; font-size: 0.82rem; width: auto; background: var(--bg-card);">
               <option value="applied" ${a.status === 'applied' ? 'selected' : ''}>Applied</option>
               <option value="interview" ${a.status === 'interview' ? 'selected' : ''}>Interview</option>
               <option value="offer" ${a.status === 'offer' ? 'selected' : ''}>Offer</option>
               <option value="rejected" ${a.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+              <option value="saved" ${a.status === 'saved' ? 'selected' : ''}>Saved</option>
             </select>
           </td>
           <td><button class="delete-btn" onclick="deleteApp(${a.id})">Delete</button></td>
@@ -249,6 +546,7 @@
         id: Date.now(),
         company: document.getElementById('app-company').value,
         role: document.getElementById('app-role').value,
+        platform: document.getElementById('app-platform').value,
         date: document.getElementById('app-date').value,
         status: document.getElementById('app-status').value
       });
@@ -262,13 +560,26 @@
       renderApps();
     };
     window.deleteApp = (id) => {
-      if(confirm('Delete this application record?')) {
+      if (confirm('Delete this application record?')) {
         apps = apps.filter(a => a.id !== id);
         renderApps();
       }
     };
 
-    // Initial render
+    // CSV Export
+    window.exportCSV = () => {
+      let csv = 'Date,Company,Role,Platform,Status\n';
+      apps.forEach(a => {
+        csv += `"${a.date}","${a.company}","${a.role}","${a.platform}","${a.status}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('href', url);
+      a.setAttribute('download', 'suchir_applications.csv');
+      a.click();
+    };
+
     renderTasks();
     renderApps();
   </script>
