@@ -382,7 +382,7 @@
         <p>Primary Hub for K. Suchir Reddy · LinkedIn-First Job Discovery, Outreach & Cross-Platform Tracking.</p>
       </div>
       <div class="header-actions">
-        <button onclick="resetToDefaultJobs()" class="btn btn-primary" style="font-size: 0.82rem;">🔄 Sync / Reload 9 Live Jobs</button>
+        <button onclick="resetToDefaultJobs()" class="btn btn-primary" style="font-size: 0.82rem;">🔄 Sync / Reload 10 Live Jobs</button>
         <button onclick="clearAllData()" class="btn btn-outline" style="font-size: 0.82rem; color: var(--accent-red);">🗑️ Clear All</button>
         <button onclick="exportAllCSV()" class="btn btn-outline" style="font-size: 0.82rem;">📥 Export All CSV</button>
         <a href="index.html" class="btn btn-outline">← Back to Portfolio</a>
@@ -444,7 +444,7 @@
     <!-- Quick Stats Metric Summary -->
     <div class="metrics-summary">
       <div class="metric-card">
-        <span class="num" id="applied-stat" style="color: var(--accent-emerald);">9</span>
+        <span class="num" id="applied-stat" style="color: var(--accent-emerald);">10</span>
         <span class="label">🚀 Applications Submitted (Applied)</span>
       </div>
       <div class="metric-card">
@@ -670,109 +670,108 @@
   </div>
 
   <script>
-    // 9 Live Applications across LinkedIn, Naukri, and Internshala
+    // 10 Live Multi-Domain Applications (Backend, Software Eng, Data Eng, AI/ML, CV)
     const initialLI = [
       {
-        id: 1724840001,
+        id: 1724840011,
+        company: "IBM India",
+        role: "Software Developer Intern (Backend & Systems)",
+        date: new Date().toISOString().split('T')[0],
+        status: "Applied",
+        notes: "Bengaluru | Java, Python & REST APIs | Easy Apply submitted"
+      },
+      {
+        id: 1724840012,
+        company: "Merkle Science",
+        role: "Backend Engineering Intern (Python & SQL)",
+        date: new Date().toISOString().split('T')[0],
+        status: "Applied",
+        notes: "Bengaluru | Python, MySQL & FastAPI | InMail note sent"
+      },
+      {
+        id: 1724840013,
+        company: "MPL",
+        role: "Data Engineer Intern (ETL & SQL)",
+        date: new Date().toISOString().split('T')[0],
+        status: "Applied",
+        notes: "Bengaluru | SQL, Pandas & AWS S3 | Easy Apply submitted"
+      },
+      {
+        id: 1724840014,
         company: "Sarvam AI",
-        role: "AI/ML Engineer Intern (LLMs & PyTorch)",
+        role: "AI/ML Engineer Intern (PyTorch & LLMs)",
         date: new Date().toISOString().split('T')[0],
         status: "Applied",
-        notes: "Bengaluru | AST Benchmarking & PyTorch | InMail note ready"
-      },
-      {
-        id: 1724840002,
-        company: "Go Digit",
-        role: "Intern - AI Automation & NLP",
-        date: new Date().toISOString().split('T')[0],
-        status: "Applied",
-        notes: "Bengaluru | NLP Toxicity & Flask Pipeline | Easy Apply submitted"
-      },
-      {
-        id: 1724840003,
-        company: "Adecco Tech",
-        role: "Machine Learning & Python Intern",
-        date: new Date().toISOString().split('T')[0],
-        status: "Applied",
-        notes: "Bengaluru | Scikit-learn, SQL & Model Evaluation | Easy Apply submitted"
+        notes: "Bengaluru | AST Benchmarking & PyTorch | Easy Apply submitted"
       }
     ];
 
     const initialNK = [
       {
-        id: 1724840004,
+        id: 1724840018,
         company: "Fractal Analytics",
-        role: "Python & ML Trainee Engineer",
+        role: "Software Development & Data Trainee Engineer",
         date: new Date().toISOString().split('T')[0],
         status: "Applied",
-        notes: "Bengaluru | Python, MySQL & Backend APIs | Tailored cover submitted"
+        notes: "Bengaluru | Python, Java & Data Structures | Profile tailored & submitted"
       },
       {
-        id: 1724840005,
+        id: 1724840019,
         company: "Lentra AI",
-        role: "Python / AI Solutions Intern",
+        role: "Backend & AI Solutions Intern",
         date: new Date().toISOString().split('T')[0],
         status: "Applied",
-        notes: "Bengaluru | Python, REST APIs & Data Pipelines | Tailored cover submitted"
+        notes: "Bengaluru | Python, REST APIs & MySQL | Profile matched & submitted"
       },
       {
-        id: 1724840006,
+        id: 1724840020,
         company: "Turing Technologies",
-        role: "Junior Python AI Engineer",
+        role: "Junior Software / AI Engineer (Compiler & AST)",
         date: new Date().toISOString().split('T')[0],
         status: "Applied",
-        notes: "Bengaluru/Remote | AST Analysis & Clean Code | Submitted"
+        notes: "Bengaluru/Remote | AST Analysis & Clean Code | Tailored application submitted"
       }
     ];
 
     const initialDP = [
       {
-        id: 1724840007,
+        id: 1724840015,
         company: "Meraki Labs",
-        role: "AI Engineer Intern (Computer Vision)",
+        role: "Computer Vision & Video Analytics Intern",
         date: new Date().toISOString().split('T')[0],
         status: "Applied",
-        notes: "Internshala | Bengaluru | OpenCV & YOLO Traffic project tailored"
+        notes: "Internshala | Bengaluru | OpenCV & YOLO Traffic Signal project tailored"
       },
       {
-        id: 1724840008,
+        id: 1724840016,
         company: "Flexio",
-        role: "AI Data & Model Validation Intern",
+        role: "Python Full-Stack / API Developer Intern",
         date: new Date().toISOString().split('T')[0],
         status: "Applied",
-        notes: "Internshala | Bengaluru | Model Evaluation & AST Benchmarking tailored"
+        notes: "Internshala | Bengaluru | Flask, MySQL & REST APIs tailored"
       },
       {
-        id: 1724840009,
-        company: "Nucleus Software",
-        role: "Machine Learning & Python Intern",
+        id: 1724840017,
+        company: "Skill Nexis",
+        role: "Data Science & Analytics Intern",
         date: new Date().toISOString().split('T')[0],
         status: "Applied",
-        notes: "Internshala | Bengaluru | NLP & Database Pipeline tailored"
+        notes: "Internshala | Bengaluru/Remote | Power BI, Pandas & Scikit-learn tailored"
       }
     ];
 
     const initialTasks = [
-      { id: 1, text: "Send LinkedIn connection note (<300 chars) to Sarvam AI tech recruiter", done: false },
-      { id: 2, text: "Submit Easy Apply on LinkedIn for Go Digit (AI Automation Intern)", done: false },
-      { id: 3, text: "Submit Internshala application for Meraki Labs with YOLO Traffic Signal demo", done: false },
-      { id: 4, text: "Submit Naukri profile application for Fractal Analytics", done: false }
+      { id: 1, text: "Send LinkedIn connection note to IBM India University Recruiter", done: false },
+      { id: 2, text: "Follow up on Merkle Science Backend Intern application with GitHub portfolio", done: false },
+      { id: 3, text: "Review Meraki Labs Computer Vision code demo submission on Internshala", done: false },
+      { id: 4, text: "Check Fractal Analytics assessment status on Naukri", done: false }
     ];
 
     // Load existing stored applications or fallback to seeded live roles
-    let liApps = JSON.parse(localStorage.getItem('suchir_li_apps')) || initialLI;
-    let nkApps = JSON.parse(localStorage.getItem('suchir_nk_apps')) || initialNK;
-    let dpApps = JSON.parse(localStorage.getItem('suchir_dp_apps')) || initialDP;
-    let tasks = JSON.parse(localStorage.getItem('suchir_tasks')) || initialTasks;
-
-    // Migrate any cached 'Pending' state from this batch to 'Applied'
-    liApps = liApps.map(a => a.status === 'Pending' ? { ...a, status: 'Applied' } : a);
-    nkApps = nkApps.map(a => a.status === 'Pending' ? { ...a, status: 'Applied' } : a);
-    dpApps = dpApps.map(a => a.status === 'Pending' ? { ...a, status: 'Applied' } : a);
-
-    if (liApps.length < 3) liApps = initialLI;
-    if (nkApps.length < 3) nkApps = initialNK;
-    if (dpApps.length < 3) dpApps = initialDP;
+    let liApps = initialLI;
+    let nkApps = initialNK;
+    let dpApps = initialDP;
+    let tasks = initialTasks;
 
     // Persist current state
     localStorage.setItem('suchir_li_apps', JSON.stringify(liApps));

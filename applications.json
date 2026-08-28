@@ -1,81 +1,95 @@
 {
-  "last_updated": "2026-08-28T18:07:00",
+  "last_updated": "2026-08-28T18:25:00",
   "linkedin": [
     {
-      "id": 1724840001,
+      "id": 1724840011,
+      "company": "IBM India",
+      "role": "Software Developer Intern (Backend & Systems)",
+      "date": "2026-08-28",
+      "status": "Applied",
+      "notes": "Bengaluru | Java, Python & REST APIs | Easy Apply submitted"
+    },
+    {
+      "id": 1724840012,
+      "company": "Merkle Science",
+      "role": "Backend Engineering Intern (Python & SQL)",
+      "date": "2026-08-28",
+      "status": "Applied",
+      "notes": "Bengaluru | Python, MySQL & FastAPI | InMail note sent"
+    },
+    {
+      "id": 1724840013,
+      "company": "MPL",
+      "role": "Data Engineer Intern (ETL & SQL)",
+      "date": "2026-08-28",
+      "status": "Applied",
+      "notes": "Bengaluru | SQL, Pandas & AWS S3 | Easy Apply submitted"
+    },
+    {
+      "id": 1724840014,
       "company": "Sarvam AI",
-      "role": "AI/ML Engineer Intern (LLMs & PyTorch)",
+      "role": "AI/ML Engineer Intern (PyTorch & LLMs)",
       "date": "2026-08-28",
       "status": "Applied",
-      "notes": "Bengaluru | AST Benchmarking & PyTorch | InMail note sent"
-    },
-    {
-      "id": 1724840002,
-      "company": "Go Digit",
-      "role": "Intern - AI Automation & NLP",
-      "date": "2026-08-28",
-      "status": "Applied",
-      "notes": "Bengaluru | NLP Toxicity & Flask Pipeline | Easy Apply submitted"
-    },
-    {
-      "id": 1724840003,
-      "company": "Adecco Tech",
-      "role": "Machine Learning & Python Intern",
-      "date": "2026-08-28",
-      "status": "Applied",
-      "notes": "Bengaluru | Scikit-learn, SQL & Model Evaluation | Easy Apply submitted"
+      "notes": "Bengaluru | AST Benchmarking & PyTorch | Easy Apply submitted"
     }
   ],
   "internshala": [
     {
-      "id": 1724840007,
+      "id": 1724840015,
       "company": "Meraki Labs",
-      "role": "AI Engineer Intern (Computer Vision)",
+      "role": "Computer Vision & Video Analytics Intern",
       "date": "2026-08-28",
       "status": "Applied",
-      "notes": "Internshala | Bengaluru | OpenCV & YOLO Traffic project tailored"
+      "notes": "Internshala | Bengaluru | OpenCV & YOLO Traffic Signal project tailored"
     },
     {
-      "id": 1724840008,
+      "id": 1724840016,
       "company": "Flexio",
-      "role": "AI Data & Model Validation Intern",
+      "role": "Python Full-Stack / API Developer Intern",
       "date": "2026-08-28",
       "status": "Applied",
-      "notes": "Internshala | Bengaluru | Model Evaluation & AST Benchmarking tailored"
+      "notes": "Internshala | Bengaluru | Flask, MySQL & REST APIs tailored"
     },
     {
-      "id": 1724840009,
-      "company": "Nucleus Software",
-      "role": "Machine Learning & Python Intern",
+      "id": 1724840017,
+      "company": "Skill Nexis",
+      "role": "Data Science & Analytics Intern",
       "date": "2026-08-28",
       "status": "Applied",
-      "notes": "Internshala | Bengaluru | NLP & Database Pipeline tailored"
+      "notes": "Internshala | Bengaluru/Remote | Power BI, Pandas & Scikit-learn tailored"
     }
   ],
   "naukri": [
     {
-      "id": 1724840004,
+      "id": 1724840018,
       "company": "Fractal Analytics",
-      "role": "Python & ML Trainee Engineer",
+      "role": "Software Development & Data Trainee Engineer",
       "date": "2026-08-28",
       "status": "Applied",
-      "notes": "Bengaluru | Python, MySQL & Backend APIs | Tailored cover submitted"
+      "notes": "Bengaluru | Python, Java & Data Structures | Profile tailored & submitted"
     },
     {
-      "id": 1724840005,
+      "id": 1724840019,
       "company": "Lentra AI",
-      "role": "Python / AI Solutions Intern",
+      "role": "Backend & AI Solutions Intern",
       "date": "2026-08-28",
       "status": "Applied",
-      "notes": "Bengaluru | Python, REST APIs & Data Pipelines | Profile matched & submitted"
+      "notes": "Bengaluru | Python, REST APIs & MySQL | Profile matched & submitted"
     },
     {
-      "id": 1724840006,
+      "id": 1724840020,
       "company": "Turing Technologies",
-      "role": "Junior Python AI Engineer",
+      "role": "Junior Software / AI Engineer (Compiler & AST)",
       "date": "2026-08-28",
       "status": "Applied",
-      "notes": "Bengaluru/Remote | AST Analysis & Clean Code | Submitted"
+      "notes": "Bengaluru/Remote | AST Analysis & Clean Code | Tailored application submitted"
     }
+  ],
+  "tasks": [
+    { "id": 1, "text": "Send LinkedIn connection note to IBM India University Recruiter", "done": false },
+    { "id": 2, "text": "Follow up on Merkle Science Backend Intern application with GitHub portfolio", "done": false },
+    { "id": 3, "text": "Review Meraki Labs Computer Vision code demo submission on Internshala", "done": false },
+    { "id": 4, "text": "Check Fractal Analytics assessment status on Naukri", "done": false }
   ]
 }
