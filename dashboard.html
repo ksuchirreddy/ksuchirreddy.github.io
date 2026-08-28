@@ -29,6 +29,7 @@
       --accent-red: #ef4444;
       --internshala-blue: #008bdc;
       --linkedin-blue: #0a66c2;
+      --naukri-blue: #1e50ff;
       --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
     }
 
@@ -50,6 +51,7 @@
       --accent-red: #dc2626;
       --internshala-blue: #008bdc;
       --linkedin-blue: #0a66c2;
+      --naukri-blue: #1e50ff;
       --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.07);
     }
 
@@ -63,12 +65,13 @@
       padding: 1.5rem;
       transition: background-color 0.3s ease, color 0.3s ease;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(0, 139, 220, 0.1) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(10, 102, 194, 0.1) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(0, 139, 220, 0.08) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(30, 80, 255, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(10, 102, 194, 0.08) 0px, transparent 50%);
       background-attachment: fixed;
     }
 
-    .container { max-width: 1300px; margin: 0 auto; }
+    .container { max-width: 1500px; margin: 0 auto; }
 
     /* Header */
     header {
@@ -120,35 +123,21 @@
     .btn-outline { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); }
     .btn-outline:hover { border-color: var(--border-hover); background: var(--bg-card-hover); transform: translateY(-1px); }
     
-    .btn-is {
-      background: var(--internshala-blue);
-      color: white;
-    }
-    .btn-is:hover {
-      background: #0077bd;
-      color: white;
-      transform: translateY(-1px);
-    }
+    .btn-is { background: var(--internshala-blue); color: white; }
+    .btn-is:hover { background: #0077bd; color: white; transform: translateY(-1px); }
 
-    .btn-li {
-      background: var(--linkedin-blue);
-      color: white;
-    }
-    .btn-li:hover {
-      background: #004182;
-      color: white;
-      transform: translateY(-1px);
-    }
+    .btn-li { background: var(--linkedin-blue); color: white; }
+    .btn-li:hover { background: #004182; color: white; transform: translateY(-1px); }
 
-    /* Platform Launchpad */
+    .btn-nk { background: var(--naukri-blue); color: white; }
+    .btn-nk:hover { background: #0b3bd6; color: white; transform: translateY(-1px); }
+
+    /* Platform Launchpads */
     .launchpad-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 1.25rem;
       margin-bottom: 2rem;
-    }
-    @media (max-width: 768px) {
-      .launchpad-grid { grid-template-columns: 1fr; }
     }
 
     .launch-card {
@@ -170,6 +159,10 @@
       background: linear-gradient(135deg, rgba(10, 102, 194, 0.15), var(--bg-card));
       border-color: rgba(10, 102, 194, 0.3);
     }
+    .launch-nk {
+      background: linear-gradient(135deg, rgba(30, 80, 255, 0.15), var(--bg-card));
+      border-color: rgba(30, 80, 255, 0.3);
+    }
 
     .launch-info {
       display: flex;
@@ -190,11 +183,12 @@
     }
     .launch-is .launch-badge-icon { background: var(--internshala-blue); }
     .launch-li .launch-badge-icon { background: var(--linkedin-blue); }
+    .launch-nk .launch-badge-icon { background: var(--naukri-blue); }
 
     /* Summary Bar */
     .metrics-summary {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1rem;
       margin-bottom: 2rem;
     }
@@ -220,15 +214,15 @@
       color: var(--text-muted);
     }
 
-    /* Dual Column Tracker Grid */
-    .dual-columns-grid {
+    /* 3-Column Tracker Grid */
+    .multi-columns-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
       gap: 1.5rem;
       margin-bottom: 2.5rem;
     }
-    @media (max-width: 1024px) {
-      .dual-columns-grid { grid-template-columns: 1fr; }
+    @media (max-width: 900px) {
+      .multi-columns-grid { grid-template-columns: 1fr; }
     }
 
     .column-box {
@@ -241,12 +235,9 @@
       flex-direction: column;
       height: 100%;
     }
-    .column-is {
-      border-top: 4px solid var(--internshala-blue);
-    }
-    .column-li {
-      border-top: 4px solid var(--linkedin-blue);
-    }
+    .column-is { border-top: 4px solid var(--internshala-blue); }
+    .column-li { border-top: 4px solid var(--linkedin-blue); }
+    .column-nk { border-top: 4px solid var(--naukri-blue); }
 
     .column-header {
       display: flex;
@@ -257,7 +248,7 @@
       border-bottom: 1px solid var(--border-color);
     }
     .column-title {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -375,7 +366,7 @@
     <header>
       <div class="header-left">
         <h1>🎯 Career Application Command Center</h1>
-        <p>Private workspace for K. Suchir Reddy · Real-time tracking across Internshala & LinkedIn.</p>
+        <p>Private workspace for K. Suchir Reddy · Real-time tracking across Internshala, LinkedIn & Naukri.</p>
       </div>
       <div class="header-actions">
         <button onclick="exportAllCSV()" class="btn btn-outline" style="font-size: 0.82rem;">📥 Export All CSV</button>
@@ -390,8 +381,8 @@
         <div class="launch-info">
           <div class="launch-badge-icon">IS</div>
           <div>
-            <h3 style="font-size: 1.05rem; font-weight: 700;">Internshala Student Dashboard</h3>
-            <p style="font-size: 0.82rem; color: var(--text-muted);">Access live applications, messages, and internships.</p>
+            <h3 style="font-size: 1.05rem; font-weight: 700;">Internshala Dashboard</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">Access applications, messages & internship tests.</p>
           </div>
         </div>
         <div>
@@ -407,12 +398,28 @@
           <div class="launch-badge-icon">in</div>
           <div>
             <h3 style="font-size: 1.05rem; font-weight: 700;">LinkedIn Job Center</h3>
-            <p style="font-size: 0.82rem; color: var(--text-muted);">Track jobs, messages with recruiters, and alerts.</p>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">Track Easy Apply jobs, recruiter chats & alerts.</p>
           </div>
         </div>
         <div>
           <a href="https://www.linkedin.com/jobs/" target="_blank" rel="noopener noreferrer" class="btn btn-li">
-            <span>Open LinkedIn Jobs ↗</span>
+            <span>Open LinkedIn ↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Naukri Card -->
+      <div class="launch-card launch-nk">
+        <div class="launch-info">
+          <div class="launch-badge-icon">NK</div>
+          <div>
+            <h3 style="font-size: 1.05rem; font-weight: 700;">Naukri Candidate Portal</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">View recruiter actions, recommended AI/ML jobs & tests.</p>
+          </div>
+        </div>
+        <div>
+          <a href="https://www.naukri.com/mnjuser/homepage" target="_blank" rel="noopener noreferrer" class="btn btn-nk">
+            <span>Open Naukri ↗</span>
           </a>
         </div>
       </div>
@@ -425,21 +432,21 @@
         <span class="label">Internshala Applied</span>
       </div>
       <div class="metric-card">
-        <span class="num" id="is-shortlisted-stat" style="color: var(--accent-amber);">0</span>
-        <span class="label">Internshala Active / Review</span>
-      </div>
-      <div class="metric-card">
         <span class="num" id="li-total-stat" style="color: var(--linkedin-blue);">0</span>
         <span class="label">LinkedIn Applied</span>
       </div>
       <div class="metric-card">
-        <span class="num" id="li-interview-stat" style="color: var(--accent-emerald);">0</span>
-        <span class="label">Interviews / Offers</span>
+        <span class="num" id="nk-total-stat" style="color: var(--naukri-blue);">0</span>
+        <span class="label">Naukri Applied</span>
+      </div>
+      <div class="metric-card">
+        <span class="num" id="all-interviews-stat" style="color: var(--accent-emerald);">0</span>
+        <span class="label">Total Interviews / Offers</span>
       </div>
     </div>
 
-    <!-- Dual-Column Application Trackers -->
-    <div class="dual-columns-grid">
+    <!-- 3-Column Application Trackers -->
+    <div class="multi-columns-grid">
       
       <!-- COLUMN 1: INTERNSHALA TRACKER -->
       <div class="column-box column-is">
@@ -561,6 +568,66 @@
         </div>
       </div>
 
+      <!-- COLUMN 3: NAUKRI TRACKER -->
+      <div class="column-box column-nk">
+        <div class="column-header">
+          <div class="column-title">
+            <span style="color: var(--naukri-blue);">🔵</span>
+            <span>Naukri Column</span>
+          </div>
+          <button onclick="exportPlatformCSV('Naukri')" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">Export Naukri</button>
+        </div>
+
+        <!-- Add Naukri Entry -->
+        <form id="form-nk" class="add-form">
+          <div class="form-group">
+            <label>Company</label>
+            <input type="text" id="nk-company" placeholder="e.g. Infosys / Wipro / Startup" required />
+          </div>
+          <div class="form-group">
+            <label>Role / Job Title</label>
+            <input type="text" id="nk-role" placeholder="Python AI Developer" required />
+          </div>
+          <div class="form-group">
+            <label>Date Applied</label>
+            <input type="date" id="nk-date" required />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="nk-status">
+              <option value="Applied" selected>Applied</option>
+              <option value="Viewed">Profile Viewed by Recruiter</option>
+              <option value="Shortlisted">Shortlisted</option>
+              <option value="Interview-R1">Interview Round 1</option>
+              <option value="Interview-Final">Final Round</option>
+              <option value="Offer">Offer Received 🎉</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+          <div class="form-full" style="display: flex; gap: 0.5rem;">
+            <input type="text" id="nk-notes" placeholder="Job ID / Location / CTC / Notes (e.g. Bengaluru)" />
+            <button type="submit" class="btn btn-nk" style="white-space: nowrap; padding: 0.4rem 1rem;">+ Add</button>
+          </div>
+        </form>
+
+        <div class="table-container">
+          <table id="table-nk">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Company</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
 
     <!-- Follow-ups & Notes -->
@@ -568,18 +635,19 @@
       <div class="column-box">
         <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem;">📋 Follow-ups & Action Items</h3>
         <form id="task-form" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-          <input type="text" id="task-input" placeholder="e.g. Check Internshala reply / Send LinkedIn message" required />
+          <input type="text" id="task-input" placeholder="e.g. Check Naukri recruiter views / Internshala test" required />
           <button type="submit" class="btn btn-primary" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">Add</button>
         </form>
         <ul class="task-list" id="task-list"></ul>
       </div>
 
       <div class="column-box">
-        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem;">💡 Application Tips</h3>
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem;">💡 Application & Platform Tips</h3>
         <ul style="color: var(--text-muted); font-size: 0.88rem; padding-left: 1.25rem; line-height: 1.7;">
+          <li><strong>Naukri:</strong> Update your profile headline every 3–4 days to stay at the top of recruiter search results.</li>
           <li><strong>Internshala:</strong> Always complete assessment questions tailored to the company's tech stack (Python, OpenCV, PyTorch).</li>
-          <li><strong>LinkedIn:</strong> Follow up with recruiters or engineers at the target company within 3–4 days of applying.</li>
-          <li><strong>Resume:</strong> Keep your public portfolio link (<a href="https://ksuchirreddy.github.io" target="_blank" style="color: var(--primary);">ksuchirreddy.github.io</a>) in your application header.</li>
+          <li><strong>LinkedIn:</strong> Send personalized connection notes to hiring managers within 2–3 days of submitting your application.</li>
+          <li><strong>Portfolio:</strong> Keep your clean GitHub Pages link (<a href="https://ksuchirreddy.github.io" target="_blank" style="color: var(--primary);">ksuchirreddy.github.io</a>) in your resume header.</li>
         </ul>
       </div>
     </div>
@@ -598,24 +666,39 @@
       { id: 2, company: 'HARMAN India', role: 'Associate Engineer - AI/ML', date: '2026-08-26', status: 'Recruiter-Contact', notes: 'Referred' }
     ];
 
+    let nkApps = JSON.parse(localStorage.getItem('suchir_nk_apps')) || [
+      { id: 1, company: 'NextGen AI Solutions', role: 'Junior Python ML Developer', date: '2026-08-28', status: 'Applied', notes: 'Bengaluru · Full-Time/Intern' }
+    ];
+
     let tasks = JSON.parse(localStorage.getItem('suchir_tasks')) || [
       { id: 1, text: 'Check Internshala student dashboard messages', done: false },
-      { id: 2, text: 'Follow up with LinkedIn recruiters for ML roles', done: false }
+      { id: 2, text: 'Follow up with LinkedIn recruiters for ML roles', done: false },
+      { id: 3, text: 'Review Naukri recruiter search impressions & update headline', done: false }
     ];
 
     // Set today's date
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('is-date').value = today;
     document.getElementById('li-date').value = today;
+    document.getElementById('nk-date').value = today;
+
+    function updateMetrics() {
+      document.getElementById('is-total-stat').textContent = isApps.length;
+      document.getElementById('li-total-stat').textContent = liApps.length;
+      document.getElementById('nk-total-stat').textContent = nkApps.length;
+
+      let interviews = 0;
+      isApps.forEach(a => { if (['Interview', 'Selected'].includes(a.status)) interviews++; });
+      liApps.forEach(a => { if (['Interview-R1', 'Interview-Final', 'Offer'].includes(a.status)) interviews++; });
+      nkApps.forEach(a => { if (['Interview-R1', 'Interview-Final', 'Offer'].includes(a.status)) interviews++; });
+      document.getElementById('all-interviews-stat').textContent = interviews;
+    }
 
     function renderIS() {
       const tbody = document.querySelector('#table-is tbody');
       tbody.innerHTML = '';
-      let reviewCount = 0;
 
       isApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
-        if (['In-Review', 'Shortlisted', 'Assignment', 'Interview'].includes(a.status)) reviewCount++;
-
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
@@ -640,19 +723,15 @@
         tbody.appendChild(tr);
       });
 
-      document.getElementById('is-total-stat').textContent = isApps.length;
-      document.getElementById('is-shortlisted-stat').textContent = reviewCount;
       localStorage.setItem('suchir_is_apps', JSON.stringify(isApps));
+      updateMetrics();
     }
 
     function renderLI() {
       const tbody = document.querySelector('#table-li tbody');
       tbody.innerHTML = '';
-      let offerCount = 0;
 
       liApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
-        if (['Interview-R1', 'Interview-Final', 'Offer'].includes(a.status)) offerCount++;
-
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
@@ -677,9 +756,41 @@
         tbody.appendChild(tr);
       });
 
-      document.getElementById('li-total-stat').textContent = liApps.length;
-      document.getElementById('li-interview-stat').textContent = offerCount;
       localStorage.setItem('suchir_li_apps', JSON.stringify(liApps));
+      updateMetrics();
+    }
+
+    function renderNK() {
+      const tbody = document.querySelector('#table-nk tbody');
+      tbody.innerHTML = '';
+
+      nkApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
+          <td>
+            <div style="font-weight: 700; color: var(--text-main);">${a.company}</div>
+            ${a.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${a.notes}</div>` : ''}
+          </td>
+          <td>${a.role}</td>
+          <td>
+            <select class="status-select" onchange="updateNKStatus(${a.id}, this.value)">
+              <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied</option>
+              <option value="Viewed" ${a.status === 'Viewed' ? 'selected' : ''}>Profile Viewed</option>
+              <option value="Shortlisted" ${a.status === 'Shortlisted' ? 'selected' : ''}>Shortlisted</option>
+              <option value="Interview-R1" ${a.status === 'Interview-R1' ? 'selected' : ''}>Interview R1</option>
+              <option value="Interview-Final" ${a.status === 'Interview-Final' ? 'selected' : ''}>Final Round</option>
+              <option value="Offer" ${a.status === 'Offer' ? 'selected' : ''}>Offer 🎉</option>
+              <option value="Rejected" ${a.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+            </select>
+          </td>
+          <td><button class="delete-btn" onclick="deleteNKApp(${a.id})">✕</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      localStorage.setItem('suchir_nk_apps', JSON.stringify(nkApps));
+      updateMetrics();
     }
 
     function renderTasks() {
@@ -730,11 +841,30 @@
       renderLI();
     };
 
+    document.getElementById('form-nk').onsubmit = (e) => {
+      e.preventDefault();
+      nkApps.push({
+        id: Date.now(),
+        company: document.getElementById('nk-company').value,
+        role: document.getElementById('nk-role').value,
+        date: document.getElementById('nk-date').value,
+        status: document.getElementById('nk-status').value,
+        notes: document.getElementById('nk-notes').value
+      });
+      document.getElementById('nk-company').value = '';
+      document.getElementById('nk-role').value = '';
+      document.getElementById('nk-notes').value = '';
+      renderNK();
+    };
+
     window.updateISStatus = (id, val) => { const a = isApps.find(x => x.id === id); if(a) a.status = val; renderIS(); };
     window.deleteISApp = (id) => { if(confirm('Delete this Internshala record?')) { isApps = isApps.filter(x => x.id !== id); renderIS(); } };
 
     window.updateLIStatus = (id, val) => { const a = liApps.find(x => x.id === id); if(a) a.status = val; renderLI(); };
     window.deleteLIApp = (id) => { if(confirm('Delete this LinkedIn record?')) { liApps = liApps.filter(x => x.id !== id); renderLI(); } };
+
+    window.updateNKStatus = (id, val) => { const a = nkApps.find(x => x.id === id); if(a) a.status = val; renderNK(); };
+    window.deleteNKApp = (id) => { if(confirm('Delete this Naukri record?')) { nkApps = nkApps.filter(x => x.id !== id); renderNK(); } };
 
     // Task Actions
     document.getElementById('task-form').onsubmit = (e) => {
@@ -749,7 +879,11 @@
 
     // Exports
     window.exportPlatformCSV = (platform) => {
-      const data = platform === 'Internshala' ? isApps : liApps;
+      let data = [];
+      if (platform === 'Internshala') data = isApps;
+      else if (platform === 'LinkedIn') data = liApps;
+      else if (platform === 'Naukri') data = nkApps;
+
       let csv = `Date,Company,Role,Status,Notes\n`;
       data.forEach(a => { csv += `"${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
       downloadBlob(csv, `suchir_${platform.toLowerCase()}_applications.csv`);
@@ -759,6 +893,7 @@
       let csv = `Platform,Date,Company,Role,Status,Notes\n`;
       isApps.forEach(a => { csv += `"Internshala","${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
       liApps.forEach(a => { csv += `"LinkedIn","${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
+      nkApps.forEach(a => { csv += `"Naukri","${a.date}","${a.company}","${a.role}","${a.status}","${a.notes || ''}"\n`; });
       downloadBlob(csv, `suchir_all_applications.csv`);
     };
 
@@ -773,6 +908,7 @@
 
     renderIS();
     renderLI();
+    renderNK();
     renderTasks();
   </script>
 </body>
