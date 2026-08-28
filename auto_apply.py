@@ -65,22 +65,60 @@ class AutoApplyAgent:
                 browser_context.close()
                 log_event("Session complete. Browser closed.")
 
+    def handle_trouble(self, platform: str, company: str, role: str, reason: str, page_url: str = ""):
+        """
+        When an application encounters trouble (2FA/OTP/Error/Captcha):
+        1. Pushes high priority alert task to Command Center in dashboard.
+        2. Sets application status to 'Pending' so it sorts to FIRST ORDER at the top.
+        3. Dispatches email notification to ksuchirreddy@gmail.com.
+        4. Syncs with GitHub so the live dashboard updates.
+        """
+        log_event(f"🚨 Trouble detected for {company} on {platform}: {reason}")
+        
+        # 1. Update applications.json
+        data_file = DASHBOARD_PATH.parent / "applications.json"
+        if data_file.exists():
+            try:
+                data = json.loads(data_file.read_text(encoding="utf-8"))
+                plat_key = platform.lower()
+                if plat_key in data:
+                    for app in data[plat_key]:
+                        if company.lower() in app.get("company", "").lower():
+                            app["status"] = "Pending"
+                            app["notes"] = f"⚠️ Trouble: {reason}"
+                
+                # Add task to Command Center
+                task_text = f"⚠️ [ACTION REQUIRED] {company} ({platform}) - {reason}"
+                if "tasks" not in data:
+                    data["tasks"] = []
+                if not any(t.get("text", "") == task_text for t in data["tasks"]):
+                    data["tasks"].insert(0, {"id": int(time.time()), "text": task_text, "done": False, "priority": True})
+                
+                data_file.write_text(json.dumps(data, indent=2), encoding="utf-8")
+            except Exception as e:
+                log_event(f"Failed to update data_file: {e}")
+
+        # 2. Dispatch Email
+        send_auth_request_email(platform, company, role, reason, page_url)
+
+        # 3. Push update to GitHub live website
+        try:
+            import subprocess
+            subprocess.run(["git", "-C", str(DASHBOARD_PATH.parent), "add", "applications.json"], check=False)
+            subprocess.run(["git", "-C", str(DASHBOARD_PATH.parent), "commit", "-m", f"Alert: {company} needs authorization"], check=False)
+            subprocess.run(["git", "-C", str(DASHBOARD_PATH.parent), "push", "origin", "main"], check=False)
+        except Exception:
+            pass
+
     def check_and_request_auth(self, page, platform: str, company: str, role: str, condition_name: str) -> bool:
         """
-        If a login, OTP, 2FA, or CAPTCHA screen is detected, send an email alert to the candidate
-        and wait for user authorization/completion.
+        If a login, OTP, 2FA, or CAPTCHA screen is detected, send an email alert to the candidate,
+        push to dashboard Command Center, and wait for user authorization/completion.
         """
-        log_event(f"⚠️ [AUTH REQUIRED] {condition_name} detected on {platform} for {company}.")
-        send_auth_request_email(
-            platform=platform,
-            company=company,
-            role=role,
-            reason=f"{condition_name} (Please verify/enter OTP in your browser window)",
-            action_url=page.url
-        )
+        self.handle_trouble(platform, company, role, condition_name, page.url)
         print(f"\n=======================================================")
         print(f"🔔 ACTION REQUIRED: {condition_name} on {platform} ({company})")
-        print(f"An email notification has been dispatched to {CANDIDATE['email']}.")
+        print(f"Pushed to Command Center on dashboard and email dispatched to {CANDIDATE['email']}.")
         print(f"Please solve/authorize in the open browser window.")
         print(f"Press Enter here once completed to continue automation...")
         print(f"=======================================================\n")

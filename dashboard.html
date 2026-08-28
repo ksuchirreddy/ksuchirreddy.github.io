@@ -807,6 +807,27 @@
       document.getElementById('offers-stat').textContent = offers;
     }
 
+    // Sort priority: Pending / Attention Required items ALWAYS appear FIRST
+    function sortAppsWithPriority(apps) {
+      return [...apps].sort((a, b) => {
+        const isAPending = (a.status === 'Pending' || a.status === 'Action-Required' || a.status === 'Trouble') ? 1 : 0;
+        const isBPending = (b.status === 'Pending' || b.status === 'Action-Required' || b.status === 'Trouble') ? 1 : 0;
+        if (isAPending !== isBPending) {
+          return isBPending - isAPending; // 1 (Pending) comes before 0 (Applied/others)
+        }
+        return new Date(b.date) - new Date(a.date);
+      });
+    }
+
+    // Auto-push trouble alerts to Command list
+    window.pushTroubleAlert = (platform, company, reason) => {
+      const alertText = `⚠️ [ACTION REQUIRED] ${company} (${platform}) - ${reason}`;
+      if (!tasks.some(t => t.text.includes(company) && !t.done)) {
+        tasks.unshift({ id: Date.now(), text: alertText, done: false, isAlert: true });
+        renderTasks();
+      }
+    };
+
     function renderLI() {
       const tbody = document.querySelector('#table-li tbody');
       tbody.innerHTML = '';
@@ -814,21 +835,22 @@
       if (liApps.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.82rem;">No LinkedIn applications logged yet. Use the form above or Claude to add!</td></tr>`;
       } else {
-        liApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
+        sortAppsWithPriority(liApps).forEach(a => {
           const isPending = a.status === 'Pending';
           const isApplied = a.status === 'Applied';
           const tr = document.createElement('tr');
+          if (isPending) tr.style.backgroundColor = 'rgba(245, 158, 11, 0.04)';
           tr.innerHTML = `
             <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
             <td>
-              <div style="font-weight: 700; color: var(--text-main);">${a.company}</div>
-              ${a.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${a.notes}</div>` : ''}
+              <div style="font-weight: 700; color: var(--text-main);">${a.company} ${isPending ? '<span style="color: var(--accent-amber); font-size: 0.75rem;">(⚠️ Action Needed)</span>' : ''}</div>
+              ${a.notes ? `<div style="font-size: 0.75rem; color: ${isPending ? 'var(--accent-amber)' : 'var(--text-muted)'};">${a.notes}</div>` : ''}
             </td>
             <td>${a.role}</td>
             <td>
               <select class="status-select ${isApplied ? 'applied-status' : isPending ? 'pending-status' : ''}" onchange="updateLIStatus(${a.id}, this.value)">
-                <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied (Easy Apply)</option>
                 <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
+                <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied (Easy Apply)</option>
                 <option value="Recruiter-DM" ${a.status === 'Recruiter-DM' ? 'selected' : ''}>Recruiter DM Sent</option>
                 <option value="Connection-Sent" ${a.status === 'Connection-Sent' ? 'selected' : ''}>Connection Sent</option>
                 <option value="Interview-R1" ${a.status === 'Interview-R1' ? 'selected' : ''}>Interview R1</option>
@@ -854,21 +876,22 @@
       if (nkApps.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.82rem;">No Naukri applications logged yet.</td></tr>`;
       } else {
-        nkApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
+        sortAppsWithPriority(nkApps).forEach(a => {
           const isPending = a.status === 'Pending';
           const isApplied = a.status === 'Applied';
           const tr = document.createElement('tr');
+          if (isPending) tr.style.backgroundColor = 'rgba(245, 158, 11, 0.04)';
           tr.innerHTML = `
             <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
             <td>
-              <div style="font-weight: 700; color: var(--text-main);">${a.company}</div>
-              ${a.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${a.notes}</div>` : ''}
+              <div style="font-weight: 700; color: var(--text-main);">${a.company} ${isPending ? '<span style="color: var(--accent-amber); font-size: 0.75rem;">(⚠️ Action Needed)</span>' : ''}</div>
+              ${a.notes ? `<div style="font-size: 0.75rem; color: ${isPending ? 'var(--accent-amber)' : 'var(--text-muted)'};">${a.notes}</div>` : ''}
             </td>
             <td>${a.role}</td>
             <td>
               <select class="status-select ${isApplied ? 'applied-status' : isPending ? 'pending-status' : ''}" onchange="updateNKStatus(${a.id}, this.value)">
-                <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied</option>
                 <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
+                <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied</option>
                 <option value="Viewed" ${a.status === 'Viewed' ? 'selected' : ''}>Profile Viewed</option>
                 <option value="Shortlisted" ${a.status === 'Shortlisted' ? 'selected' : ''}>Shortlisted</option>
                 <option value="Interview-R1" ${a.status === 'Interview-R1' ? 'selected' : ''}>Interview R1</option>
@@ -893,21 +916,22 @@
       if (dpApps.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.82rem;">No Internshala applications logged yet.</td></tr>`;
       } else {
-        dpApps.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
+        sortAppsWithPriority(dpApps).forEach(a => {
           const isPending = a.status === 'Pending';
           const isApplied = a.status === 'Applied';
           const tr = document.createElement('tr');
+          if (isPending) tr.style.backgroundColor = 'rgba(245, 158, 11, 0.04)';
           tr.innerHTML = `
             <td style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">${a.date}</td>
             <td>
-              <div style="font-weight: 700; color: var(--text-main);">${a.company}</div>
-              ${a.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted);">${a.notes}</div>` : ''}
+              <div style="font-weight: 700; color: var(--text-main);">${a.company} ${isPending ? '<span style="color: var(--accent-amber); font-size: 0.75rem;">(⚠️ Action Needed)</span>' : ''}</div>
+              ${a.notes ? `<div style="font-size: 0.75rem; color: ${isPending ? 'var(--accent-amber)' : 'var(--text-muted)'};">${a.notes}</div>` : ''}
             </td>
             <td>${a.role}</td>
             <td>
               <select class="status-select ${isApplied ? 'applied-status' : isPending ? 'pending-status' : ''}" onchange="updateDPStatus(${a.id}, this.value)">
-                <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied on Site</option>
                 <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>🟡 Ready (Pending)</option>
+                <option value="Applied" ${a.status === 'Applied' ? 'selected' : ''}>Applied on Site</option>
                 <option value="Assessment" ${a.status === 'Assessment' ? 'selected' : ''}>Assessment</option>
                 <option value="Interview-R1" ${a.status === 'Interview-R1' ? 'selected' : ''}>Interview R1</option>
                 <option value="Offer" ${a.status === 'Offer' ? 'selected' : ''}>Offer 🎉</option>
