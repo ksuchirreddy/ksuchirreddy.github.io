@@ -17,11 +17,20 @@ app = Flask(__name__)
 CORS(app)
 
 # Configuration
-UPLOAD_FOLDER = 'uploads'
-RESULTS_FOLDER = 'results'
-DEMO_DATA_FOLDER = '../demo-data'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+RESULTS_FOLDER = os.path.join(BASE_DIR, 'results')
+
+if os.path.exists(os.path.join(BASE_DIR, 'demo-data')):
+    DEMO_DATA_FOLDER = os.path.join(BASE_DIR, 'demo-data')
+elif os.path.exists(os.path.join(BASE_DIR, '../demo-data')):
+    DEMO_DATA_FOLDER = os.path.join(BASE_DIR, '../demo-data')
+else:
+    DEMO_DATA_FOLDER = os.path.join(BASE_DIR, 'demo-data')
+
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(RESULTS_FOLDER, exist_ok=True)
+os.makedirs(DEMO_DATA_FOLDER, exist_ok=True)
 
 # In-memory storage for demo
 pothole_database = []
