@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulseGuard — Real-Time API & Infrastructure Health Monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-main: #0b0f19;
+      --bg-card: rgba(18, 24, 38, 0.85);
+      --bg-card-hover: rgba(28, 36, 56, 0.95);
+      --bg-glass: rgba(15, 21, 34, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(99, 102, 241, 0.4);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+      --primary: #6366f1;
+      --primary-glow: rgba(99, 102, 241, 0.25);
+      --accent-cyan: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 1.5rem;
+      background-image:
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    .container { max-width: 1240px; margin: 0 auto; }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text-main);
+      text-decoration: none;
+    }
+
+    .pulse-dot {
+      width: 12px;
+      height: 12px;
+      background-color: var(--accent-emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--accent-emerald);
+      animation: pulseAnimation 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseAnimation {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #4f46e5; transform: translateY(-1px); }
+    .btn-outline { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); }
+    .btn-outline:hover { border-color: var(--border-hover); background: var(--bg-card-hover); }
+
+    /* Stats Banner */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.25rem;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-main);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .stat-sub {
+      font-size: 0.8rem;
+      color: var(--accent-emerald);
+      margin-top: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Live Chart Section */
+    .chart-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .chart-container {
+      width: 100%;
+      height: 180px;
+      position: relative;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Monitor Rows */
+    .monitor-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .monitor-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.25rem;
+      box-shadow: var(--card-shadow);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .monitor-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .monitor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .monitor-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-operational {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .status-degraded {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent-amber);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .status-down {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--accent-red);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .monitor-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .monitor-url {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .monitor-metrics {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .metric-item {
+      text-align: right;
+    }
+
+    .metric-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .metric-val {
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* 90-day history bar */
+    .history-timeline {
+      display: flex;
+      gap: 3px;
+      margin-top: 1rem;
+      align-items: center;
+    }
+
+    .timeline-bar {
+      flex: 1;
+      height: 24px;
+      border-radius: 3px;
+      background: rgba(16, 185, 129, 0.7);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .timeline-bar:hover {
+      transform: scaleY(1.2);
+      opacity: 1;
+    }
+
+    .timeline-bar.degraded { background: rgba(245, 158, 11, 0.85); }
+    .timeline-bar.down { background: rgba(239, 68, 68, 0.85); }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 500px;
+      padding: 1.75rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.1rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.65rem 0.9rem;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <a href="../" class="logo">
+        <div class="pulse-dot"></div>
+        <span>PulseGuard <span style="font-size: 0.75rem; font-weight: 600; color: var(--primary); border: 1px solid var(--border-hover); padding: 2px 8px; border-radius: 9999px; margin-left: 6px;">Live Telemetry</span></span>
+      </a>
+
+      <div class="header-actions">
+        <button class="btn btn-outline" id="pingNowBtn" onclick="triggerManualCheck()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+          Check All Probes
+        </button>
+        <button class="btn btn-primary" onclick="openAddModal()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Add Endpoint
+        </button>
+      </div>
+    </header>
+
+    <!-- Stats Banner -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Global Fleet Uptime (30d)</div>
+        <div class="stat-value" style="color: var(--accent-emerald);" id="uptimeStat">99.98%</div>
+        <div class="stat-sub">🟢 All Systems Operational</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Average Response Latency</div>
+        <div class="stat-value" id="latencyStat">42 ms</div>
+        <div class="stat-sub">⚡ Edge Probes Active</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Monitored Endpoints</div>
+        <div class="stat-value" id="monitorCountStat">5 / 5</div>
+        <div class="stat-sub">🔒 Multi-Region Verification</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Incident Recovery Rate</div>
+        <div class="stat-value" style="color: var(--accent-cyan);">100%</div>
+        <div class="stat-sub">🛡️ Auto-healing state machine</div>
+      </div>
+    </div>
+
+    <!-- Live Telemetry Latency Chart -->
+    <div class="chart-section">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Live Response Time Telemetry (Past 60 Seconds)</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Real-time HTTP health check latency stream across edge locations</div>
+        </div>
+        <span style="font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; color: var(--accent-emerald);" id="lastCheckTime">Live Pulse: Active</span>
+      </div>
+      <div class="chart-container">
+        <canvas id="latencyCanvas"></canvas>
+      </div>
+    </div>
+
+    <!-- Monitors List -->
+    <div class="section-header">
+      <div class="section-title">Live Service Endpoints</div>
+      <div style="font-size: 0.82rem; color: var(--text-muted);">Auto-refreshed every 5s</div>
+    </div>
+
+    <div class="monitor-list" id="monitorsContainer">
+      <!-- Generated via JavaScript -->
+    </div>
+  </div>
+
+  <!-- Add Monitor Modal -->
+  <div class="modal-overlay" id="addModal">
+    <div class="modal-content">
+      <h3 class="modal-title">Add New Health Probe</h3>
+      <div class="form-group">
+        <label class="form-label">Service Name</label>
+        <input type="text" id="newServiceName" class="form-input" placeholder="e.g. User Auth Microservice" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Target URL</label>
+        <input type="url" id="newServiceUrl" class="form-input" placeholder="https://api.domain.com/health" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">HTTP Method</label>
+        <select id="newServiceMethod" class="form-select">
+          <option value="GET">GET</option>
+          <option value="POST">POST</option>
+          <option value="HEAD">HEAD</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Check Interval</label>
+        <select id="newServiceInterval" class="form-select">
+          <option value="10">10 Seconds (High Frequency)</option>
+          <option value="30">30 Seconds</option>
+          <option value="60">60 Seconds</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeAddModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitNewMonitor()">Start Monitoring</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State
+    const monitors = [
+      {
+        id: 1,
+        name: "Primary API Gateway",
+        url: "https://api.pulseguard.io/v1/health",
+        status: "operational",
+        uptime: "100.0%",
+        latency: 38,
+        ssl: "Valid (294 days)",
+        history: generateHistory(0)
+      },
+      {
+        id: 2,
+        name: "PostgreSQL Database Cluster",
+        url: "db.internal.cloud:5432/telemetry",
+        status: "operational",
+        uptime: "99.99%",
+        latency: 18,
+        ssl: "TLS 1.3 Active",
+        history: generateHistory(0)
+      },
+      {
+        id: 3,
+        name: "AI LLM Inference API",
+        url: "https://ai.pulseguard.io/v1/models",
+        status: "operational",
+        uptime: "99.94%",
+        latency: 142,
+        ssl: "Valid (180 days)",
+        history: generateHistory(1)
+      },
+      {
+        id: 4,
+        name: "Authentication & OAuth Server",
+        url: "https://auth.pulseguard.io/.well-known/openid",
+        status: "operational",
+        uptime: "100.0%",
+        latency: 29,
+        ssl: "Valid (312 days)",
+        history: generateHistory(0)
+      },
+      {
+        id: 5,
+        name: "Stripe Webhook Worker",
+        url: "https://billing.pulseguard.io/webhook/events",
+        status: "operational",
+        uptime: "99.98%",
+        latency: 54,
+        ssl: "Valid (210 days)",
+        history: generateHistory(0)
+      }
+    ];
+
+    function generateHistory(anomalyIndex) {
+      const arr = [];
+      for (let i = 0; i < 45; i++) {
+        if (anomalyIndex > 0 && i === 22) {
+          arr.push("degraded");
+        } else {
+          arr.push("operational");
+        }
+      }
+      return arr;
+    }
+
+    // Render Monitors
+    function renderMonitors() {
+      const container = document.getElementById("monitorsContainer");
+      container.innerHTML = "";
+
+      monitors.forEach(m => {
+        const card = document.createElement("div");
+        card.className = "monitor-card";
+        
+        let statusBadge = `<span class="status-badge status-operational">● Operational</span>`;
+        if (m.status === "degraded") {
+          statusBadge = `<span class="status-badge status-degraded">● Degraded</span>`;
+        } else if (m.status === "down") {
+          statusBadge = `<span class="status-badge status-down">● Outage</span>`;
+        }
+
+        const historyHtml = m.history.map(status => {
+          let cls = "timeline-bar";
+          if (status === "degraded") cls += " degraded";
+          if (status === "down") cls += " down";
+          return `<div class="${cls}" title="Status: ${status}"></div>`;
+        }).join("");
+
+        card.innerHTML = `
+          <div class="monitor-header">
+            <div class="monitor-info">
+              ${statusBadge}
+              <div>
+                <div class="monitor-name">${m.name}</div>
+                <div class="monitor-url">${m.url}</div>
+              </div>
+            </div>
+            <div class="monitor-metrics">
+              <div class="metric-item">
+                <div class="metric-label">Latency</div>
+                <div class="metric-val" id="lat-${m.id}">${m.latency} ms</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-label">Uptime (30d)</div>
+                <div class="metric-val" style="color: var(--accent-emerald);">${m.uptime}</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-label">Security</div>
+                <div class="metric-val" style="color: var(--accent-cyan); font-size: 0.82rem;">${m.ssl}</div>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.8rem;">
+            <span>30 days ago</span>
+            <span>99.98% overall health</span>
+            <span>Today</span>
+          </div>
+          <div class="history-timeline">
+            ${historyHtml}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      document.getElementById("monitorCountStat").innerText = `${monitors.length} / ${monitors.length}`;
+    }
+
+    // Latency Chart Canvas Drawing
+    const canvas = document.getElementById("latencyCanvas");
+    const ctx = canvas.getContext("2d");
+    let chartData = Array.from({length: 40}, () => 35 + Math.random() * 20);
+
+    function resizeCanvas() {
+      canvas.width = canvas.parentElement.clientWidth * window.devicePixelRatio;
+      canvas.height = canvas.parentElement.clientHeight * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function drawChart() {
+      const w = canvas.parentElement.clientWidth;
+      const h = canvas.parentElement.clientHeight;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid lines
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+      ctx.lineWidth = 1;
+      for (let y = 30; y < h; y += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      // Draw Gradient Line
+      const step = w / (chartData.length - 1);
+      ctx.beginPath();
+      chartData.forEach((val, i) => {
+        const x = i * step;
+        const y = h - (val / 120) * (h - 40) - 20;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+
+      ctx.strokeStyle = "#6366f1";
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Fill area under line
+      ctx.lineTo(w, h);
+      ctx.lineTo(0, h);
+      ctx.closePath();
+      const grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, "rgba(99, 102, 241, 0.25)");
+      grad.addColorStop(1, "rgba(99, 102, 241, 0.0)");
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    // Interval to simulate live latency ticks
+    setInterval(() => {
+      const nextVal = 32 + Math.random() * 25 + (Math.random() > 0.9 ? 30 : 0);
+      chartData.shift();
+      chartData.push(nextVal);
+      drawChart();
+
+      // Update monitor latencies randomly
+      monitors.forEach(m => {
+        m.latency = Math.max(10, Math.round(m.latency + (Math.random() * 6 - 3)));
+        const elem = document.getElementById(`lat-${m.id}`);
+        if (elem) elem.innerText = `${m.latency} ms`;
+      });
+
+      const avg = Math.round(monitors.reduce((acc, m) => acc + m.latency, 0) / monitors.length);
+      document.getElementById("latencyStat").innerText = `${avg} ms`;
+    }, 2000);
+
+    function triggerManualCheck() {
+      const btn = document.getElementById("pingNowBtn");
+      btn.innerHTML = `<span style="display: inline-block; animation: spin 1s infinite linear;">↻</span> Checking...`;
+      setTimeout(() => {
+        btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Probes Verified`;
+        setTimeout(() => {
+          btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg> Check All Probes`;
+        }, 1500);
+      }, 700);
+    }
+
+    // Modal helpers
+    function openAddModal() {
+      document.getElementById("addModal").style.display = "flex";
+    }
+
+    function closeAddModal() {
+      document.getElementById("addModal").style.display = "none";
+    }
+
+    function submitNewMonitor() {
+      const name = document.getElementById("newServiceName").value.trim();
+      const url = document.getElementById("newServiceUrl").value.trim();
+      if (!name || !url) {
+        alert("Please enter a service name and endpoint URL.");
+        return;
+      }
+
+      monitors.push({
+        id: monitors.length + 1,
+        name: name,
+        url: url,
+        status: "operational",
+        uptime: "100.0%",
+        latency: Math.floor(25 + Math.random() * 30),
+        ssl: "Valid (365 days)",
+        history: generateHistory(0)
+      });
+
+      renderMonitors();
+      closeAddModal();
+      document.getElementById("newServiceName").value = "";
+      document.getElementById("newServiceUrl").value = "";
+    }
+
+    // Initial render
+    renderMonitors();
+    drawChart();
+  </script>
+</body>
+</html>
