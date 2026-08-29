@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Pothole Tagging System — Live Demo</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-main: #090d16;
+      --bg-card: rgba(18, 24, 38, 0.85);
+      --bg-card-hover: rgba(28, 36, 56, 0.95);
+      --bg-glass: rgba(15, 21, 34, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(99, 102, 241, 0.4);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+      --primary: #6366f1;
+      --primary-glow: rgba(99, 102, 241, 0.25);
+      --accent-cyan: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: rgba(255, 255, 255, 0.95);
+      --bg-card-hover: #ffffff;
+      --bg-glass: rgba(255, 255, 255, 0.85);
+      --border-color: rgba(0, 0, 0, 0.08);
+      --border-hover: rgba(99, 102, 241, 0.4);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-subtle: #94a3b8;
+      --primary: #4f46e5;
+      --primary-glow: rgba(79, 70, 229, 0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 1.5rem;
+      background-image:
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    header {
+      text-align: center;
+      padding-bottom: 2rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+    }
+
+    .nav-back {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      z-index: 100;
+    }
+    .nav-back:hover { border-color: var(--border-hover); background: var(--bg-card-hover); }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+    }
+    .stat-card .num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+    .stat-card .label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    /* Upload Section */
+    .upload-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .upload-area {
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 2.5rem 1rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .upload-area:hover, .upload-area.dragover {
+      border-color: var(--primary);
+      background: var(--bg-glass);
+    }
+    .upload-area p { color: var(--text-muted); margin-bottom: 1rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #4f46e5; transform: translateY(-1px); }
+    .btn-outline { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); }
+    .btn-outline:hover { border-color: var(--border-hover); background: var(--bg-card-hover); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .demo-images {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+    }
+    .demo-images img {
+      width: 120px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid var(--border-color);
+      transition: all 0.2s ease;
+    }
+    .demo-images img:hover { border-color: var(--primary); transform: translateY(-2px); }
+
+    /* Results */
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 900px) {
+      .results-grid { grid-template-columns: 1fr; }
+    }
+
+    .image-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.25rem;
+      box-shadow: var(--card-shadow);
+    }
+    .image-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; }
+    .image-card img { width: 100%; border-radius: 8px; }
+
+    /* Detections List */
+    .detections-list {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+    }
+    .detection-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      margin-bottom: 0.75rem;
+    }
+    .detection-info { display: flex; align-items: center; gap: 1rem; }
+    .severity-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .severity-Low { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid rgba(16,185,129,0.3); }
+    .severity-Medium { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); border: 1px solid rgba(245,158,11,0.3); }
+    .severity-High { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249,115,22,0.3); }
+    .severity-Critical { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); border: 1px solid rgba(239,68,68,0.3); }
+
+    .loading {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 2rem;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--border-color);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 3rem 1rem;
+      font-size: 0.95rem;
+    }
+
+    /* Tech badges */
+    .tech-showcase {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .tech-tag {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+  <a href="../index.html" class="nav-back">← Back to Portfolio</a>
+
+  <div class="container">
+    <header>
+      <h1>🕳️ AI Pothole Tagging System</h1>
+      <p>Real-time computer vision pothole detection & severity tagging using OpenCV</p>
+      <div class="tech-showcase" style="justify-content: center;">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Flask</span>
+        <span class="tech-tag">OpenCV</span>
+        <span class="tech-tag">Computer Vision</span>
+        <span class="tech-tag">HTML5/JS</span>
+      </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <span class="num" id="stat-total" style="color: var(--accent-cyan);">0</span>
+        <span class="label">Total Potholes Detected</span>
+      </div>
+      <div class="stat-card">
+        <span class="num" id="stat-images" style="color: var(--primary);">0</span>
+        <span class="label">Images Analyzed</span>
+      </div>
+      <div class="stat-card">
+        <span class="num" id="stat-critical" style="color: var(--accent-red);">0</span>
+        <span class="label">Critical Severity</span>
+      </div>
+      <div class="stat-card">
+        <span class="num" id="stat-medium" style="color: var(--accent-amber);">0</span>
+        <span class="label">Medium+ Severity</span>
+      </div>
+    </div>
+
+    <!-- Upload Section -->
+    <div class="upload-section">
+      <div class="upload-area" id="uploadArea">
+        <p>📸 Drop a road image here or click to upload</p>
+        <input type="file" id="fileInput" accept="image/*" style="display: none;" />
+        <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">Upload Image</button>
+        <button class="btn btn-outline" id="analyzeBtn" onclick="analyzeUploaded()" disabled>🔍 Analyze</button>
+      </div>
+
+      <div class="demo-images" id="demoImages">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="resultsContainer" style="display: none;">
+      <div class="results-grid">
+        <div class="image-card">
+          <h3>Original Image</h3>
+          <img id="originalImg" alt="Original" />
+        </div>
+        <div class="image-card">
+          <h3>Detection Result</h3>
+          <img id="resultImg" alt="Detection Result" />
+        </div>
+      </div>
+
+      <div class="detections-list" id="detectionsList">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="loading" style="display: none;">
+      <div class="spinner"></div>
+      <p>Analyzing image for potholes...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="empty-state">
+      <p>Upload an image or try a demo image to see live pothole detection in action.</p>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'https://pothole-tagging.onrender.com/api';
+    let currentImageBase64 = null;
+
+    // Load demo images
+    async function loadDemoImages() {
+      try {
+        const response = await fetch(`${API_BASE}/demo-images`);
+        const data = await response.json();
+
+        const container = document.getElementById('demoImages');
+        container.innerHTML = '<p style="width: 100%; color: var(--text-subtle); font-size: 0.85rem; margin-bottom: 0.5rem;">Or try demo images:</p>';
+
+        if (data.images.length === 0) {
+          container.innerHTML += '<span style="color: var(--text-subtle); font-size: 0.82rem;">No demo images available - upload your own road photo!</span>';
+          return;
+        }
+
+        data.images.forEach(filename => {
+          const img = document.createElement('img');
+          img.src = `${API_BASE}/demo/${filename}`;
+          img.alt = filename;
+          img.title = `Try: ${filename}`;
+          img.onclick = () => loadDemoImage(filename);
+          container.appendChild(img);
+        });
+      } catch (error) {
+        console.error('Failed to load demo images:', error);
+      }
+    }
+
+    async function loadDemoImage(filename) {
+      try {
+        const response = await fetch(`${API_BASE}/demo/${filename}`);
+        const blob = await response.blob();
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          currentImageBase64 = reader.result;
+          showOriginal(reader.result);
+        };
+        reader.readAsDataURL(blob);
+      } catch (error) {
+        console.error('Failed to load demo image:', error);
+      }
+    }
+
+    function showOriginal(base64) {
+      document.getElementById('originalImg').src = base64;
+      document.getElementById('analyzeBtn').disabled = false;
+      document.getElementById('resultsContainer').style.display = 'none';
+      document.getElementById('emptyState').style.display = 'none';
+    }
+
+    // File upload handling
+    const fileInput = document.getElementById('fileInput');
+    const uploadArea = document.getElementById('uploadArea');
+
+    fileInput.addEventListener('change', handleFileSelect);
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      if (e.dataTransfer.files.length > 0) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    function handleFileSelect(e) {
+      if (e.target.files.length > 0) {
+        handleFile(e.target.files[0]);
+      }
+    }
+
+    function handleFile(file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        currentImageBase64 = reader.result;
+        showOriginal(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function analyzeUploaded() {
+      if (!currentImageBase64) {
+        alert('Please upload or select an image first.');
+        return;
+      }
+
+      document.getElementById('loadingState').style.display = 'block';
+      document.getElementById('resultsContainer').style.display = 'none';
+      document.getElementById('analyzeBtn').disabled = true;
+
+      try {
+        const response = await fetch(`${API_BASE}/detect/base64`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: currentImageBase64 })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          displayResults(data);
+          await loadStats();
+        } else {
+          alert('Detection failed: ' + data.error);
+        }
+      } catch (error) {
+        alert('Error: ' + error.message);
+      } finally {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('analyzeBtn').disabled = false;
+      }
+    }
+
+    function displayResults(data) {
+      document.getElementById('resultImg').src = `data:image/jpeg;base64,${data.result_image}`;
+      document.getElementById('resultsContainer').style.display = 'block';
+
+      const list = document.getElementById('detectionsList');
+      if (data.detections.length === 0) {
+        list.innerHTML = `
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem;">Detection Results</h3>
+          <div class="empty-state" style="padding: 1.5rem;">✅ No potholes detected in this image. Road looks clear!</div>
+        `;
+      } else {
+        list.innerHTML = `
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem;">
+            Detection Results (${data.total_count} found)
+          </h3>
+        `;
+
+        data.detections.forEach((det, i) => {
+          const item = document.createElement('div');
+          item.className = 'detection-item';
+          item.innerHTML = `
+            <div class="detection-info">
+              <span class="severity-badge severity-${det.severity}">${det.severity}</span>
+              <div>
+                <div style="font-weight: 700;">Pothole #${i + 1}</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">
+                  Area: ${Math.round(det.area)}px² · Confidence: ${(det.confidence * 100).toFixed(0)}%
+                </div>
+              </div>
+            </div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-subtle);">
+              [${det.bbox.join(', ')}]
+            </div>
+          `;
+          list.appendChild(item);
+        });
+      }
+    }
+
+    async function loadStats() {
+      try {
+        const response = await fetch(`${API_BASE}/stats`);
+        const data = await response.json();
+
+        document.getElementById('stat-total').textContent = data.total_detections || 0;
+        document.getElementById('stat-images').textContent = data.total_images || 0;
+        const severityDist = data.severity_distribution || {};
+        document.getElementById('stat-critical').textContent = severityDist['Critical'] || 0;
+        document.getElementById('stat-medium').textContent = (severityDist['Medium'] || 0) + (severityDist['High'] || 0);
+      } catch (error) {
+        console.error('Failed to load stats:', error);
+      }
+    }
+
+    // Initialize
+    loadDemoImages();
+    loadStats();
+  </script>
+</body>
+</html>
