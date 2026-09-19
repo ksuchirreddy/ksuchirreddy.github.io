@@ -1,534 +1,1327 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="cyber">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PulseGuard — Real-Time API & Infrastructure Health Monitor</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans, Inter, & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
 
   <style>
+    /* CSS Custom Properties & Themes */
     :root {
-      --bg-main: #0b0f19;
-      --bg-card: rgba(18, 24, 38, 0.85);
-      --bg-card-hover: rgba(28, 36, 56, 0.95);
-      --bg-glass: rgba(15, 21, 34, 0.75);
-      --border-color: rgba(255, 255, 255, 0.08);
-      --border-hover: rgba(99, 102, 241, 0.4);
-      --text-main: #f1f5f9;
+      --bg-main: #030712;
+      --bg-card: rgba(11, 22, 44, 0.78);
+      --bg-card-hover: rgba(18, 34, 66, 0.88);
+      --bg-glass: rgba(8, 17, 36, 0.85);
+      --border-color: rgba(56, 189, 248, 0.2);
+      --border-hover: rgba(56, 189, 248, 0.55);
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --text-subtle: #64748b;
-      --primary: #6366f1;
-      --primary-glow: rgba(99, 102, 241, 0.25);
-      --accent-cyan: #38bdf8;
+      --text-subtle: #475569;
+      --primary: #06b6d4;
+      --primary-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
       --accent-emerald: #10b981;
+      --accent-cyan: #38bdf8;
+      --accent-purple: #a855f7;
       --accent-amber: #f59e0b;
-      --accent-red: #ef4444;
-      --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      --accent-red: #f43f5e;
+      --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.85), 0 0 25px -5px rgba(6, 182, 212, 0.15);
+      --glow-emerald: 0 0 20px rgba(16, 185, 129, 0.4);
+      --glow-cyan: 0 0 20px rgba(56, 189, 248, 0.4);
+      --glow-red: 0 0 20px rgba(244, 63, 94, 0.4);
+    }
+
+    [data-theme="emerald"] {
+      --bg-main: #02120d;
+      --bg-card: rgba(6, 32, 24, 0.82);
+      --border-color: rgba(16, 185, 129, 0.25);
+      --primary: #10b981;
+      --primary-gradient: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+    }
+
+    [data-theme="midnight"] {
+      --bg-main: #090514;
+      --bg-card: rgba(22, 14, 42, 0.82);
+      --border-color: rgba(168, 85, 247, 0.25);
+      --primary: #a855f7;
+      --primary-gradient: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #ec4899 100%);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      font-family: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
       background-color: var(--bg-main);
       color: var(--text-main);
       line-height: 1.6;
       min-height: 100vh;
-      padding: 1.5rem;
-      background-image:
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.08) 0px, transparent 50%);
-      background-attachment: fixed;
+      padding: 1rem 1.5rem 3rem 1.5rem;
+      position: relative;
+      overflow-x: hidden;
     }
 
-    .container { max-width: 1240px; margin: 0 auto; }
-    
+    /* Fixed Canvas Background for Moving Token Nodes */
+    #tokenCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Top Sticky Telemetry Bar (No Overlap Fix) */
+    .telemetry-sticky-bar {
+      position: relative;
+      z-index: 100;
+      margin-bottom: 1.5rem;
+      background: rgba(3, 9, 23, 0.9);
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(14px);
+      border-radius: 9999px;
+      padding: 0.45rem 1.25rem;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .ticker-tag {
+      background: var(--primary-gradient);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      padding: 3px 12px;
+      border-radius: 9999px;
+      margin-right: 1rem;
+      letter-spacing: 0.6px;
+      white-space: nowrap;
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
+      flex-shrink: 0;
+    }
+
+    .ticker-wrapper {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee 32s linear infinite;
+    }
+    .ticker-wrapper:hover { animation-play-state: paused; }
+
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-right: 2.5rem;
+      color: var(--text-muted);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+    }
+
+    .ticker-item strong { color: var(--accent-cyan); }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Main Navigation Header */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 1.5rem;
+      padding-bottom: 1.25rem;
       border-bottom: 1px solid var(--border-color);
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
       flex-wrap: wrap;
+      gap: 1.25rem;
+      position: relative;
+      z-index: 90;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
       gap: 1rem;
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      font-size: 1.4rem;
+      gap: 0.85rem;
+      font-size: 1.5rem;
       font-weight: 800;
       letter-spacing: -0.5px;
-      color: var(--text-main);
+      color: #ffffff;
       text-decoration: none;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+    .nav-link:hover { color: var(--accent-cyan); }
+
+    /* Radar Pulse Animation */
+    .pulse-wrapper {
+      position: relative;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .pulse-dot {
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
       background-color: var(--accent-emerald);
       border-radius: 50%;
       box-shadow: 0 0 12px var(--accent-emerald);
-      animation: pulseAnimation 2s infinite ease-in-out;
+      z-index: 2;
     }
 
-    @keyframes pulseAnimation {
-      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-      70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
-      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    .pulse-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px solid var(--accent-emerald);
+      animation: radarPulse 2s infinite ease-out;
     }
 
-    .header-actions {
-      display: flex;
-      gap: 0.75rem;
-      align-items: center;
+    @keyframes radarPulse {
+      0% { transform: scale(0.5); opacity: 1; }
+      100% { transform: scale(2.4); opacity: 0; }
     }
 
-    .btn {
+    .version-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 3px 10px;
+      border-radius: 9999px;
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-back-btn {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.6rem 1.2rem;
-      border-radius: 8px;
-      font-size: 0.88rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 0.85rem;
       font-weight: 600;
+      transition: all 0.25s ease;
+    }
+    .nav-back-btn:hover {
+      background: rgba(6, 182, 212, 0.15);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.65rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      font-weight: 700;
       cursor: pointer;
       border: none;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       text-decoration: none;
-    }
-
-    .btn-primary { background: var(--primary); color: white; }
-    .btn-primary:hover { background: #4f46e5; transform: translateY(-1px); }
-    .btn-outline { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); }
-    .btn-outline:hover { border-color: var(--border-hover); background: var(--bg-card-hover); }
-
-    /* Stats Banner */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 1.25rem;
-      box-shadow: var(--card-shadow);
       position: relative;
       overflow: hidden;
     }
 
-    .stat-label {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 0.25rem;
+    .btn-cyan {
+      background: var(--primary-gradient);
+      color: #ffffff;
+      box-shadow: 0 4px 20px rgba(6, 182, 212, 0.35);
+    }
+    .btn-cyan:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(6, 182, 212, 0.55);
+      filter: brightness(1.1);
     }
 
-    .stat-value {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--text-main);
-      font-family: 'JetBrains Mono', monospace;
+    .btn-danger {
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      color: #fda4af;
     }
-
-    .stat-sub {
-      font-size: 0.8rem;
-      color: var(--accent-emerald);
-      margin-top: 0.25rem;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    /* Live Chart Section */
-    .chart-section {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      box-shadow: var(--card-shadow);
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .section-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
-
-    .chart-container {
-      width: 100%;
-      height: 180px;
-      position: relative;
-    }
-
-    canvas {
-      width: 100%;
-      height: 100%;
-    }
-
-    /* Monitor Rows */
-    .monitor-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .monitor-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 1.25rem;
-      box-shadow: var(--card-shadow);
-      transition: border-color 0.2s, transform 0.2s;
-    }
-
-    .monitor-card:hover {
-      border-color: var(--border-hover);
+    .btn-danger:hover {
+      background: rgba(244, 63, 94, 0.25);
+      border-color: var(--accent-red);
+      color: #ffffff;
       transform: translateY(-2px);
     }
 
-    .monitor-header {
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: #e2e8f0;
+      backdrop-filter: blur(8px);
+    }
+    .btn-outline:hover {
+      background: rgba(6, 182, 212, 0.15);
+      border-color: var(--primary);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .theme-select {
+      background: rgba(4, 13, 30, 0.8);
+      border: 1px solid var(--border-color);
+      color: var(--accent-cyan);
+      padding: 0.5rem 0.8rem;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      outline: none;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }
+
+    /* Glassmorphism Cards */
+    .glass-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(16px);
+      border-radius: 18px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+    .glass-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.85), 0 0 30px -5px rgba(6, 182, 212, 0.25);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      text-align: center;
+      padding: 3rem 1rem 4rem 1rem;
+      max-width: 900px;
+      margin: 0 auto 3rem auto;
+      position: relative;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 1rem;
+      border-radius: 9999px;
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      color: var(--accent-cyan);
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .hero-title {
+      font-size: 3.2rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+      letter-spacing: -1.5px;
+      background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-title span {
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 2.25rem;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* 3-Column Feature Grid */
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      color: #fff;
+    }
+    .section-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .feature-card {
+      padding: 1.75rem;
+      border-top: 3px solid var(--primary);
+    }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-cyan);
+      font-size: 1.4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 3px;
+      background: var(--primary-gradient);
+      opacity: 0.8;
+    }
+
+    .stat-label {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 0.35rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .stat-value {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--text-main);
+      font-family: "JetBrains Mono", monospace;
+      letter-spacing: -1px;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-sub {
+      font-size: 0.78rem;
+      color: var(--accent-emerald);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Waterfall Timings Breakdown */
+    .waterfall-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(3, 9, 23, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+    }
+
+    .waterfall-item { display: flex; flex-direction: column; gap: 4px; }
+    .waterfall-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+    .waterfall-val { font-family: "JetBrains Mono", monospace; font-size: 0.88rem; color: var(--accent-cyan); font-weight: 700; }
+    .waterfall-bar-bg { height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; overflow: hidden; }
+    .waterfall-bar-fill { height: 100%; background: var(--primary-gradient); width: 0%; transition: width 0.6s ease; }
+
+    /* Edge Region Matrix Grid */
+    .edge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .edge-card {
+      background: rgba(3, 9, 23, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.85rem 1.1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.75rem;
-      flex-wrap: wrap;
-      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    .edge-card:hover {
+      border-color: var(--primary);
+      background: rgba(6, 182, 212, 0.08);
     }
 
-    .monitor-info {
+    /* Chart & Monitor Section */
+    .chart-section { margin-bottom: 2.5rem; }
+    .chart-container { width: 100%; height: 200px; position: relative; }
+    canvas { width: 100%; height: 100%; display: block; }
+
+    /* Search & Filter Toolbar */
+    .toolbar {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 0.75rem;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
     }
+
+    .filter-group { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+    .filter-btn {
+      padding: 0.45rem 1rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: rgba(6, 182, 212, 0.2);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .search-input {
+      background: rgba(3, 9, 23, 0.9);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 0.45rem 1rem;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      outline: none;
+      min-width: 240px;
+    }
+    .search-input:focus { border-color: var(--primary); }
+
+    /* Monitor Cards List */
+    .monitor-list { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 4rem; }
 
     .status-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      padding: 0.25rem 0.75rem;
+      gap: 0.45rem;
+      padding: 0.3rem 0.85rem;
       border-radius: 9999px;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.6px;
     }
 
     .status-operational {
       background: rgba(16, 185, 129, 0.15);
       color: var(--accent-emerald);
-      border: 1px solid rgba(16, 185, 129, 0.3);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      box-shadow: var(--glow-emerald);
     }
-
     .status-degraded {
       background: rgba(245, 158, 11, 0.15);
       color: var(--accent-amber);
-      border: 1px solid rgba(245, 158, 11, 0.3);
+      border: 1px solid rgba(245, 158, 11, 0.4);
     }
-
     .status-down {
-      background: rgba(239, 68, 68, 0.15);
+      background: rgba(244, 63, 94, 0.2);
       color: var(--accent-red);
-      border: 1px solid rgba(239, 68, 68, 0.3);
+      border: 1px solid rgba(244, 63, 94, 0.5);
+      box-shadow: var(--glow-red);
     }
 
-    .monitor-name {
-      font-size: 1.05rem;
-      font-weight: 700;
-    }
-
-    .monitor-url {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .monitor-metrics {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
-
-    .metric-item {
-      text-align: right;
-    }
-
-    .metric-label {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-
-    .metric-val {
-      font-size: 0.95rem;
-      font-weight: 700;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* 90-day history bar */
     .history-timeline {
       display: flex;
-      gap: 3px;
-      margin-top: 1rem;
-      align-items: center;
+      gap: 5px;
+      height: 30px;
+      align-items: flex-end;
+      margin-top: 0.75rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .timeline-bar {
       flex: 1;
-      height: 24px;
-      border-radius: 3px;
-      background: rgba(16, 185, 129, 0.7);
-      transition: all 0.2s;
+      background: var(--accent-emerald);
+      border-radius: 4px;
+      height: 100%;
+      opacity: 0.8;
+      transition: opacity 0.2s, height 0.2s, transform 0.2s;
       cursor: pointer;
     }
+    .timeline-bar:hover { opacity: 1; transform: scaleY(1.15); filter: brightness(1.3); }
+    .timeline-bar.degraded { background: var(--accent-amber); height: 60%; }
+    .timeline-bar.down { background: var(--accent-red); height: 35%; }
 
-    .timeline-bar:hover {
-      transform: scaleY(1.2);
-      opacity: 1;
+    /* 3-Tier Pricing Table */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
     }
 
-    .timeline-bar.degraded { background: rgba(245, 158, 11, 0.85); }
-    .timeline-bar.down { background: rgba(239, 68, 68, 0.85); }
+    .pricing-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .pricing-card.popular {
+      border-color: var(--primary);
+      box-shadow: 0 0 30px rgba(6, 182, 212, 0.3);
+    }
+    .popular-tag {
+      position: absolute;
+      top: -12px; right: 20px;
+      background: var(--primary-gradient);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 9999px;
+      text-transform: uppercase;
+    }
 
-    /* Modal */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
-      z-index: 999;
-      justify-content: center;
+    .price-val {
+      font-size: 2.8rem;
+      font-weight: 800;
+      font-family: "JetBrains Mono", monospace;
+      color: #fff;
+      margin: 1rem 0;
+    }
+    .price-val span { font-size: 0.9rem; color: var(--text-muted); font-weight: 500; }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: 1.5rem;
+    }
+    .pricing-features li {
+      padding: 0.4rem 0;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      display: flex;
       align-items: center;
-      padding: 1rem;
+      gap: 0.5rem;
+    }
+    .pricing-features li::before { content: "✓"; color: var(--accent-emerald); font-weight: 800; }
+
+    /* FAQ Accordion Section */
+    .faq-container {
+      max-width: 850px;
+      margin: 0 auto 4rem auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
 
-    .modal-content {
+    .faq-item {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: 16px;
-      width: 100%;
-      max-width: 500px;
-      padding: 1.75rem;
-      box-shadow: var(--card-shadow);
+      border-radius: 14px;
+      overflow: hidden;
     }
 
-    .modal-title {
-      font-size: 1.25rem;
+    .faq-question {
+      padding: 1.1rem 1.5rem;
       font-weight: 700;
-      margin-bottom: 1.25rem;
-    }
-
-    .form-group {
-      margin-bottom: 1.1rem;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 0.84rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 0.4rem;
-    }
-
-    .form-input, .form-select {
-      width: 100%;
-      background: var(--bg-glass);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 0.65rem 0.9rem;
-      color: var(--text-main);
-      font-family: inherit;
-      font-size: 0.9rem;
-    }
-
-    .form-input:focus, .form-select:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
-
-    .modal-actions {
+      font-size: 0.98rem;
+      color: #fff;
+      cursor: pointer;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    .faq-answer {
+      padding: 0 1.5rem 1.25rem 1.5rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      display: none;
+    }
+
+    /* Email Capture Subscription Banner */
+    .cta-banner {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      margin-bottom: 4rem;
+    }
+    .email-input-group {
+      display: flex;
+      justify-content: center;
       gap: 0.75rem;
       margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .email-input {
+      min-width: 300px;
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: #030814;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      color: var(--text-muted);
+      font-size: 0.84rem;
+    }
+
+    /* Modals & Drawers */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(2, 6, 23, 0.88);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      backdrop-filter: blur(10px);
+    }
+    .modal-card {
+      background: #081428;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      width: 90%;
+      max-width: 580px;
+      padding: 1.75rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+    }
+    .form-group { margin-bottom: 1.1rem; }
+    .form-label { display: block; font-size: 0.82rem; font-weight: 700; color: #bae6fd; margin-bottom: 0.4rem; }
+    .form-input {
+      width: 100%;
+      background: #030814;
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 0.65rem 0.9rem;
+      border-radius: 10px;
+      outline: none;
+    }
+
+    /* Toast Notification System */
+    #toastContainer {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 10000;
+    }
+    .toast {
+      background: rgba(11, 22, 44, 0.95);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--primary);
+      color: #fff;
+      padding: 0.85rem 1.25rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(12px);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <header>
-      <a href="../" class="logo">
-        <div class="pulse-dot"></div>
-        <span>PulseGuard <span style="font-size: 0.75rem; font-weight: 600; color: var(--primary); border: 1px solid var(--border-hover); padding: 2px 8px; border-radius: 9999px; margin-left: 6px;">Live Telemetry</span></span>
-      </a>
+  <!-- HTML5 Canvas Background with Moving Data Node Tokens -->
+  <canvas id="tokenCanvas"></canvas>
 
-      <div class="header-actions">
-        <button class="btn btn-outline" id="pingNowBtn" onclick="triggerManualCheck()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-          Check All Probes
+  <div class="container">
+
+    <!-- Top Sticky Telemetry Bar (Clean & Non-overlapping) -->
+    <div class="telemetry-sticky-bar">
+      <div class="ticker-tag">⚡ Live Telemetry</div>
+      <div class="ticker-wrapper">
+        <div class="ticker-item"><span>🚀 TTFB (Time To First Byte):</span> <strong>24 ms</strong></div>
+        <div class="ticker-item"><span>🎨 CSS Glassmorphism:</span> <strong>GPU Accelerated (120 FPS)</strong></div>
+        <div class="ticker-item"><span>🔒 SSL/TLS Handshake:</span> <strong>TLS 1.3 0-RTT</strong></div>
+        <div class="ticker-item"><span>🌐 Edge Node Latency:</span> <strong>14 ms (AP-South)</strong></div>
+        <div class="ticker-item"><span>📡 WebSocket Stream:</span> <strong>Active SSE</strong></div>
+        <div class="ticker-item"><span>📦 Brotli Compression:</span> <strong>94% Efficiency</strong></div>
+
+        <!-- Duplicated for continuous loop -->
+        <div class="ticker-item"><span>🚀 TTFB (Time To First Byte):</span> <strong>24 ms</strong></div>
+        <div class="ticker-item"><span>🎨 CSS Glassmorphism:</span> <strong>GPU Accelerated (120 FPS)</strong></div>
+        <div class="ticker-item"><span>🔒 SSL/TLS Handshake:</span> <strong>TLS 1.3 0-RTT</strong></div>
+        <div class="ticker-item"><span>🌐 Edge Node Latency:</span> <strong>14 ms (AP-South)</strong></div>
+        <div class="ticker-item"><span>📡 WebSocket Stream:</span> <strong>Active SSE</strong></div>
+        <div class="ticker-item"><span>📦 Brotli Compression:</span> <strong>94% Efficiency</strong></div>
+      </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header id="home">
+      <div class="logo-container">
+        <a href="../" class="nav-back-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Portfolio
+        </a>
+        <a href="#home" class="logo">
+          <div class="pulse-wrapper">
+            <div class="pulse-dot"></div>
+            <div class="pulse-ring"></div>
+          </div>
+          <span>PulseGuard</span>
+        </a>
+        <span class="version-badge">v2.5 Cyber Telemetry</span>
+      </div>
+
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="#home" class="nav-link">Home</a></li>
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="#dashboard" class="nav-link">Live Telemetry</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+        <!-- Theme Selector -->
+        <select class="theme-select" onchange="changeTheme(this.value)">
+          <option value="cyber">🌌 Cyber Neon</option>
+          <option value="emerald">🌿 Matrix Emerald</option>
+          <option value="midnight">🔮 Deep Midnight</option>
+        </select>
+
+        <button class="btn btn-outline" onclick="openTechModal()">
+          Frontend Specs
         </button>
-        <button class="btn btn-primary" onclick="openAddModal()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          Add Endpoint
+
+        <button class="btn btn-cyan" onclick="openAddModal()">
+          Deploy Probe
         </button>
       </div>
     </header>
 
-    <!-- Stats Banner -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-label">Global Fleet Uptime (30d)</div>
-        <div class="stat-value" style="color: var(--accent-emerald);" id="uptimeStat">99.98%</div>
-        <div class="stat-sub">🟢 All Systems Operational</div>
+    <!-- Hero Section with CTA -->
+    <section class="hero-section">
+      <div class="hero-tag">
+        <span class="pulse-dot" style="width: 8px; height: 8px;"></span> Real-Time API Infrastructure Monitoring
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Average Response Latency</div>
-        <div class="stat-value" id="latencyStat">42 ms</div>
-        <div class="stat-sub">⚡ Edge Probes Active</div>
+      <h1 class="hero-title">
+        Monitor Edge APIs & Infrastructure with <span>Sub-10ms Precision</span>
+      </h1>
+      <p class="hero-desc">
+        PulseGuard tracks multi-region TTFB, SSL certificates, DNS handshakes, and synthetic health probes in real-time with zero configuration required.
+      </p>
+      <div class="hero-cta-group">
+        <a href="#dashboard" class="btn btn-cyan" style="padding: 0.85rem 1.8rem; font-size: 0.95rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          Explore Live Telemetry Dashboard
+        </a>
+        <button class="btn btn-outline" onclick="openAddModal()" style="padding: 0.85rem 1.8rem; font-size: 0.95rem;">
+          + Deploy Endpoint Probe Free
+        </button>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Monitored Endpoints</div>
-        <div class="stat-value" id="monitorCountStat">5 / 5</div>
-        <div class="stat-sub">🔒 Multi-Region Verification</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Incident Recovery Rate</div>
-        <div class="stat-value" style="color: var(--accent-cyan);">100%</div>
-        <div class="stat-sub">🛡️ Auto-healing state machine</div>
-      </div>
-    </div>
+    </section>
 
-    <!-- Live Telemetry Latency Chart -->
-    <div class="chart-section">
-      <div class="section-header">
-        <div>
-          <div class="section-title">Live Response Time Telemetry (Past 60 Seconds)</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">Real-time HTTP health check latency stream across edge locations</div>
+    <!-- 3-Column Feature Grid -->
+    <section id="features">
+      <h2 class="section-title">Engineered for High-Scale Edge Fleets</h2>
+      <p class="section-subtitle">Real-time telemetry and synthetic health probes built with glassmorphic aesthetics.</p>
+
+      <div class="feature-grid">
+        <div class="glass-card feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.5rem;">Multi-Region Edge Probes</h3>
+          <p style="color: var(--text-muted); font-size: 0.88rem;">
+            Synthetic ping checkers deployed across US-East, EU-Central, AP-South, and AP-East edge locations to measure TTFB latency under 15ms.
+          </p>
         </div>
-        <span style="font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; color: var(--accent-emerald);" id="lastCheckTime">Live Pulse: Active</span>
-      </div>
-      <div class="chart-container">
-        <canvas id="latencyCanvas"></canvas>
-      </div>
-    </div>
 
-    <!-- Monitors List -->
-    <div class="section-header">
-      <div class="section-title">Live Service Endpoints</div>
-      <div style="font-size: 0.82rem; color: var(--text-muted);">Auto-refreshed every 5s</div>
-    </div>
+        <div class="glass-card feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.5rem;">Automated SSL & TLS Audit</h3>
+          <p style="color: var(--text-muted); font-size: 0.88rem;">
+            Proactively monitor certificate expiration dates, TLS 1.3 handshake negotiation duration, and security chain validity automatically.
+          </p>
+        </div>
 
-    <div class="monitor-list" id="monitorsContainer">
-      <!-- Generated via JavaScript -->
-    </div>
+        <div class="glass-card feature-card">
+          <div class="feature-icon">📊</div>
+          <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.5rem;">Real-Time ECG Telemetry</h3>
+          <p style="color: var(--text-muted); font-size: 0.88rem;">
+            HTML5 2D Canvas rendering with GPU-accelerated backdrop blur filters and glowing Bezier curve latency visualizations.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Telemetry Dashboard Section -->
+    <section id="dashboard" style="margin-bottom: 4rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff;">📡 Live Health Telemetry Dashboard</h2>
+          <p style="font-size: 0.88rem; color: var(--text-muted);">Real-time monitoring stats and active synthetic probes</p>
+        </div>
+
+        <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+          <button class="btn btn-danger" onclick="simulateOutage()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            Simulate Incident
+          </button>
+          <button class="btn btn-outline" id="pingNowBtn" onclick="triggerManualCheck()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+            Ping All Probes
+          </button>
+          <button class="btn btn-outline" onclick="exportReport()">
+            Export JSON
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="glass-card stat-card">
+          <div class="stat-label">
+            <span>Global Fleet Uptime</span>
+            <span style="font-size: 0.7rem; color: var(--accent-emerald);">SLO 99.9%</span>
+          </div>
+          <div class="stat-value" style="color: var(--accent-emerald);" id="uptimeStat">99.98%</div>
+          <div class="stat-sub">
+            <span>●</span> All Core Microservices Healthy
+          </div>
+        </div>
+
+        <div class="glass-card stat-card">
+          <div class="stat-label">
+            <span>Average TTFB & Latency</span>
+            <span style="font-size: 0.7rem; color: var(--accent-cyan);">Global Edge</span>
+          </div>
+          <div class="stat-value" style="color: var(--accent-cyan);" id="latencyStat">32 ms</div>
+          <div class="stat-sub">
+            <span>⚡</span> Real-Time Multi-Region Edge Dispatch
+          </div>
+        </div>
+
+        <div class="glass-card stat-card">
+          <div class="stat-label">
+            <span>Active Health Probes</span>
+            <span style="font-size: 0.7rem; color: var(--accent-purple);">100% Monitored</span>
+          </div>
+          <div class="stat-value" style="color: #ffffff;" id="monitorCountStat">5 / 5</div>
+          <div class="stat-sub">
+            <span>🛡️</span> Zero Outages in 24 Hours
+          </div>
+        </div>
+
+        <div class="glass-card stat-card">
+          <div class="stat-label">
+            <span>Frontend Hydration & DOM</span>
+            <span style="font-size: 0.7rem; color: #a78bfa;">120 FPS</span>
+          </div>
+          <div class="stat-value" style="color: #a78bfa;" id="fpsStat">16.6 ms</div>
+          <div class="stat-sub">
+            <span>🎨</span> Canvas 2D + GPU Backdrop-Filter
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Interactive Probe Tester & Waterfall Breakdown -->
+      <div class="glass-card probe-tool-card" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <h3 style="font-size: 1rem; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 0.5rem;">
+              ⚡ Synthetic Endpoint Pinger & TTFB Inspector
+            </h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Measure DNS Lookup, TCP Handshake, TLS Negotiation, TTFB & Payload Download.</p>
+          </div>
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+            <span class="preset-pill" onclick="setProbeUrl('https://1.1.1.1/dns-query')">🌐 Cloudflare DNS</span>
+            <span class="preset-pill" onclick="setProbeUrl('https://api.github.com/zen')">🐙 GitHub API</span>
+            <span class="preset-pill" onclick="setProbeUrl('https://httpbin.org/status/200')">🧪 HTTPBin 200</span>
+            <span class="preset-pill" onclick="setProbeUrl('https://vercel.com/api/v1/health')">▲ Vercel Edge</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap;">
+          <input type="text" id="customProbeUrl" class="search-input" style="flex: 1; min-width: 280px;" value="https://api.pulseguard.io/v1/health" placeholder="https://api.yourdomain.com/health" />
+          <button class="btn btn-cyan" onclick="sendCustomProbe()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            Send Synthetic Probe
+          </button>
+        </div>
+
+        <!-- Waterfall Breakdown -->
+        <div class="waterfall-container" id="waterfallBox" style="display: none;">
+          <div class="waterfall-item">
+            <span class="waterfall-label">DNS Lookup</span>
+            <span class="waterfall-val" id="wfDns">3 ms</span>
+            <div class="waterfall-bar-bg"><div class="waterfall-bar-fill" id="wfDnsBar" style="width: 20%;"></div></div>
+          </div>
+          <div class="waterfall-item">
+            <span class="waterfall-label">TCP Connect</span>
+            <span class="waterfall-val" id="wfTcp">5 ms</span>
+            <div class="waterfall-bar-bg"><div class="waterfall-bar-fill" id="wfTcpBar" style="width: 35%;"></div></div>
+          </div>
+          <div class="waterfall-item">
+            <span class="waterfall-label">TLS Handshake</span>
+            <span class="waterfall-val" id="wfTls">8 ms</span>
+            <div class="waterfall-bar-bg"><div class="waterfall-bar-fill" id="wfTlsBar" style="width: 50%;"></div></div>
+          </div>
+          <div class="waterfall-item">
+            <span class="waterfall-label">TTFB</span>
+            <span class="waterfall-val" id="wfTtfb">18 ms</span>
+            <div class="waterfall-bar-bg"><div class="waterfall-bar-fill" id="wfTtfbBar" style="width: 75%;"></div></div>
+          </div>
+          <div class="waterfall-item">
+            <span class="waterfall-label">Content Transfer</span>
+            <span class="waterfall-val" id="wfTransfer">2 ms</span>
+            <div class="waterfall-bar-bg"><div class="waterfall-bar-fill" id="wfTransferBar" style="width: 15%;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edge Region Matrix -->
+      <div class="edge-grid">
+        <div class="edge-card">
+          <span style="color: var(--text-muted); font-size: 0.82rem;">🇺🇸 US-East (Virginia)</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent-emerald);">28ms</span>
+        </div>
+        <div class="edge-card">
+          <span style="color: var(--text-muted); font-size: 0.82rem;">🇪🇺 EU-Central (Frankfurt)</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent-emerald);">22ms</span>
+        </div>
+        <div class="edge-card">
+          <span style="color: var(--text-muted); font-size: 0.82rem;">🇮🇳 AP-South (Bengaluru)</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent-emerald);">12ms</span>
+        </div>
+        <div class="edge-card">
+          <span style="color: var(--text-muted); font-size: 0.82rem;">🇯🇵 AP-East (Tokyo)</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent-emerald);">42ms</span>
+        </div>
+      </div>
+
+      <!-- Live ECG Waveform Canvas Chart -->
+      <div class="glass-card chart-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <div>
+            <h3 style="font-size: 1rem; font-weight: 700; color: #ffffff;">📊 Heartbeat & Multi-Region Latency Waveform</h3>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">Real-time HTML5 2D Canvas rendering with glowing gradient stroke</p>
+          </div>
+          <span style="font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; color: var(--accent-emerald); background: rgba(16, 185, 129, 0.1); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.3);">
+            ● Stream Active (2.0s)
+          </span>
+        </div>
+        <div class="chart-container">
+          <canvas id="latencyCanvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Search & Filter Toolbar -->
+      <div class="toolbar">
+        <div class="filter-group">
+          <button class="filter-btn active" onclick="filterMonitors('all', this)">All Probes (<span id="cntAll">5</span>)</button>
+          <button class="filter-btn" onclick="filterMonitors('operational', this)">Operational (<span id="cntOp">5</span>)</button>
+          <button class="filter-btn" onclick="filterMonitors('degraded', this)">Degraded (<span id="cntDeg">0</span>)</button>
+          <button class="filter-btn" onclick="filterMonitors('down', this)">Outage (<span id="cntDown">0</span>)</button>
+        </div>
+
+        <input type="text" class="search-input" id="searchInput" oninput="handleSearch()" placeholder="🔍 Search endpoint or URL..." />
+      </div>
+
+      <!-- Monitors Container -->
+      <div class="monitor-list" id="monitorsContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+
+
+    <!-- FAQ Accordion Section -->
+    <section id="faq">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">Got questions about PulseGuard's edge probes and telemetry?</p>
+
+      <div class="faq-container">
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>How does PulseGuard measure sub-10ms TTFB latency?</span>
+            <span>+</span>
+          </div>
+          <div class="faq-answer">
+            PulseGuard dispatches lightweight synthetic HTTP/2 and HTTP/3 probes directly from edge nodes located close to your primary cloud infrastructure (AWS, Cloudflare, Vercel, GCP).
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Can I monitor private internal microservices behind a VPN?</span>
+            <span>+</span>
+          </div>
+          <div class="faq-answer">
+            Yes, using our light PulseGuard Sidecar Agent binary, you can dispatch telemetry from inside your private VPC cluster directly to the PulseGuard control plane.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>How does the SSL Certificate Expiry Alert work?</span>
+            <span>+</span>
+          </div>
+          <div class="faq-answer">
+            PulseGuard checks TLS/SSL handshake certificates during every ping check and notifies your team 30 days, 7 days, and 24 hours prior to expiration via Slack, Email, or Webhooks.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Email Capture Subscription Banner -->
+    <section id="contact" class="cta-banner">
+      <h2 style="font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">Never Miss an API Outage</h2>
+      <p style="color: var(--text-muted); max-width: 550px; margin: 0 auto;">Subscribe to receive instant Slack, Webhook, and SMS alerts when your endpoints drop below 99.9% uptime.</p>
+
+      <div class="email-input-group">
+        <input type="email" id="subscriberEmail" class="email-input" placeholder="Enter your engineering email..." />
+        <button class="btn btn-cyan" onclick="subscribeEmail()">
+          Subscribe to Alerts
+        </button>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>
+        <strong style="color: #fff;">PulseGuard</strong> — NextGen Real-Time API & Infrastructure Health Monitor
+      </div>
+      <div style="display: flex; gap: 1rem;">
+        <a href="#home" style="color: var(--text-muted); text-decoration: none;">Home</a>
+        <a href="#features" style="color: var(--text-muted); text-decoration: none;">Features</a>
+        <a href="#dashboard" style="color: var(--text-muted); text-decoration: none;">Dashboard</a>
+        <a href="#faq" style="color: var(--text-muted); text-decoration: none;">FAQ</a>
+      </div>
+    </footer>
+
   </div>
 
-  <!-- Add Monitor Modal -->
+  <!-- Modal: Add Endpoint Probe -->
   <div class="modal-overlay" id="addModal">
-    <div class="modal-content">
-      <h3 class="modal-title">Add New Health Probe</h3>
+    <div class="modal-card">
+      <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 0.25rem; color: #ffffff;">Add Health Endpoint Probe</h3>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">Deploy a synthetic probe to monitor response latency and SSL cert expiry.</p>
+
       <div class="form-group">
-        <label class="form-label">Service Name</label>
-        <input type="text" id="newServiceName" class="form-input" placeholder="e.g. User Auth Microservice" />
+        <label class="form-label">Service / Endpoint Name</label>
+        <input type="text" id="newServiceName" class="form-input" placeholder="e.g. Payment Gateway Microservice" />
       </div>
+
       <div class="form-group">
         <label class="form-label">Target URL</label>
-        <input type="url" id="newServiceUrl" class="form-input" placeholder="https://api.domain.com/health" />
+        <input type="url" id="newServiceUrl" class="form-input" placeholder="https://api.yourdomain.com/v1/health" />
       </div>
-      <div class="form-group">
-        <label class="form-label">HTTP Method</label>
-        <select id="newServiceMethod" class="form-select">
-          <option value="GET">GET</option>
-          <option value="POST">POST</option>
-          <option value="HEAD">HEAD</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Check Interval</label>
-        <select id="newServiceInterval" class="form-select">
-          <option value="10">10 Seconds (High Frequency)</option>
-          <option value="30">30 Seconds</option>
-          <option value="60">60 Seconds</option>
-        </select>
-      </div>
-      <div class="modal-actions">
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.75rem;">
         <button class="btn btn-outline" onclick="closeAddModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="submitNewMonitor()">Start Monitoring</button>
+        <button class="btn btn-cyan" onclick="submitNewMonitor()">Deploy Probe</button>
       </div>
     </div>
   </div>
 
+  <!-- Modal: Payload Inspector Drawer -->
+  <div class="modal-overlay" id="inspectorModal">
+    <div class="modal-card" style="max-width: 650px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+        <div>
+          <h3 style="font-size: 1.2rem; font-weight: 800; color: #ffffff;" id="inspectName">Endpoint Inspector</h3>
+          <p style="font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; color: var(--accent-cyan);" id="inspectUrl">https://api.pulseguard.io</p>
+        </div>
+        <button class="btn btn-outline" onclick="closeInspectorModal()" style="padding: 0.3rem 0.6rem;">✕</button>
+      </div>
+
+      <div style="background: rgba(3, 9, 23, 0.9); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">
+        <div style="color: var(--accent-emerald); font-weight: 700; margin-bottom: 0.5rem;">HTTP/2 200 OK | Content-Type: application/json</div>
+        <pre style="color: #cbd5e1; overflow-x: auto; white-space: pre-wrap;" id="inspectJson">{
+  "status": "healthy",
+  "region": "us-east-1",
+  "services": {
+    "database": "connected",
+    "cache": "redis_cluster_ok",
+    "queue": "active"
+  },
+  "metrics": {
+    "memory_usage_mb": 142.8,
+    "cpu_load_pct": 1.4,
+    "uptime_seconds": 384920
+  }
+}</pre>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end;">
+        <button class="btn btn-cyan" onclick="closeInspectorModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Frontend Specs & Tech Stack -->
+  <div class="modal-overlay" id="techModal">
+    <div class="modal-card" style="max-width: 620px;">
+      <h3 style="font-size: 1.2rem; font-weight: 800; color: #ffffff; margin-bottom: 0.5rem;">🎨 Frontend Aesthetic & Architectural Specs</h3>
+      <p style="font-size: 0.82rem; color: var(--text-muted);">Overview of front-end techniques utilized in PulseGuard:</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; margin-top: 1rem;">
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 10px; font-size: 0.78rem;">
+          <h4 style="color: var(--accent-cyan);">Token Nodes Canvas</h4>
+          <p style="color: var(--text-muted);">HTML5 Canvas animating floating network data tokens in the background.</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 10px; font-size: 0.78rem;">
+          <h4 style="color: var(--accent-cyan);">CSS Glassmorphism</h4>
+          <p style="color: var(--text-muted);">Backdrop-filter blur(16px), layered rgba background, glowing borders.</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 10px; font-size: 0.78rem;">
+          <h4 style="color: var(--accent-cyan);">TTFB Telemetry</h4>
+          <p style="color: var(--text-muted);">Synthetic probe telemetry computing latency, DNS resolution, and TLS handshake.</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 10px; font-size: 0.78rem;">
+          <h4 style="color: var(--accent-cyan);">Accordion & Marquee</h4>
+          <p style="color: var(--text-muted);">Smooth FAQ expanders & continuous telemetry marquee ticker.</p>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+        <button class="btn btn-cyan" onclick="closeTechModal()">Close Specs</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer"></div>
+
   <script>
-    // State
+    // State & Initial Monitors Data
+    let currentTheme = "cyber";
+    let activeFilter = "all";
+    let searchQuery = "";
+
     const monitors = [
       {
         id: 1,
-        name: "Primary API Gateway",
+        name: "Primary API Gateway Microservice",
         url: "https://api.pulseguard.io/v1/health",
         status: "operational",
         uptime: "100.0%",
-        latency: 38,
+        latency: 34,
         ssl: "Valid (294 days)",
         history: generateHistory(0)
       },
       {
         id: 2,
-        name: "PostgreSQL Database Cluster",
-        url: "db.internal.cloud:5432/telemetry",
+        name: "Redis & SQLite Database Cluster",
+        url: "db.internal.cloud:6379/health",
         status: "operational",
         uptime: "99.99%",
-        latency: 18,
+        latency: 16,
         ssl: "TLS 1.3 Active",
         history: generateHistory(0)
       },
       {
         id: 3,
-        name: "AI LLM Inference API",
+        name: "AI Code Assistant LLM Pipeline",
         url: "https://ai.pulseguard.io/v1/models",
         status: "operational",
         uptime: "99.94%",
-        latency: 142,
+        latency: 128,
         ssl: "Valid (180 days)",
         history: generateHistory(1)
       },
       {
         id: 4,
         name: "Authentication & OAuth Server",
-        url: "https://auth.pulseguard.io/.well-known/openid",
+        url: "https://auth.pulseguard.io/health",
         status: "operational",
         uptime: "100.0%",
-        latency: 29,
+        latency: 28,
         ssl: "Valid (312 days)",
         history: generateHistory(0)
       },
       {
         id: 5,
-        name: "Stripe Webhook Worker",
-        url: "https://billing.pulseguard.io/webhook/events",
+        name: "Computer Vision Telemetry Dispatcher",
+        url: "https://cv.pulseguard.io/stream",
         status: "operational",
         uptime: "99.98%",
-        latency: 54,
+        latency: 48,
         ssl: "Valid (210 days)",
         history: generateHistory(0)
       }
@@ -537,67 +1330,191 @@
     function generateHistory(anomalyIndex) {
       const arr = [];
       for (let i = 0; i < 45; i++) {
-        if (anomalyIndex > 0 && i === 22) {
-          arr.push("degraded");
-        } else {
-          arr.push("operational");
-        }
+        if (anomalyIndex > 0 && i === 22) arr.push("degraded");
+        else arr.push("operational");
       }
       return arr;
     }
 
-    // Render Monitors
+    // Canvas Background: Moving Data Tokens Animation
+    const tokenCanvas = document.getElementById("tokenCanvas");
+    const tCtx = tokenCanvas.getContext("2d");
+    let tokens = [];
+
+    function resizeTokenCanvas() {
+      tokenCanvas.width = window.innerWidth;
+      tokenCanvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeTokenCanvas);
+    resizeTokenCanvas();
+
+    const tokenSymbols = ["200 OK", "TTFB", "DNS", "TLS", "HTTP/3", "API", "503", "SSL", "EDGE", "Brotli", "2.4ms"];
+
+    function initTokens() {
+      tokens = [];
+      const count = Math.floor(window.innerWidth / 35);
+      for (let i = 0; i < count; i++) {
+        tokens.push({
+          x: Math.random() * tokenCanvas.width,
+          y: Math.random() * tokenCanvas.height,
+          vx: (Math.random() - 0.5) * 0.8,
+          vy: (Math.random() - 0.5) * 0.8,
+          radius: 4 + Math.random() * 4,
+          label: tokenSymbols[Math.floor(Math.random() * tokenSymbols.length)],
+          color: Math.random() > 0.3 ? "rgba(6, 182, 212, " : "rgba(16, 185, 129, ",
+          alpha: 0.15 + Math.random() * 0.35
+        });
+      }
+    }
+    initTokens();
+
+    function drawTokens() {
+      tCtx.clearRect(0, 0, tokenCanvas.width, tokenCanvas.height);
+
+      // Connect nearby tokens with lines
+      for (let i = 0; i < tokens.length; i++) {
+        for (let j = i + 1; j < tokens.length; j++) {
+          const dx = tokens[i].x - tokens[j].x;
+          const dy = tokens[i].y - tokens[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 130) {
+            tCtx.beginPath();
+            tCtx.moveTo(tokens[i].x, tokens[i].y);
+            tCtx.lineTo(tokens[j].x, tokens[j].y);
+            tCtx.strokeStyle = `rgba(56, 189, 248, ${0.12 * (1 - dist / 130)})`;
+            tCtx.lineWidth = 1;
+            tCtx.stroke();
+          }
+        }
+      }
+
+      // Draw each token node & floating label
+      tokens.forEach(t => {
+        t.x += t.vx;
+        t.y += t.vy;
+
+        if (t.x < 0 || t.x > tokenCanvas.width) t.vx *= -1;
+        if (t.y < 0 || t.y > tokenCanvas.height) t.vy *= -1;
+
+        tCtx.beginPath();
+        tCtx.arc(t.x, t.y, t.radius, 0, Math.PI * 2);
+        tCtx.fillStyle = t.color + t.alpha + ")";
+        tCtx.shadowColor = "#06b6d4";
+        tCtx.shadowBlur = 8;
+        tCtx.fill();
+        tCtx.shadowBlur = 0;
+
+        // Label text
+        tCtx.fillStyle = `rgba(226, 232, 240, ${t.alpha * 0.8})`;
+        tCtx.font = "10px 'JetBrains Mono', monospace";
+        tCtx.fillText(t.label, t.x + 8, t.y + 3);
+      });
+
+      requestAnimationFrame(drawTokens);
+    }
+    drawTokens();
+
+    // Theme Switcher
+    function changeTheme(themeName) {
+      currentTheme = themeName;
+      document.documentElement.setAttribute("data-theme", themeName);
+      showToast(`Switched theme to ${themeName.toUpperCase()}`, "info");
+    }
+
+    // Toast Notification System
+    function showToast(message, type = "info") {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      
+      let icon = "⚡";
+      if (type === "success") icon = "✅";
+      if (type === "warning") icon = "⚠️";
+      if (type === "danger") icon = "🚨";
+
+      toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateX(100%)";
+        toast.style.transition = "all 0.3s ease";
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Render Monitors with Filtering & Searching
     function renderMonitors() {
       const container = document.getElementById("monitorsContainer");
       container.innerHTML = "";
 
-      monitors.forEach(m => {
-        const card = document.createElement("div");
-        card.className = "monitor-card";
-        
-        let statusBadge = `<span class="status-badge status-operational">● Operational</span>`;
-        if (m.status === "degraded") {
-          statusBadge = `<span class="status-badge status-degraded">● Degraded</span>`;
-        } else if (m.status === "down") {
-          statusBadge = `<span class="status-badge status-down">● Outage</span>`;
-        }
+      const filtered = monitors.filter(m => {
+        const matchesFilter = (activeFilter === "all") || (m.status === activeFilter);
+        const matchesSearch = m.name.toLowerCase().includes(searchQuery) || m.url.toLowerCase().includes(searchQuery);
+        return matchesFilter && matchesSearch;
+      });
 
-        const historyHtml = m.history.map(status => {
+      // Update Toolbar Counts
+      document.getElementById("cntAll").innerText = monitors.length;
+      document.getElementById("cntOp").innerText = monitors.filter(m => m.status === "operational").length;
+      document.getElementById("cntDeg").innerText = monitors.filter(m => m.status === "degraded").length;
+      document.getElementById("cntDown").innerText = monitors.filter(m => m.status === "down").length;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="glass-card" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+            🔍 No monitors match your criteria. Try adjusting your search query or filter.
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(m => {
+        const card = document.createElement("div");
+        card.className = "glass-card monitor-card";
+        
+        let statusBadge = `<span class="status-badge status-operational"><span class="pulse-dot" style="width: 8px; height: 8px;"></span> Operational</span>`;
+        if (m.status === "degraded") statusBadge = `<span class="status-badge status-degraded">● Degraded 503</span>`;
+        if (m.status === "down") statusBadge = `<span class="status-badge status-down">● Critical Outage</span>`;
+
+        const historyHtml = m.history.map((status, idx) => {
           let cls = "timeline-bar";
           if (status === "degraded") cls += " degraded";
           if (status === "down") cls += " down";
-          return `<div class="${cls}" title="Status: ${status}"></div>`;
+          return `<div class="${cls}" title="Probe Check #${idx + 1}: ${status.toUpperCase()}"></div>`;
         }).join("");
 
         card.innerHTML = `
-          <div class="monitor-header">
-            <div class="monitor-info">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.85rem;">
               ${statusBadge}
               <div>
-                <div class="monitor-name">${m.name}</div>
-                <div class="monitor-url">${m.url}</div>
+                <div style="font-weight: 700; font-size: 0.98rem; color: #ffffff;">${m.name}</div>
+                <div style="font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; color: var(--text-muted);">${m.url}</div>
               </div>
             </div>
-            <div class="monitor-metrics">
-              <div class="metric-item">
-                <div class="metric-label">Latency</div>
-                <div class="metric-val" id="lat-${m.id}">${m.latency} ms</div>
+
+            <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
+              <div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Latency</div>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.92rem; font-weight: 700; color: var(--accent-cyan);" id="lat-${m.id}">${m.latency} ms</div>
               </div>
-              <div class="metric-item">
-                <div class="metric-label">Uptime (30d)</div>
-                <div class="metric-val" style="color: var(--accent-emerald);">${m.uptime}</div>
+              <div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Uptime</div>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.92rem; font-weight: 700; color: var(--accent-emerald);">${m.uptime}</div>
               </div>
-              <div class="metric-item">
-                <div class="metric-label">Security</div>
-                <div class="metric-val" style="color: var(--accent-cyan); font-size: 0.82rem;">${m.ssl}</div>
+              <div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Security</div>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #bae6fd;">${m.ssl}</div>
               </div>
+
+              <button class="btn btn-outline" onclick="inspectPayload('${m.name}', '${m.url}')" style="padding: 0.35rem 0.7rem; font-size: 0.78rem;">
+                Inspect Payload
+              </button>
             </div>
           </div>
-          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.8rem;">
-            <span>30 days ago</span>
-            <span>99.98% overall health</span>
-            <span>Today</span>
-          </div>
+
           <div class="history-timeline">
             ${historyHtml}
           </div>
@@ -608,105 +1525,215 @@
       document.getElementById("monitorCountStat").innerText = `${monitors.length} / ${monitors.length}`;
     }
 
-    // Latency Chart Canvas Drawing
+    function filterMonitors(filter, btnElem) {
+      activeFilter = filter;
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      if (btnElem) btnElem.classList.add("active");
+      renderMonitors();
+    }
+
+    function handleSearch() {
+      searchQuery = document.getElementById("searchInput").value.toLowerCase().trim();
+      renderMonitors();
+    }
+
+    // HTML5 Canvas ECG Waveform Rendering
     const canvas = document.getElementById("latencyCanvas");
     const ctx = canvas.getContext("2d");
-    let chartData = Array.from({length: 40}, () => 35 + Math.random() * 20);
+    let chartData = Array.from({length: 50}, () => 28 + Math.random() * 18);
 
     function resizeCanvas() {
+      if (!canvas.parentElement) return;
       canvas.width = canvas.parentElement.clientWidth * window.devicePixelRatio;
       canvas.height = canvas.parentElement.clientHeight * window.devicePixelRatio;
       ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     }
     window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
+    setTimeout(resizeCanvas, 100);
 
     function drawChart() {
-      const w = canvas.parentElement.clientWidth;
-      const h = canvas.parentElement.clientHeight;
+      const w = canvas.parentElement ? canvas.parentElement.clientWidth : 800;
+      const h = canvas.parentElement ? canvas.parentElement.clientHeight : 200;
 
       ctx.clearRect(0, 0, w, h);
 
-      // Grid lines
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+      ctx.strokeStyle = "rgba(56, 189, 248, 0.08)";
       ctx.lineWidth = 1;
-      for (let y = 30; y < h; y += 40) {
+      for (let y = 30; y < h; y += 35) {
         ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(w, y);
         ctx.stroke();
       }
 
-      // Draw Gradient Line
       const step = w / (chartData.length - 1);
       ctx.beginPath();
-      chartData.forEach((val, i) => {
-        const x = i * step;
-        const y = h - (val / 120) * (h - 40) - 20;
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      });
+      ctx.moveTo(0, h - (chartData[0] / 120) * (h - 40) - 20);
 
-      ctx.strokeStyle = "#6366f1";
-      ctx.lineWidth = 2.5;
+      for (let i = 0; i < chartData.length - 1; i++) {
+        const x1 = i * step;
+        const y1 = h - (chartData[i] / 120) * (h - 40) - 20;
+        const x2 = (i + 1) * step;
+        const y2 = h - (chartData[i + 1] / 120) * (h - 40) - 20;
+
+        const xc = (x1 + x2) / 2;
+        const yc = (y1 + y2) / 2;
+        ctx.quadraticCurveTo(x1, y1, xc, yc);
+      }
+
+      ctx.strokeStyle = "#06b6d4";
+      ctx.lineWidth = 3;
+      ctx.shadowColor = "rgba(6, 182, 212, 0.6)";
+      ctx.shadowBlur = 12;
       ctx.stroke();
 
-      // Fill area under line
+      ctx.shadowBlur = 0;
       ctx.lineTo(w, h);
       ctx.lineTo(0, h);
       ctx.closePath();
       const grad = ctx.createLinearGradient(0, 0, 0, h);
-      grad.addColorStop(0, "rgba(99, 102, 241, 0.25)");
-      grad.addColorStop(1, "rgba(99, 102, 241, 0.0)");
+      grad.addColorStop(0, "rgba(6, 182, 212, 0.35)");
+      grad.addColorStop(1, "rgba(6, 182, 212, 0.0)");
       ctx.fillStyle = grad;
       ctx.fill();
     }
 
-    // Interval to simulate live latency ticks
     setInterval(() => {
-      const nextVal = 32 + Math.random() * 25 + (Math.random() > 0.9 ? 30 : 0);
+      const nextVal = 26 + Math.random() * 22;
       chartData.shift();
       chartData.push(nextVal);
       drawChart();
 
-      // Update monitor latencies randomly
       monitors.forEach(m => {
-        m.latency = Math.max(10, Math.round(m.latency + (Math.random() * 6 - 3)));
-        const elem = document.getElementById(`lat-${m.id}`);
-        if (elem) elem.innerText = `${m.latency} ms`;
+        if (m.status !== "down" && m.status !== "degraded") {
+          m.latency = Math.max(10, Math.round(m.latency + (Math.random() * 4 - 2)));
+          const elem = document.getElementById(`lat-${m.id}`);
+          if (elem) elem.innerText = `${m.latency} ms`;
+        }
       });
-
-      const avg = Math.round(monitors.reduce((acc, m) => acc + m.latency, 0) / monitors.length);
-      document.getElementById("latencyStat").innerText = `${avg} ms`;
     }, 2000);
+
+    function setProbeUrl(url) {
+      document.getElementById("customProbeUrl").value = url;
+    }
+
+    function sendCustomProbe() {
+      const url = document.getElementById("customProbeUrl").value;
+      const wfBox = document.getElementById("waterfallBox");
+      wfBox.style.display = "grid";
+
+      showToast(`Pinging ${url}...`, "info");
+
+      document.getElementById("wfDnsBar").style.width = "0%";
+      document.getElementById("wfTcpBar").style.width = "0%";
+      document.getElementById("wfTlsBar").style.width = "0%";
+      document.getElementById("wfTtfbBar").style.width = "0%";
+      document.getElementById("wfTransferBar").style.width = "0%";
+
+      setTimeout(() => {
+        const dns = Math.floor(2 + Math.random() * 4);
+        const tcp = Math.floor(4 + Math.random() * 5);
+        const tls = Math.floor(6 + Math.random() * 6);
+        const ttfb = Math.floor(16 + Math.random() * 15);
+        const transfer = Math.floor(2 + Math.random() * 3);
+
+        document.getElementById("wfDns").innerText = `${dns} ms`;
+        document.getElementById("wfTcp").innerText = `${tcp} ms`;
+        document.getElementById("wfTls").innerText = `${tls} ms`;
+        document.getElementById("wfTtfb").innerText = `${ttfb} ms`;
+        document.getElementById("wfTransfer").innerText = `${transfer} ms`;
+
+        document.getElementById("wfDnsBar").style.width = `${dns * 15}%`;
+        document.getElementById("wfTcpBar").style.width = `${tcp * 12}%`;
+        document.getElementById("wfTlsBar").style.width = `${tls * 10}%`;
+        document.getElementById("wfTtfbBar").style.width = `${ttfb * 3}%`;
+        document.getElementById("wfTransferBar").style.width = `${transfer * 20}%`;
+
+        showToast(`Probe complete! TTFB: ${ttfb}ms | 200 OK`, "success");
+      }, 500);
+    }
+
+    function simulateOutage() {
+      const m = monitors[2];
+      m.status = "degraded";
+      m.latency = 480;
+      renderMonitors();
+
+      document.getElementById("uptimeStat").innerText = "98.42%";
+      document.getElementById("uptimeStat").style.color = "var(--accent-amber)";
+
+      showToast("ALERT: Degradation detected in AI Code Assistant LLM Pipeline!", "warning");
+
+      setTimeout(() => {
+        m.status = "operational";
+        m.latency = 120;
+        document.getElementById("uptimeStat").innerText = "99.98%";
+        document.getElementById("uptimeStat").style.color = "var(--accent-emerald)";
+        renderMonitors();
+        showToast("Incident Resolved: AI LLM Pipeline recovered to 100% operational state.", "success");
+      }, 5000);
+    }
 
     function triggerManualCheck() {
       const btn = document.getElementById("pingNowBtn");
-      btn.innerHTML = `<span style="display: inline-block; animation: spin 1s infinite linear;">↻</span> Checking...`;
+      btn.innerHTML = `<span style="animation: spin 1s infinite linear; display: inline-block;">↻</span> Probing...`;
+      showToast("Pinging all synthetic endpoint probes across 4 edge regions...", "info");
+
       setTimeout(() => {
-        btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Probes Verified`;
+        btn.innerHTML = `✓ Probes OK`;
+        monitors.forEach(m => {
+          m.latency = Math.max(12, Math.round(m.latency + (Math.random() * 6 - 3)));
+        });
+        renderMonitors();
+        showToast("All 5 health probes returned HTTP 200 OK.", "success");
+
         setTimeout(() => {
-          btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg> Check All Probes`;
+          btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg> Ping All Probes`;
         }, 1500);
-      }, 700);
+      }, 800);
     }
 
-    // Modal helpers
-    function openAddModal() {
-      document.getElementById("addModal").style.display = "flex";
+    function exportReport() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(monitors, null, 2));
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `PulseGuard_Health_Report_${new Date().toISOString().slice(0, 10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast("Exported infrastructure health report JSON!", "success");
     }
 
-    function closeAddModal() {
-      document.getElementById("addModal").style.display = "none";
+    function toggleFaq(elem) {
+      const ans = elem.nextElementSibling;
+      const isVisible = ans.style.display === "block";
+      ans.style.display = isVisible ? "none" : "block";
+      elem.querySelector("span:last-child").innerText = isVisible ? "+" : "−";
     }
+
+    function subscribeEmail() {
+      const email = document.getElementById("subscriberEmail").value.trim();
+      if (!email || !email.includes("@")) return alert("Please enter a valid engineering email.");
+      showToast(`Subscribed ${email} to incident alerts!`, "success");
+      document.getElementById("subscriberEmail").value = "";
+    }
+
+    function openAddModal() { document.getElementById("addModal").style.display = "flex"; }
+    function closeAddModal() { document.getElementById("addModal").style.display = "none"; }
+    function openTechModal() { document.getElementById("techModal").style.display = "flex"; }
+    function closeTechModal() { document.getElementById("techModal").style.display = "none"; }
+
+    function inspectPayload(name, url) {
+      document.getElementById("inspectName").innerText = name;
+      document.getElementById("inspectUrl").innerText = url;
+      document.getElementById("inspectorModal").style.display = "flex";
+    }
+    function closeInspectorModal() { document.getElementById("inspectorModal").style.display = "none"; }
 
     function submitNewMonitor() {
       const name = document.getElementById("newServiceName").value.trim();
       const url = document.getElementById("newServiceUrl").value.trim();
-      if (!name || !url) {
-        alert("Please enter a service name and endpoint URL.");
-        return;
-      }
+      if (!name || !url) return alert("Please enter service name and URL");
 
       monitors.push({
         id: monitors.length + 1,
@@ -714,18 +1741,17 @@
         url: url,
         status: "operational",
         uptime: "100.0%",
-        latency: Math.floor(25 + Math.random() * 30),
+        latency: Math.floor(22 + Math.random() * 20),
         ssl: "Valid (365 days)",
         history: generateHistory(0)
       });
 
       renderMonitors();
       closeAddModal();
-      document.getElementById("newServiceName").value = "";
-      document.getElementById("newServiceUrl").value = "";
+      showToast(`Deployed probe for ${name}!`, "success");
     }
 
-    // Initial render
+    // Init
     renderMonitors();
     drawChart();
   </script>
