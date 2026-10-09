@@ -1,37 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lumina Vision — Cinematic Interface</title>
-  
-  <!-- Fonts: Plus Jakarta Sans for clean typography -->
+  <title>K. Suchir Reddy — Systems & AI/ML Engineer | Lumina Vision Edition</title>
+  <meta name="description" content="K. Suchir Reddy — builds computer vision pipelines, infrastructure telemetry systems, and developer tooling. Based in Bengaluru." />
+  <meta name="theme-color" content="#050505" />
+
+  <!-- Fonts: Space Grotesk (headings) / DM Sans (body) / JetBrains Mono (code) / Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <style>
     /* ============================================
-       RESET & BASE ENVIRONMENT
+       DESIGN TOKENS
        ============================================ */
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root {
+      /* Surface */
+      --bg-root: #050505;
+      --bg-elevated: #0d0d0d;
+      --bg-surface: #141414;
+      --bg-surface-hover: #1a1a1a;
+
+      /* Glass */
+      --glass-bg: rgba(12, 12, 12, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-blur: 24px;
+
+      /* Text */
+      --text-primary: #e8e6e3;
+      --text-secondary: #7a7770;
+      --text-tertiary: #4a4744;
+      --text-inverse: #050505;
+
+      /* Accent — warm gold & glowing node blue */
+      --accent: #d4a843;
+      --accent-blue: #3b82f6;
+      --accent-dim: rgba(212, 168, 67, 0.12);
+      --accent-glow: rgba(212, 168, 67, 0.06);
+      --accent-mid: rgba(212, 168, 67, 0.35);
+
+      /* Neomorphic shadows */
+      --shadow-raised: 0 1px 2px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.03);
+      --shadow-elevated: 0 2px 4px rgba(0,0,0,0.5), 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+      --shadow-accent: 0 4px 24px rgba(212, 168, 67, 0.12);
+
+      /* Typography */
+      --font-heading: 'Space Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-body: 'DM Sans', 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+      /* Spacing scale */
+      --space-xs: 0.5rem;
+      --space-sm: 0.75rem;
+      --space-md: 1.25rem;
+      --space-lg: 2rem;
+      --space-xl: 3.5rem;
+      --space-2xl: 6rem;
+
+      /* Radii */
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+
+      /* Transitions */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-fast: 180ms var(--ease-out);
+      --transition-med: 350ms var(--ease-out);
     }
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background-color: #000000;
-      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-      color: #ffffff;
-      -webkit-font-smoothing: antialiased;
+    [data-theme="light"] {
+      --bg-root: #fafaf8;
+      --bg-elevated: #f0f0ec;
+      --bg-surface: #e8e6e3;
+      --bg-surface-hover: #ddd9d4;
+      --glass-bg: rgba(250, 250, 248, 0.75);
+      --glass-border: rgba(0, 0, 0, 0.08);
+      --text-primary: #0a0a0a;
+      --text-secondary: #6b6860;
+      --text-tertiary: #9e9a92;
+      --text-inverse: #fafaf8;
+      --accent: #b8912a;
+      --accent-dim: rgba(184, 145, 42, 0.1);
+      --accent-glow: rgba(184, 145, 42, 0.05);
+      --accent-mid: rgba(184, 145, 42, 0.3);
     }
 
     /* ============================================
-       BACKGROUND VIDEO & TEXT PROTECTION OVERLAY
+       RESET & BASE
+       ============================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; -webkit-font-smoothing: antialiased; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-root);
+      color: var(--text-primary);
+      line-height: 1.65;
+      overflow-x: hidden;
+      transition: background var(--transition-med), color var(--transition-med);
+    }
+
+    ::selection { background: var(--accent-dim); color: var(--text-primary); }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ============================================
+       LUMINA CINEMATIC BACKGROUND VIDEO & OVERLAY
        ============================================ */
     .bg-video {
       position: fixed;
@@ -52,35 +129,102 @@
     .text-protection-overlay {
       position: fixed;
       inset: 0;
-      background: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 30%, rgba(0,0,0,0) 85%);
+      background: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0.15) 85%);
       z-index: 1;
       pointer-events: none;
     }
 
-    /* ============================================
-       GLOBAL LAYOUT SHELL (70px Horizontal Padding)
-       ============================================ */
-    .viewport-shell {
-      position: relative;
-      z-index: 2;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding-left: 70px;
-      padding-right: 70px;
+    /* Atmosphere Grid & Auroras */
+    .atmosphere {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .atmo-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(212, 168, 67, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212, 168, 67, 0.025) 1px, transparent 1px);
+      background-size: 80px 80px;
+      animation: gridMove 20s linear infinite;
+      opacity: 0.4;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(80px, 80px); }
+    }
+
+    .atmo-particles { position: absolute; inset: 0; }
+
+    .particle {
+      position: absolute;
+      width: 2px; height: 2px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0;
     }
 
     /* ============================================
-       LAYER 1: TOP NAVIGATION
+       GLOBAL CONTAINER (70px Horizontal Padding)
        ============================================ */
-    .top-nav {
-      width: 100%;
-      height: 100px;
+    .container {
+      max-width: 1340px;
+      margin: 0 auto;
+      padding-left: 70px;
+      padding-right: 70px;
+      position: relative;
+      z-index: 2;
+    }
+
+    section {
+      padding: var(--space-2xl) 0;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: var(--space-sm);
+      display: block;
+    }
+
+    .section-heading {
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      color: var(--text-primary);
+      margin-bottom: var(--space-lg);
+    }
+
+    /* ============================================
+       TOP NAVIGATION (LAYER 1 - 70px Padded)
+       ============================================ */
+    .nav-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 90px;
+      z-index: 100;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding-left: 70px;
+      padding-right: 70px;
+      background: rgba(5, 5, 5, 0.4);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     /* Logo (Left) */
@@ -96,7 +240,7 @@
       width: 34px;
       height: 34px;
       border-radius: 8px;
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(15, 23, 42, 0.7);
       border: 1px solid rgba(59, 130, 246, 0.4);
       box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
       display: flex;
@@ -134,14 +278,21 @@
       font-weight: 400;
       color: rgba(255, 255, 255, 0.6);
       text-decoration: none;
-      transition: color 0.2s ease;
+      transition: color var(--transition-fast);
     }
 
-    .nav-links a:hover {
+    .nav-links a:hover,
+    .nav-links a.active {
       color: #ffffff;
     }
 
-    /* Play Button (Far Right) */
+    /* Actions & Far Right Play Button */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
     .play-btn {
       width: 52px;
       height: 52px;
@@ -154,7 +305,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.3s var(--ease-out);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
 
@@ -171,20 +322,52 @@
       margin-left: 2px;
     }
 
-    /* ============================================
-       LAYER 2: MIDDLE HERO ELEMENTS
-       ============================================ */
-    .hero-container {
-      flex: 1;
+    .icon-btn {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid var(--glass-border);
+      color: var(--text-secondary);
       display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      align-items: flex-start;
-      transform: translateY(-12%);
-      max-width: 600px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
     }
 
-    /* Element 1: Tag */
+    .icon-btn:hover {
+      color: var(--text-primary);
+      border-color: var(--accent-mid);
+      background: var(--accent-dim);
+    }
+
+    /* ============================================
+       HERO SECTION (LAYER 2 — LUMINA + TERMINAL)
+       ============================================ */
+    .hero {
+      padding-top: 9rem;
+      padding-bottom: var(--space-2xl);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-xl);
+      align-items: center;
+      transform: translateY(-12%); /* Lumina specification */
+    }
+
+    /* Hero Left Content */
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* Pill Tag (Element 1) */
     .hero-tag-pill {
       display: inline-flex;
       align-items: center;
@@ -199,41 +382,45 @@
       letter-spacing: 0.4em;
       color: rgba(255, 255, 255, 0.9);
       margin-bottom: 12px;
+      width: fit-content;
     }
 
     .hero-tag-dot {
-      width: 5px;
-      height: 5px;
+      width: 5px; height: 5px;
       border-radius: 50%;
       background: #3b82f6;
       box-shadow: 0 0 8px #3b82f6;
     }
 
-    /* Element 2: Heading */
-    .hero-heading {
-      font-size: 80px;
+    /* Heading (Element 2) */
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2.5rem, 5vw, 4.8rem);
       font-weight: 700;
-      line-height: 1.0;
       letter-spacing: -0.03em;
+      line-height: 1.0;
       color: #ffffff;
       margin-bottom: 16px;
-      white-space: nowrap;
     }
 
-    /* Element 3: Subheading */
+    .hero-title .accent { color: var(--accent); }
+
+    /* Subheading (Element 3) */
     .hero-subheading {
       font-size: 16px;
       font-weight: 400;
       color: rgba(255, 255, 255, 0.6);
-      max-width: 430px;
+      max-width: 430px; /* Strictly 430px */
       margin-bottom: 30px;
       line-height: 1.65;
     }
 
-    /* Element 4: Primary Button (Orbital Border Capsule) */
+    .hero-subheading strong { color: #ffffff; font-weight: 600; }
+
+    /* Primary Capsule Button (Element 4) with 6s 1000% Orbital Rotation */
     .primary-btn-wrap {
       position: relative;
-      padding: 2.5px; /* 2.5px conic gradient border */
+      padding: 2.5px; /* 2.5px conic gradient stroke */
       border-radius: 9999px;
       overflow: hidden;
       display: inline-flex;
@@ -242,13 +429,14 @@
       cursor: pointer;
       text-decoration: none;
       transition: transform 0.3s ease;
+      width: fit-content;
+      margin-bottom: 2rem;
     }
 
     .primary-btn-wrap:hover {
       transform: translateY(-2px);
     }
 
-    /* Continuous 6s 1000% Orbital Rotation */
     .orbital-border-source {
       position: absolute;
       top: -450%;
@@ -261,12 +449,8 @@
     }
 
     @keyframes orbitalRotate {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     .primary-btn-inner {
@@ -290,43 +474,130 @@
     }
 
     .btn-arrow {
-      width: 14px;
-      height: 14px;
+      width: 14px; height: 14px;
       fill: none;
       stroke: currentColor;
       stroke-width: 2.5;
       stroke-linecap: round;
       stroke-linejoin: round;
-      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.2s var(--ease-out);
     }
 
     .primary-btn-wrap:hover .btn-arrow {
       transform: translateX(5px);
     }
 
-    /* ============================================
-       LAYER 3: BOTTOM ELEMENTS
-       ============================================ */
-    .bottom-container {
-      width: 100%;
-      padding-bottom: 35px;
+    /* Hero Stats Strip */
+    .hero-stats {
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      gap: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    /* Label */
+    .hero-stat-num {
+      font-family: var(--font-mono);
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .hero-stat-label {
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* Terminal Component */
+    .hero-visual { position: relative; }
+
+    .terminal {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.008) 100%), var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-elevated);
+      font-family: var(--font-mono);
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.55rem 1rem;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .terminal-dots { display: flex; gap: 6px; }
+    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .td-r { background: #c0392b; }
+    .td-y { background: #d4a843; }
+    .td-g { background: #27ae60; }
+
+    .terminal-title { font-size: 0.68rem; color: var(--text-tertiary); }
+    .terminal-status { font-size: 0.65rem; color: #27ae60; }
+
+    .terminal-body {
+      padding: 1.25rem;
+      font-size: 0.78rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      min-height: 320px;
+    }
+
+    .terminal-line { margin-bottom: 2px; }
+    .terminal-line .prompt { color: var(--accent); }
+    .terminal-line .output { color: var(--text-secondary); }
+    .terminal-line .highlight { color: var(--accent); }
+
+    .terminal-input-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.25rem;
+      border-top: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .terminal-input {
+      background: none; border: none; color: var(--accent);
+      font-family: var(--font-mono); font-size: 0.78rem; outline: none; flex: 1;
+    }
+
+    .terminal-chips {
+      display: flex; gap: 0.35rem; flex-wrap: wrap;
+      padding: 0 1.25rem 0.75rem;
+    }
+
+    .terminal-chip {
+      font-size: 0.65rem; padding: 2px 8px; border-radius: 4px;
+      background: var(--accent-dim); color: var(--accent);
+      border: 1px solid rgba(212, 168, 67, 0.15); cursor: pointer;
+    }
+
+    /* ============================================
+       AUTO-AUTOMATION ECOSYSTEM TICKER (LAYER 3)
+       ============================================ */
+    .ecosystem-section {
+      padding: 2.5rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: var(--space-2xl);
+    }
+
     .ecosystem-label {
       font-size: 9px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.6em;
       color: rgba(255, 255, 255, 0.25);
-      margin-bottom: 22px;
+      margin-bottom: 20px;
       text-align: center;
     }
 
-    /* Infinite Auto-Scrolling Ticker */
     .ticker-wrap {
       width: 100%;
       overflow: hidden;
@@ -344,12 +615,8 @@
     }
 
     @keyframes infiniteTicker {
-      0% {
-        transform: translateX(0);
-      }
-      100% {
-        transform: translateX(-50%);
-      }
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
 
     .ticker-logo {
@@ -359,31 +626,192 @@
       filter: grayscale(100%);
       opacity: 0.55;
       transition: all 0.3s ease;
-      cursor: default;
     }
 
     .ticker-logo:hover {
       filter: grayscale(0%);
-      opacity: 0.9;
+      opacity: 0.95;
     }
 
-    .ticker-logo svg {
-      height: 15px;
-      width: auto;
-      fill: currentColor;
+    .ticker-logo svg { height: 15px; width: auto; fill: currentColor; }
+    .ticker-text { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; color: #ffffff; }
+
+    /* ============================================
+       BENTO BOX PROJECTS GRID
+       ============================================ */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: minmax(180px, auto);
+      gap: var(--space-md);
     }
 
-    .ticker-text {
-      font-size: 11px;
+    .bento-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.005) 100%), var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: all var(--transition-med);
+      box-shadow: var(--shadow-raised);
+    }
+
+    .bento-card:hover {
+      border-color: rgba(212, 168, 67, 0.3);
+      box-shadow: var(--shadow-elevated), 0 0 40px var(--accent-glow);
+      transform: translateY(-5px);
+    }
+
+    .bento-card--wide { grid-column: span 8; }
+    .bento-card--narrow { grid-column: span 4; }
+    .bento-card--tall { grid-row: span 2; }
+
+    .bento-tag {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
       font-weight: 600;
-      letter-spacing: 0.04em;
-      color: #ffffff;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      width: fit-content;
+      margin-bottom: var(--space-sm);
+    }
+
+    .bento-title {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+    }
+
+    .bento-date { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-tertiary); margin-bottom: var(--space-sm); }
+    .bento-desc { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .bento-tech {
+      display: flex; flex-wrap: wrap; gap: 0.35rem;
+      margin-top: var(--space-md); padding-top: var(--space-sm);
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .tech-pill {
+      font-family: var(--font-mono); font-size: 0.68rem;
+      padding: 0.2rem 0.55rem; border-radius: 4px;
+      background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+      color: var(--text-secondary);
+    }
+
+    .bento-link {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      font-size: 0.8rem; font-weight: 600; color: var(--accent);
+      margin-top: var(--space-sm);
+    }
+
+    /* ============================================
+       SKILLS & EXPERIENCE ALTERNATING ROWS
+       ============================================ */
+    .alt-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl);
+      align-items: center; padding: var(--space-xl) 0;
+    }
+
+    .alt-row + .alt-row { border-top: 1px solid var(--glass-border); }
+    .alt-row--reverse .alt-content { order: 2; }
+    .alt-row--reverse .alt-visual { order: 1; }
+
+    .alt-content { display: flex; flex-direction: column; gap: var(--space-md); }
+    .alt-tag { font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600; text-transform: uppercase; color: var(--accent); }
+    .alt-title { font-family: var(--font-heading); font-size: clamp(1.4rem, 2.5vw, 1.8rem); font-weight: 700; }
+    .alt-desc { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7; }
+    .alt-desc strong { color: var(--text-primary); font-weight: 600; }
+
+    .alt-visual {
+      background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border); border-radius: var(--radius-md);
+      padding: var(--space-lg); box-shadow: var(--shadow-raised); min-height: 220px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+
+    .skill-bars { display: flex; flex-direction: column; gap: var(--space-sm); }
+    .skill-bar-row { display: flex; align-items: center; gap: var(--space-sm); }
+    .skill-bar-label { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-secondary); width: 120px; }
+    .skill-bar-track { flex: 1; height: 4px; background: var(--bg-surface); border-radius: 2px; overflow: hidden; }
+    .skill-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 1.2s var(--ease-out); width: 0; }
+    .skill-bar-fill.animated { width: var(--bar-width); }
+
+    /* ============================================
+       CONTACT SECTION
+       ============================================ */
+    .contact-wrap {
+      background: linear-gradient(135deg, var(--accent-dim) 0%, var(--accent-glow) 100%);
+      border: 1px solid rgba(212, 168, 67, 0.1); border-radius: var(--radius-lg);
+      padding: var(--space-2xl) var(--space-xl); text-align: center;
+    }
+
+    .contact-heading { font-family: var(--font-heading); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; margin-bottom: var(--space-sm); }
+    .contact-sub { font-size: 1rem; color: var(--text-secondary); max-width: 500px; margin: 0 auto var(--space-lg); }
+
+    .contact-links { display: flex; justify-content: center; gap: var(--space-sm); flex-wrap: wrap; }
+    .contact-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.65rem 1.2rem; border-radius: var(--radius-sm);
+      background: var(--bg-elevated); border: 1px solid var(--glass-border);
+      font-size: 0.85rem; font-weight: 600; transition: all var(--transition-fast);
+    }
+
+    .contact-link:hover { border-color: var(--accent-mid); background: var(--accent-dim); }
+
+    /* Footer & Dock */
+    footer { padding: var(--space-xl) 0; text-align: center; font-size: 0.78rem; color: var(--text-tertiary); border-top: 1px solid var(--glass-border); }
+
+    .dock {
+      position: fixed; bottom: var(--space-lg); left: 50%; transform: translateX(-50%);
+      z-index: 99; display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.9rem;
+      background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border); border-radius: var(--radius-pill);
+    }
+
+    .dock-btn {
+      padding: 0.4rem 0.75rem; border-radius: var(--radius-pill); font-size: 0.75rem;
+      font-weight: 600; color: var(--text-secondary); background: transparent; border: none; cursor: pointer;
+    }
+
+    .dock-btn--accent { background: var(--accent-dim); color: var(--accent); }
+
+    .toast {
+      position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%) translateY(12px);
+      background: var(--accent); color: var(--text-inverse); font-weight: 700; font-size: 0.82rem;
+      padding: 0.5rem 1.1rem; border-radius: var(--radius-pill); opacity: 0; pointer-events: none; transition: all var(--transition-fast);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      .container { padding-left: 20px; padding-right: 20px; }
+      .nav-header { padding-left: 20px; padding-right: 20px; }
+      .hero-grid { grid-template-columns: 1fr; transform: translateY(0); }
+      .projects-grid { grid-template-columns: 1fr; }
+      .bento-card--wide, .bento-card--narrow { grid-column: span 1; }
+      .alt-row { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .dock { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Background Video -->
+  <!-- Background Video (Lumina Vision Cinematic) -->
   <video class="bg-video" autoplay loop muted playsinline>
     <source src="https://cdn.sceneai.art/Hero%20Section%20Video/9ad5cc99-2fa4-4154-bcc2-5c9ec152778e.mp4" type="video/mp4" />
   </video>
@@ -391,146 +819,434 @@
   <!-- Left-aligned Deep Black Protection Gradient Overlay -->
   <div class="text-protection-overlay"></div>
 
-  <!-- Global Viewport Shell (70px Horizontal Padding) -->
-  <div class="viewport-shell">
+  <!-- Atmosphere -->
+  <div class="atmosphere">
+    <div class="atmo-grid"></div>
+    <div class="atmo-particles" id="atmoParticles"></div>
+  </div>
 
-    <!-- LAYER 1: TOP NAVIGATION -->
-    <header class="top-nav">
-      <!-- Logo (Left) -->
-      <a href="#" class="nav-logo">
-        <div class="logo-square">
-          <svg class="logo-node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="3" />
-            <path d="M12 3v6M12 15v6M3 12h6M15 12h6" />
-            <circle cx="12" cy="3" r="1.5" />
-            <circle cx="12" cy="21" r="1.5" />
-            <circle cx="3" cy="12" r="1.5" />
-            <circle cx="21" cy="12" r="1.5" />
-          </svg>
-        </div>
-        <span class="logo-text">auto-automation</span>
-      </a>
+  <div class="toast" id="toast">Copied to clipboard</div>
 
-      <!-- Links (Center-Right) -->
-      <ul class="nav-links">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Photos</a></li>
-        <li><a href="#">Crew</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
+  <!-- ====== TOP NAVIGATION (LAYER 1 - 70px Side Padding) ====== -->
+  <header class="nav-header">
+    <!-- Logo (Left) -->
+    <a href="#" class="nav-logo">
+      <div class="logo-square">
+        <svg class="logo-node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3" />
+          <path d="M12 3v6M12 15v6M3 12h6M15 12h6" />
+          <circle cx="12" cy="3" r="1.5" />
+          <circle cx="12" cy="21" r="1.5" />
+          <circle cx="3" cy="12" r="1.5" />
+          <circle cx="21" cy="12" r="1.5" />
+        </svg>
+      </div>
+      <span class="logo-text">auto-automation</span>
+    </a>
 
-      <!-- Play Button (Far Right) -->
+    <!-- Links (Center-Right) -->
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about" class="active">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <!-- Actions (Far Right Play Button & Theme Toggle) -->
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeToggle" title="Toggle theme">
+        <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+
       <button class="play-btn" aria-label="Play video">
         <svg class="play-icon" viewBox="0 0 24 24">
           <polygon points="7,4 20,12 7,20" />
         </svg>
       </button>
-    </header>
+    </div>
+  </header>
 
-    <!-- LAYER 2: MIDDLE HERO ELEMENTS -->
-    <main class="hero-container">
-      <!-- Element 1: Tag -->
-      <div class="hero-tag-pill">
-        <span class="hero-tag-dot"></span>
-        INITIALIZE VISION
-      </div>
+  <div class="container">
 
-      <!-- Element 2: Heading -->
-      <h1 class="hero-heading">Intelligence Unbound</h1>
+    <!-- ====== HERO SECTION (LAYER 2 — LUMINA + TERMINAL) ====== -->
+    <section class="hero" id="about">
+      <div class="hero-grid">
+        <!-- Left: Narrative & Lumina Elements -->
+        <div class="hero-content reveal">
+          <!-- Element 1: Pill Tag -->
+          <div class="hero-tag-pill">
+            <span class="hero-tag-dot"></span>
+            INITIALIZE VISION
+          </div>
 
-      <!-- Element 3: Subheading -->
-      <p class="hero-subheading">
-        Experience autonomous intelligence powering next-generation computer vision workflows with spatial accuracy and real-time execution.
-      </p>
+          <!-- Element 2: Heading -->
+          <h1 class="hero-title">
+            Intelligence Unbound<br />
+            <span class="accent">at Production Scale.</span>
+          </h1>
 
-      <!-- Element 4: Primary Button (Orbital Border Capsule) -->
-      <a href="#" class="primary-btn-wrap">
-        <div class="orbital-border-source"></div>
-        <div class="primary-btn-inner">
-          <span>Explore Platform</span>
-          <svg class="btn-arrow" viewBox="0 0 24 24">
-            <line x1="5" y1="12" x2="19" y2="12" />
-            <polyline points="12 5 19 12 12 19" />
-          </svg>
+          <!-- Element 3: Subheading -->
+          <p class="hero-subheading">
+            <strong>Suchir Reddy</strong> — engineer building computer vision pipelines that segment 30+ road hazards in real time, telemetry systems with 99.98% uptime, and developer tooling.
+          </p>
+
+          <!-- Element 4: Primary Orbital Capsule Button -->
+          <a href="#projects" class="primary-btn-wrap">
+            <div class="orbital-border-source"></div>
+            <div class="primary-btn-inner">
+              <span>Explore Projects</span>
+              <svg class="btn-arrow" viewBox="0 0 24 24">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </div>
+          </a>
+
+          <!-- Stats Strip -->
+          <div class="hero-stats">
+            <div>
+              <div class="hero-stat-num">8.15</div>
+              <div class="hero-stat-label">B.E. CGPA</div>
+            </div>
+            <div>
+              <div class="hero-stat-num">99.98%</div>
+              <div class="hero-stat-label">Fleet Uptime</div>
+            </div>
+            <div>
+              <div class="hero-stat-num">30+</div>
+              <div class="hero-stat-label">CV Hazards</div>
+            </div>
+            <div>
+              <div class="hero-stat-num">100%</div>
+              <div class="hero-stat-label">CI/CD Pass</div>
+            </div>
+          </div>
         </div>
-      </a>
-    </main>
 
-    <!-- LAYER 3: BOTTOM ELEMENTS -->
-    <footer class="bottom-container">
-      <!-- Label -->
+        <!-- Right: Interactive CLI Terminal -->
+        <div class="hero-visual reveal">
+          <div class="terminal">
+            <div class="terminal-bar">
+              <div class="terminal-dots">
+                <span class="terminal-dot td-r"></span>
+                <span class="terminal-dot td-y"></span>
+                <span class="terminal-dot td-g"></span>
+              </div>
+              <span class="terminal-title">suchir@portfolio ~ interactive</span>
+              <span class="terminal-status">Online</span>
+            </div>
+            <div class="terminal-body" id="cliOutput">
+              <div class="terminal-line">
+                <span class="prompt">[sys]</span> <span class="output">Type a command or click below.</span>
+              </div>
+            </div>
+            <div class="terminal-input-row">
+              <span class="prompt">suchir$</span>
+              <input type="text" id="cliInput" class="terminal-input" placeholder="help, projects, skills, contact..." autocomplete="off" />
+            </div>
+            <div class="terminal-chips">
+              <span class="terminal-chip" onclick="runCmd('projects')">projects</span>
+              <span class="terminal-chip" onclick="runCmd('skills')">skills</span>
+              <span class="terminal-chip" onclick="runCmd('education')">education</span>
+              <span class="terminal-chip" onclick="runCmd('contact')">contact</span>
+              <span class="terminal-chip" onclick="runCmd('clear')">clear</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== AUTO-AUTOMATION ECOSYSTEM TICKER (LAYER 3) ====== -->
+    <div class="ecosystem-section reveal">
       <div class="ecosystem-label">AUTO-AUTOMATION ECOSYSTEM</div>
-
-      <!-- Ticker -->
       <div class="ticker-wrap">
         <div class="ticker-track">
-          <!-- Item 1: Google -->
           <div class="ticker-logo">
             <svg viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 15.987 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
             <span class="ticker-text">Google</span>
           </div>
-
-          <!-- Item 2: Cust.io -->
           <div class="ticker-logo">
             <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
             <span class="ticker-text">Cust.io</span>
           </div>
-
-          <!-- Item 3: Hummel -->
           <div class="ticker-logo">
             <svg viewBox="0 0 24 24"><path d="M12 2L4 12h5v10h6V12h5L12 2z"/></svg>
             <span class="ticker-text">Hummel</span>
           </div>
-
-          <!-- Item 4: Copper -->
           <div class="ticker-logo">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/></svg>
             <span class="ticker-text">Copper</span>
           </div>
-
-          <!-- Item 5: Tesla -->
           <div class="ticker-logo">
             <svg viewBox="0 0 24 24"><path d="M12 4.5C8 4.5 4 6 4 6s1 4 8 4 8-4 8-4-4-1.5-8-1.5zM12 10.5v9.5"/></svg>
             <span class="ticker-text">Tesla</span>
           </div>
-
-          <!-- DUPLICATED FOR SEAMLESS INFINITE LOOP -->
-
-          <!-- Item 1: Google -->
+          <!-- Loop repeat -->
           <div class="ticker-logo">
             <svg viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 15.987 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
             <span class="ticker-text">Google</span>
           </div>
-
-          <!-- Item 2: Cust.io -->
           <div class="ticker-logo">
             <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
             <span class="ticker-text">Cust.io</span>
           </div>
-
-          <!-- Item 3: Hummel -->
           <div class="ticker-logo">
             <svg viewBox="0 0 24 24"><path d="M12 2L4 12h5v10h6V12h5L12 2z"/></svg>
             <span class="ticker-text">Hummel</span>
           </div>
-
-          <!-- Item 4: Copper -->
           <div class="ticker-logo">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/></svg>
             <span class="ticker-text">Copper</span>
           </div>
-
-          <!-- Item 5: Tesla -->
           <div class="ticker-logo">
             <svg viewBox="0 0 24 24"><path d="M12 4.5C8 4.5 4 6 4 6s1 4 8 4 8-4 8-4-4-1.5-8-1.5zM12 10.5v9.5"/></svg>
             <span class="ticker-text">Tesla</span>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- ====== BENTO GRID PROJECTS ====== -->
+    <section id="projects">
+      <div class="reveal">
+        <span class="section-label">01 — Projects</span>
+        <h2 class="section-heading">Systems I've shipped.</h2>
+      </div>
+
+      <div class="projects-grid">
+        <!-- Wide: AI Code Assistant -->
+        <article class="bento-card bento-card--wide reveal">
+          <div>
+            <span class="bento-tag">AI &amp; Developer Tooling</span>
+            <h3 class="bento-title">AI Code Studio &amp; Debugger</h3>
+            <div class="bento-date">Jan 2026 – Mar 2026</div>
+            <p class="bento-desc">
+              A code transformation assistant that finds what linters can't — missing return statements, logic inversions, subtle off-by-ones. Runs AST analysis and scaffolds unit tests around detected defects. Built the backend in Python/Flask, the AST engine from scratch, and the UI to make the whole thing navigable.
+            </p>
+          </div>
+          <div class="bento-tech">
+            <span class="tech-pill">Python</span>
+            <span class="tech-pill">Flask</span>
+            <span class="tech-pill">LLM APIs</span>
+            <span class="tech-pill">AST Parsing</span>
+            <span class="tech-pill">UI/UX</span>
+          </div>
+          <a href="code-assistant/" class="bento-link">Live sandbox <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </article>
+
+        <!-- Narrow tall: Pothole -->
+        <article class="bento-card bento-card--narrow bento-card--tall reveal">
+          <div>
+            <span class="bento-tag">Computer Vision</span>
+            <h3 class="bento-title">Road Distress Segmentation</h3>
+            <div class="bento-date">Aug 2025 – Nov 2025</div>
+            <p class="bento-desc">
+              Real-time pothole detection using Canny edge contours and spatial GPS bounding boxes. Classifies hazard severity for municipal reporting.
+            </p>
+          </div>
+          <div>
+            <div class="bento-tech">
+              <span class="tech-pill">Python</span>
+              <span class="tech-pill">OpenCV</span>
+              <span class="tech-pill">Flask</span>
+              <span class="tech-pill">Spatial Telemetry</span>
+            </div>
+            <a href="pothole/" class="bento-link">Live HUD <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+          </div>
+        </article>
+
+        <!-- Wide: PulseGuard -->
+        <article class="bento-card bento-card--wide reveal">
+          <div>
+            <span class="bento-tag">Infrastructure &amp; Uptime</span>
+            <h3 class="bento-title">PulseGuard — Fleet Telemetry Suite</h3>
+            <div class="bento-date">Jan 2025 – Mar 2025</div>
+            <p class="bento-desc">
+              Multi-frequency HTTP probe system with live ECG heartbeat canvas, auto-recovering incident state machines, and SSL certificate expiry monitoring. Maintains 99.98% uptime across monitored endpoints. The state machine component alone reduced false-positive alerts by 60%.
+            </p>
+          </div>
+          <div class="bento-tech">
+            <span class="tech-pill">Next.js 15</span>
+            <span class="tech-pill">React 19</span>
+            <span class="tech-pill">SQLite</span>
+            <span class="tech-pill">Network Protocols</span>
+            <span class="tech-pill">State Machines</span>
+          </div>
+          <a href="pulseguard/" class="bento-link">Live ops dashboard <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </article>
+      </div>
+    </section>
+
+    <!-- ====== SKILLS — ALTERNATING ROWS ====== -->
+    <section id="skills">
+      <div class="reveal">
+        <span class="section-label">02 — Technical depth</span>
+        <h2 class="section-heading">What I work with daily.</h2>
+      </div>
+
+      <!-- Row 1: Languages -->
+      <div class="alt-row reveal">
+        <div class="alt-content">
+          <span class="alt-tag">Languages</span>
+          <h3 class="alt-title">The code I reach for first.</h3>
+          <p class="alt-desc">
+            <strong>Python</strong> is my primary language — it's where CV pipelines, LLM integrations, and backend systems live. <strong>C/C++</strong> for performance-critical work. <strong>Java</strong> for OOP. <strong>SQL</strong> for schemas.
+          </p>
+        </div>
+        <div class="alt-visual">
+          <div class="skill-bars">
+            <div class="skill-bar-row"><span class="skill-bar-label">Python</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--bar-width: 92%"></div></div></div>
+            <div class="skill-bar-row"><span class="skill-bar-label">C / C++</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--bar-width: 68%"></div></div></div>
+            <div class="skill-bar-row"><span class="skill-bar-label">Java</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--bar-width: 60%"></div></div></div>
+            <div class="skill-bar-row"><span class="skill-bar-label">SQL</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--bar-width: 72%"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: AI & CV -->
+      <div class="alt-row alt-row--reverse reveal">
+        <div class="alt-content">
+          <span class="alt-tag">AI &amp; Computer Vision</span>
+          <h3 class="alt-title">Seeing the world through pixels.</h3>
+          <p class="alt-desc">
+            <strong>OpenCV</strong> for real-time video processing. <strong>Pandas &amp; NumPy</strong> for data pipelines. <strong>LLM APIs</strong> for AI tools.
+          </p>
+        </div>
+        <div class="alt-visual">
+          <div class="skill-bars">
+            <div class="skill-bar-row"><span class="skill-bar-label">OpenCV</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--bar-width: 85%"></div></div></div>
+            <div class="skill-bar-row"><span class="skill-bar-label">Pandas / NumPy</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--bar-width: 80%"></div></div></div>
+            <div class="skill-bar-row"><span class="skill-bar-label">LLM APIs</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--bar-width: 75%"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== EXPERIENCE ====== -->
+    <section id="experience">
+      <div class="reveal">
+        <span class="section-label">03 — Experience</span>
+        <h2 class="section-heading">What I've done, not what I'd do.</h2>
+      </div>
+
+      <div class="alt-row reveal">
+        <div class="alt-content">
+          <span class="alt-tag">Jan 2025 – Present</span>
+          <h3 class="alt-title">Python &amp; AI Software Engineer</h3>
+          <p class="alt-desc" style="color:var(--text-tertiary); font-size:0.85rem;">Independent · Bengaluru, India</p>
+          <p class="alt-desc">
+            Built production Python applications: real-time CV video pipelines, LLM-integrated developer tools, and telemetry systems with 99.98% uptime.
+          </p>
+        </div>
+        <div class="alt-visual">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); line-height: 2;">
+            <div><span style="color:var(--accent);">→</span> Computer vision pipelines (OpenCV)</div>
+            <div><span style="color:var(--accent);">→</span> LLM-integrated code analysis tools</div>
+            <div><span style="color:var(--accent);">→</span> Telemetry &amp; uptime monitoring</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== CONTACT ====== -->
+    <section id="contact">
+      <div class="contact-wrap reveal">
+        <h2 class="contact-heading">Let's build something that works.</h2>
+        <p class="contact-sub">Open to AI/ML engineering, software engineering, and systems roles. Bengaluru or remote.</p>
+        <div class="contact-links">
+          <a href="mailto:ksuchirreddy@gmail.com" class="contact-link" onclick="copyEmail(event)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            ksuchirreddy@gmail.com
+          </a>
+          <a href="https://github.com/ksuchirreddy" target="_blank" class="contact-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== FOOTER ====== -->
+    <footer>
+      <p>Built with HTML, CSS, JS — Lumina Vision Edition ♥ 2026</p>
     </footer>
 
   </div>
 
+  <!-- ====== FLOATING QUICK DOCK ====== -->
+  <div class="dock">
+    <a href="#about" class="dock-btn">Home</a>
+    <a href="#projects" class="dock-btn">Projects</a>
+    <a href="#contact" class="dock-btn">Contact</a>
+    <a href="resume.pdf" target="_blank" class="dock-btn dock-btn--accent">Resume</a>
+  </div>
+
+  <!-- ====== JAVASCRIPT ====== -->
+  <script>
+    // 1. CLI Terminal Commands
+    const cliInput = document.getElementById('cliInput');
+    const cliOutput = document.getElementById('cliOutput');
+
+    const commands = {
+      projects: `<span class="prompt">suchir$ projects</span><br><span class="output">3 shipped systems:</span><br>1. <span class="highlight">AI Code Studio</span> — AST bug detection<br>2. <span class="highlight">Road Distress HUD</span> — OpenCV segmentation<br>3. <span class="highlight">PulseGuard</span> — 99.98% uptime telemetry`,
+      skills: `<span class="prompt">suchir$ skills</span><br><span class="output">Languages:</span> Python, C/C++, Java, SQL<br><span class="output">Core:</span> OpenCV, LLM APIs, Networking`,
+      education: `<span class="prompt">suchir$ education</span><br><span class="highlight">Dayananda Sagar College of Engineering</span><br>B.E. Computer Science & Business Systems — CGPA: 8.15`,
+      contact: `<span class="prompt">suchir$ contact</span><br>Email: <span class="highlight">ksuchirreddy@gmail.com</span><br>Phone: +91 78995 97757`,
+      clear: null,
+    };
+
+    function runCmd(cmd) {
+      if (!cmd) return;
+      if (cmd === 'clear') {
+        cliOutput.innerHTML = `<div class="terminal-line"><span class="prompt">[sys]</span> <span class="output">Cleared.</span></div>`;
+        return;
+      }
+      const html = commands[cmd] || `<span class="prompt">suchir$ ${cmd}</span><br><span style="color:#c0392b;">Unknown command.</span> Type <span class="highlight">help</span>.`;
+      const line = document.createElement('div');
+      line.className = 'terminal-line';
+      line.innerHTML = html;
+      cliOutput.appendChild(line);
+      cliOutput.scrollTop = cliOutput.scrollHeight;
+    }
+
+    cliInput?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const cmd = cliInput.value.trim().toLowerCase();
+        cliInput.value = '';
+        runCmd(cmd);
+      }
+    });
+
+    // 2. Scroll Reveal & Skill Bar Observer
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => revealObserver.observe(el));
+
+    const skillBars = document.querySelectorAll('.skill-bar-fill');
+    const barObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('animated'); });
+    }, { threshold: 0.3 });
+    skillBars.forEach(bar => barObserver.observe(bar));
+
+    // 3. Theme Toggle & Copy Email
+    const themeToggle = document.getElementById('themeToggle');
+    const htmlEl = document.documentElement;
+    themeToggle?.addEventListener('click', () => {
+      const next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      htmlEl.setAttribute('data-theme', next);
+    });
+
+    function copyEmail(e) {
+      if (e) e.preventDefault();
+      navigator.clipboard.writeText('ksuchirreddy@gmail.com').then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+      });
+    }
+  </script>
 </body>
 </html>
